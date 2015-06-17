@@ -17,7 +17,7 @@ const TITLE = "Nigma"
 General Variables:
 Use camelCase
 ```javascript
-let taskItemCounter= 0; // you can use 'var'  
+let taskItemCounter = 0; // you can use 'var'  
 let taskItemColor = "red" 
 ```
 
@@ -96,3 +96,5 @@ const Box = React.createClass({ //Name: PascalCase
 ##FLUX
 
 * [Flux step by step] (http://blogs.atlassian.com/2014/08/flux-architecture-step-by-step/)
+* 
+
