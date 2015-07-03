@@ -1,15 +1,14 @@
-@import '../../node_modules/material-ui-stylus';
+$BigFontSize = 16px;
+$MediumFontSize = $BigFontSize - 2px;
+$LittleFontSize = $MediumFontSize - 2px;
 
-// Your styles here
-.example
-  color: red;
+@import '../../node_modules/material-ui-stylus';
+@import 'folder-list';
+@import 'folder-item';
 
 body
   background: #eee;
 
-.menu
-
-  &-container
-    background: white;
-    padding: 0 20px;
-    margin-top: 30px;
+input
+  box-shadow: none !important;
+  border-bottom: none !important;
