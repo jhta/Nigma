@@ -1,7 +1,7 @@
 # nigma
 
 
-###Install Dependencies
+###Install Dependences
     npm install
     
 
