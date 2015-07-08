@@ -11,25 +11,25 @@ const exampleFolders = [
   {
     name:"name 1",
     items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
+      {title: "item1"},
+      {title: "item2"},
+      {title: "item3"}
     ]
   },
   {
     name:"name 2",
     items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
+      {title: "item1"},
+      {title: "item2"},
+      {title: "item3"}
     ]
   },
   {
     name:"name 3",
     items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
+      {title: "item1"},
+      {title: "item2"},
+      {title: "item3"}
     ]
   },
 
