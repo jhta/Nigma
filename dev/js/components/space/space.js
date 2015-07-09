@@ -13,22 +13,28 @@ const Space = React.createClass({
 
   render() {
     return (
-      <div className="Space">
-        <div  className="Space-content z-depth-1">
-          <Tabs>
-            <Tab label="Formulacion" >
-              <Formulation />
-            </Tab>
-            <Tab label="Respuestas" >
-              <Answers />
-            </Tab>
+      <div className="Space row">
+        <div className="col s8">
+          <div className="Space-content z-depth-1 ">
+            <Tabs>
+              <Tab label="Formulacion" >
+                <Formulation />
+              </Tab>
+              <Tab label="Respuestas" >
+                <Answers />
+              </Tab>
 
-            <Tab label="Metadatos" >
-              <Metadata />
-            </Tab>
+              <Tab label="Metadatos" >
+                <Metadata />
+              </Tab>
 
-
-          </Tabs>
+            </Tabs>
+          </div>
+        </div>
+        <div className="col s4">
+          <div className="Space-right z-depth-1">
+            hola!
+          </div>
         </div>
       </div>
     )
