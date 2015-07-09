@@ -4,14 +4,14 @@ const { Route, Link, DefaultRoute, NotFoundRoute } = Router;
 
 const Nigma = require('../components/app');
 
-const FolderList = require('../components/menu/folder-list');
+const FolderContainer = require('../components/menu/folder-container');
 
 const Routes = (
   <Route name="nigma" path="/" handler={Nigma}>
 
-    <Route name="folders" path="folders" handler={FolderList} />
+    <Route name="folders" path="folders" handler={FolderContainer} />
 
-    <DefaultRoute 	handler={FolderList}/>
+    <DefaultRoute 	handler={FolderContainer}/>
 
   </Route>
 )

@@ -2,7 +2,6 @@ const React       = require("react");
 const Router      = require("react-router");
 const mui         = require("material-ui");
 const TopBar      = require("./topbar.js");
-const {TextField} = mui;
 const ThemeMixin  = require("../mixins/ui-theme");
 
 const {RouteHandler} = Router;
