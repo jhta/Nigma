@@ -11,6 +11,8 @@ var FolderContainer = React.createClass({
   render: function() {
     return (
       <Card>
+        
+      </Card>
     );
   }
 
