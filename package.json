@@ -38,6 +38,7 @@
     "react-tap-event-plugin": "^0.1.7",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.2.3"
+    "watchify": "^3.2.3",
+    "material-ui": "~0.10.0"
   }
 }
