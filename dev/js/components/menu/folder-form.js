@@ -1,32 +1,32 @@
 const React = require("react");
-const mui         = require("material-ui");
-const {TextField, RaisedButton, FontIcon} = mui;
-const ThemeMixin  = require("../../mixins/ui-theme");
-
-
 var FormFolder = React.createClass({
-  mixins: [ThemeMixin, React.addons.LinkedStateMixin],
+  mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
     return {
       folderName: ""
     };
   },
+  _handleClick: function (e) {
+    alert("Click");
+  },
 
   render: function() {
     return (
-      <div className="row">
-        <div className="col s10">
-          <TextField
-            hintText="Nombre del folder"
-            fullWidth={true}
-            floatingLabelText="Nombre del folder"
-            valueLink={this.linkState('folderName')} />
-        </div>
-        <div className="col s2">
-          <RaisedButton secondary={true} label="Agregar">
-            <FontIcon className="muidocs-icon-custom-github"/>
-          </RaisedButton>
+      <div className="FolderForm">
+        <div className="row">
+          <div className="col s7 m8 l9">
+            <div className="input-field col s12">
+              <input
+                id="folder-name"
+                placeholder="Nombre"
+                type="text"
+                valueLink={this.linkState('folderName')}/>
+            </div>
+          </div>
+          <div className="col s5 m4 l3">
+            <button className="waves-effect waves-light truncate btn" onClick={this._handleClick}>Agregar folder <i className="material-icons right">done</i></button>
+          </div>
         </div>
       </div>
     );
