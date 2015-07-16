@@ -10,7 +10,7 @@ const FolderItem  = React.createClass({
   render: function() {
     let item = this.props.item;
     return (
-      <a  className="collection-item">{item.title}</a>
+      <a  className="collection-item FolderItem">{item.title}</a>
     );
   }
 
@@ -23,13 +23,13 @@ const Folder  = React.createClass({
   },
   render: function() {
     let folder = this.props.folder;
-    var questions = folder.items.map(function(question) {
-      return <FolderItem item={question} />
+    var questions = folder.items.map(function(question, index) {
+      return <FolderItem item={question} key={index}/>
     });
     return (
-      <li>
+      <li className="Folder">
         <div className="collapsible-header">
-          <i className="material-icons circle">folder</i><span className="title">{folder.name}</span>
+          <i className="material-icons">folder</i><span className="title">{folder.name}</span>
         </div>
         <div className="collapsible-body">
           <div className="collection">
@@ -57,10 +57,10 @@ const FolderList = React.createClass({
   render: function(){
     let folders = this.props.folders;
     var folderComponents = folders.map(function (folder) {
-      return <Folder folder={folder}/>
+      return <Folder folder={folder} key={folder.id}/>
     });
     return(
-      <ul className="collapsible popout">
+      <ul className="collapsible popout FolderList">
         {folderComponents}
       </ul>
     );
