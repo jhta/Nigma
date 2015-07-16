@@ -1,4 +1,4 @@
-const exampleFolders = [
+var exampleFolders = [
   {
     id: 1,
     name:"Estadística",

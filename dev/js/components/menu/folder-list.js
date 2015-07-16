@@ -1,81 +1,74 @@
 const React = require("react");
-const Router = require("react-router");
-const mui         = require("material-ui");
-const {TextField} = mui;
-const ThemeMixin  = require("../../mixins/ui-theme");
 
-//CURRENT COMPONENTS
-const FolderItem = require("./folder-item");
+//Components
+//const FolderItem = require('./folder-item');
 
-const exampleFolders = [
-  {
-    name:"name 1",
-    items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
-    ]
+const FolderItem  = React.createClass({
+  propTypes: {
+    item: React.PropTypes.object.isRequired
   },
-  {
-    name:"name 2",
-    items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
-    ]
-  },
-  {
-    name:"name 3",
-    items: [
-      {title: "item"},
-      {title: "item"},
-      {title: "item"}
-    ]
-  },
+  render: function() {
+    let item = this.props.item;
+    return (
+      <a  className="collection-item">{item.title}</a>
+    );
+  }
 
-];
+});
+
+
+const Folder  = React.createClass({
+  propTypes: {
+    folder: React.PropTypes.object.isRequired
+  },
+  render: function() {
+    let folder = this.props.folder;
+    var questions = folder.items.map(function(question) {
+      return <FolderItem item={question} />
+    });
+    return (
+      <li>
+        <div className="collapsible-header">
+          <i className="material-icons circle">folder</i><span className="title">{folder.name}</span>
+        </div>
+        <div className="collapsible-body">
+          <div className="collection">
+            {questions}
+          </div>
+        </div>
+      </li>
+    );
+  }
+
+});
+
 
 const FolderList = React.createClass({
 
-  mixins: [ThemeMixin],
+  getDefaultProps: function() {
+    return {
+      folders: []
+    };
+  },
+  propTypes: {
+    folders: React.PropTypes.array.isRequired
+  },
 
-  render(){
-    return (
-      <div>
-        <div className="FolderList container z-depth-1">
-        <FolderList.Form />
-        <FolderList.List />
-
-        </div>
-      </div>
-    )
-  }
-});
-
-
-FolderList.Form = React.createClass({
-  render() {
+  render: function(){
+    let folders = this.props.folders;
+    var folderComponents = folders.map(function (folder) {
+      return <Folder folder={folder}/>
+    });
     return(
-      <TextField
-        hintText="Create Folder"
-        fullWidth={true}
-      />
-
-    )
+      <ul className="collapsible popout">
+        {folderComponents}
+      </ul>
+    );
   }
 });
 
-FolderList.List = React.createClass({
-  render(){
-    return (
-      <ul className="FolderList-List collapsible z-depth-0" data-collapsible="accordion">
-         {exampleFolders.map((folder, index)=>{
-           return (
-             <FolderItem folder={folder} key={index}/>
-           )
-         })}
-       </ul>
-    )
-  }
-});
+
+
+
+
 module.exports = FolderList;
