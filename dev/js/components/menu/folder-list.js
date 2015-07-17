@@ -1,7 +1,7 @@
 const React = require("react");
 
 //Components
-//const FolderItem = require('./folder-item');
+const FolderQuestionForm = require('./folder-question-form');
 
 const FolderItem  = React.createClass({
   propTypes: {
@@ -20,7 +20,7 @@ const FolderItem  = React.createClass({
 const Folder  = React.createClass({
   propTypes: {
     folder: React.PropTypes.object.isRequired,
-    folderIndex: React.PropTypes.umber.isRequired,
+    folderIndex: React.PropTypes.number.isRequired,
   },
   render: function() {
     let folder = this.props.folder;
@@ -38,6 +38,7 @@ const Folder  = React.createClass({
             {questions}
           </div>
         </div>
+        <FolderQuestionForm folderIndex={folderIndex} />
       </li>
     );
   }
@@ -58,8 +59,8 @@ const FolderList = React.createClass({
 
   render: function(){
     let folders = this.props.folders;
-    var folderComponents = folders.map(function (folder) {
-      return <Folder folder={folder} key={folder.id}/>
+    var folderComponents = folders.map(function (folder, index) {
+      return <Folder folder={folder} folderIndex={index} key={folder.id}/>
     });
     return(
       <ul className="collapsible popout FolderList">
