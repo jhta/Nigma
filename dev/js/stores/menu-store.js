@@ -8,9 +8,8 @@ var assign = require('object-assign');
 var _folders = require('../components/menu/example-items');
 
 function _addFolder(folderName) {
-  var lastId = _folders[_folders.length - 1];
   var folder = {
-    id: lastId  + 1,
+    id: _folders.length + 1,
     name: folderName,
     items: []
   }
