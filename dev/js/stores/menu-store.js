@@ -16,6 +16,14 @@ function _addFolder(folderName) {
   _folders.push(folder);
 }
 
+function _addQuestion(folderIndex, question) {
+  if(folderIndex >= 0 && folderIndex < _folders.length){
+    _folders[folderIndex].items.push({
+      title: question
+    });
+  }
+}
+
 var MenuStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -40,6 +48,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
       _addFolder(action.folderName);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.ADD_QUESTION:
+      _addQuestion(action.folderIndex, action.question);
       MenuStore.emitChange();
       break;
     default:

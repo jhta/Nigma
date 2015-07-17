@@ -19,10 +19,12 @@ const FolderItem  = React.createClass({
 
 const Folder  = React.createClass({
   propTypes: {
-    folder: React.PropTypes.object.isRequired
+    folder: React.PropTypes.object.isRequired,
+    folderIndex: React.PropTypes.umber.isRequired,
   },
   render: function() {
     let folder = this.props.folder;
+    let folderIndex = this.props.folderIndex;
     var questions = folder.items.map(function(question, index) {
       return <FolderItem item={question} key={index}/>
     });

@@ -31,7 +31,7 @@ var FolderContainer = React.createClass({
   },
   componentWillUnmount: function() {
     MenuStore.removeChangeListener()
-  },
+  }
 
 });
 

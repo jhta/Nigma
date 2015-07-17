@@ -7,7 +7,14 @@ var MenuActions = {
       type: MenuActionConstants.ADD_FOLDER,
       folderName: folderName
     });
-  }
+  },
+  addQuestion: function (folderIndex, question) {
+    Dispatcher.dispatch({
+      type: MenuActionConstants.ADD_QUESTION,
+      folderIndex: folderIndex,
+      question: question
+    });
+  },
 }
 
 module.exports = MenuActions;
