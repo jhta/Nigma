@@ -2,6 +2,13 @@ $BigFontSize = 16px;
 $MediumFontSize = $BigFontSize - 2px;
 $LittleFontSize = $MediumFontSize - 2px;
 
+
+// about colors: https://learnboost.github.io/stylus/docs/bifs.html
+$darkness-gray = #bbb;
+$gray = #ddd;
+$ligth-gray = tint($gray,70%);
+
+
 @import '../../node_modules/material-ui-stylus';
 @import 'folder-list';
 @import 'folder-item';
@@ -17,4 +24,4 @@ input
 .u
   &-tab
     &-content
-      margin: 30px;
+      margin: 15px;
