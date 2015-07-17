@@ -10,7 +10,7 @@ const FolderItem  = React.createClass({
   render: function() {
     let item = this.props.item;
     return (
-      <a  className="collection-item FolderItem">{item.title}</a>
+      <a  className="FolderItem collection-item">{item.title}</a>
     );
   }
 
@@ -37,8 +37,8 @@ const Folder  = React.createClass({
           <div className="collection">
             {questions}
           </div>
+          <FolderQuestionForm folderIndex={folderIndex} />
         </div>
-        <FolderQuestionForm folderIndex={folderIndex} />
       </li>
     );
   }
