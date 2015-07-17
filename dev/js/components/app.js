@@ -15,7 +15,7 @@ const Nigma = React.createClass({
   render(){
     return (
       <div>
-        <TopBar />
+        <TopBar user="Jeison Higuita"/>
         <RouteHandler />
       </div>
     )
