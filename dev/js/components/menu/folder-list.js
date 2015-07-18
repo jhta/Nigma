@@ -67,6 +67,9 @@ const FolderList = React.createClass({
         {folderComponents}
       </ul>
     );
+  },
+  componentDidUpdate: function(prevProps, prevState) {
+    $(this.getDOMNode()).collapsible();
   }
 });
 
