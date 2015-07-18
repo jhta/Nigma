@@ -18,25 +18,30 @@ var Modal = React.createClass({
     positiveCallback: React.PropTypes.func
   },
   _handlePositiveClick: function(){
-    this.props.positiveCallback();
+    if(this.props.positiveCallback)
+      this.props.positiveCallback();
     $(this.getDOMNode()).closeModal();
   },
   _handleNegativeClick: function() {
-    this.props.negativeCallback();
+    if(this.props.negativeCallback)
+      this.props.negativeCallback();
     $(this.getDOMNode()).closeModal();
   },
 
-  open: function() {
+  openModal: function() {
     $(this.getDOMNode()).openModal();
+  },
+  closeModal: function() {
+    $(this.getDOMNode()).closeModal();
   },
   render: function() {
     var positiveButton;
     var negativeButton;
     if (this.props.showPositiveButton){
-      positiveButton = <a onClick={this._handlePositiveClick} className="modal-action waves-effect waves-green btn-flat">{this.props.positiveButtonText}</a>
+      positiveButton = <a onClick={this._handlePositiveClick} className="modal-action waves-effect waves-green btn">{this.props.positiveButtonText}</a>
     }
     if (this.props.showNegativeButton){
-      positiveButton = <a onClick={this._handleNegativeClick} className="modal-action waves-effect waves-green btn-flat">{this.props.negativeButtonText}</a>
+      negativeButton = <a onClick={this._handleNegativeClick} className="modal-action waves-effect waves-green btn-flat">{this.props.negativeButtonText}</a>
     }
     return (
       <div className="modal">

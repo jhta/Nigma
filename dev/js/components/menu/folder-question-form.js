@@ -1,6 +1,8 @@
 const React = require("react");
-
+const MenuActions = require('../../actions/menu-actions');
 var Modal = require('../util/modal');
+
+
 var FolderQuestionForm = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
   getInitialState: function() {
@@ -12,7 +14,10 @@ var FolderQuestionForm = React.createClass({
     folderIndex: React.PropTypes.number.isRequired,
   },
   _handleClick: function(e) {
-    this.refs.modal.open();
+    this.refs.modal.openModal();
+  },
+  _addQuestion: function() {
+    MenuActions.addQuestion(this.props.folderIndex, this.state.questionName);
   },
   render: function() {
     let folderIndex = this.props.folderIndex;
@@ -25,7 +30,7 @@ var FolderQuestionForm = React.createClass({
             </div>
           </div>
         </div>
-        <Modal headerText="Nueva pregunta" ref="modal">
+        <Modal headerText="Nueva pregunta" ref="modal" positiveCallback={this._addQuestion}>
           <div className="input-field col s12">
             <input
               id="question-name"

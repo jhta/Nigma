@@ -51,6 +51,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
+      console.log(action);
       _addQuestion(action.folderIndex, action.question);
       MenuStore.emitChange();
       break;
