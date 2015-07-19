@@ -1,81 +1,86 @@
 const React = require("react");
-const Router = require("react-router");
-const mui         = require("material-ui");
-const {TextField} = mui;
-const ThemeMixin  = require("../../mixins/ui-theme");
 
-//CURRENT COMPONENTS
-const FolderItem = require("./folder-item");
+//Components
+const FolderQuestionForm = require('./folder-question-form');
 
-const exampleFolders = [
-  {
-    name:"name 1",
-    items: [
-      {title: "item1"},
-      {title: "item2"},
-      {title: "item3"}
-    ]
-  },
-  {
-    name:"name 2",
-    items: [
-      {title: "item1"},
-      {title: "item2"},
-      {title: "item3"}
-    ]
-  },
-  {
-    name:"name 3",
-    items: [
-      {title: "item1"},
-      {title: "item2"},
-      {title: "item3"}
-    ]
+const FolderItem  = React.createClass({
+
+  propTypes: {
+    item: React.PropTypes.object.isRequired
   },
 
-];
+  render() {
+    let item = this.props.item;
+    return (
+      <a  className="FolderItem collection-item">{item.title}</a>
+    );
+  }
+
+});
+
+
+const Folder  = React.createClass({
+
+  propTypes: {
+    folder: React.PropTypes.object.isRequired,
+    folderIndex: React.PropTypes.number.isRequired,
+  },
+
+  render() {
+    let folder = this.props.folder;
+    let folderIndex = this.props.folderIndex;
+    var questions = folder.items.map((question, index)=>{
+      return <FolderItem item={question} key={index}/>
+    });
+    return (
+      <li className="Folder">
+        <div className="collapsible-header">
+          <i className="material-icons">folder</i><span className="title">{folder.name}</span>
+        </div>
+        <div className="collapsible-body">
+          <div className="collection">
+            {questions}
+          </div>
+          <FolderQuestionForm folderIndex={folderIndex} />
+        </div>
+      </li>
+    );
+  }
+
+});
+
 
 const FolderList = React.createClass({
 
-  mixins: [ThemeMixin],
+  getDefaultProps() {
+    return {
+      folders: []
+    };
+  },
+  propTypes: {
+    folders: React.PropTypes.array.isRequired
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    $(this.getDOMNode()).collapsible();
+  },
 
   render(){
-    return (
-      <div>
-        <div className="FolderList container z-depth-1">
-        <FolderList.Form />
-        <FolderList.List />
-
-        </div>
-      </div>
-    )
-  }
-});
-
-
-FolderList.Form = React.createClass({
-  render() {
+    let folders = this.props.folders;
+    var folderComponents = folders.map((folder, index)=>{
+      return <Folder folder={folder} folderIndex={index} key={folder.id}/>
+    });
     return(
-      <TextField
-        hintText="Create Folder"
-        fullWidth={true}
-      />
-
-    )
+      <ul className="collapsible popout FolderList">
+        {folderComponents}
+      </ul>
+    );
   }
+
 });
 
-FolderList.List = React.createClass({
-  render(){
-    return (
-      <ul className="FolderList-List collapsible z-depth-0" data-collapsible="accordion">
-         {exampleFolders.map((folder, index)=>{
-           return (
-             <FolderItem folder={folder} key={index}/>
-           )
-         })}
-       </ul>
-    )
-  }
-});
+
+
+
+
 module.exports = FolderList;
