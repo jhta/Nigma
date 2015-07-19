@@ -4,6 +4,10 @@ const router 	= require('./router/router');
 
 router.run( function ( Handler, state ) {
 
+	$(document).on("ready",()=>{
+		$('.dropdown-button').dropdown();
+	});
+
 	React.render(
 		<Handler />,
 		document.body

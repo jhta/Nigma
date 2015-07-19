@@ -1,9 +1,12 @@
 const React = require("react");
-const ContentEditable = require("../utils/content-editable");
+//Utils
+const ContentEditable       = require("../utils/content-editable");
 const MaterializeComponents = require("../utils/material-components");
 const {Button} = MaterializeComponents;
 
-const ExpresionGenerator = require("./expresion-generator");
+//Custom components
+const ExpresionGenerator  = require("./expresion-generator");
+
 const Formulation = React.createClass({
 
   getInitialState() {

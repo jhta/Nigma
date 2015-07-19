@@ -6,6 +6,7 @@ const ThemeMixin  = require("../../mixins/ui-theme");
 const Formulation = require("./formulation");
 const Answers     = require("./answers");
 const Metadata    = require("./metadata");
+const RightPanel  = require("./right-panel");
 
 const Space = React.createClass({
 
@@ -31,11 +32,7 @@ const Space = React.createClass({
             </Tabs>
           </div>
         </div>
-        <div className="col s4">
-          <div className="Space-right z-depth-1">
-            hola!
-          </div>
-        </div>
+        <RightPanel />
       </div>
     )
   }
