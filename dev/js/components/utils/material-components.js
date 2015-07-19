@@ -2,7 +2,7 @@ const React = require("react");
 
 /**
  * MATERIALIZE BUTTON
- * --------
+ * -----------------
  * @prop  [cssClass: css class for component]
  * @prop  [icon: icon for button]
  * @prop  [label: label for button]
