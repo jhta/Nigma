@@ -82,7 +82,10 @@ gulp.task('stylus', function() {
 });
 
 
-
+gulp.task('images', function() {
+  gulp.src('dev/images/**.*')
+    .pipe(gulp.dest('dist/images'))
+});
 
 /**
  * SERVER TASK
@@ -124,8 +127,9 @@ gulp.task('watch', function() {
   bundleScripts(true);
   gulp.watch('dev/styl/**/*.styl', ['stylus']);
   gulp.watch('dev/**/*.html', ['html']);
+  gulp.watch('dev/images/**.*', ['images']);
 })
 
 
-gulp.task('build', ['stylus', 'html', 'browserify']);
+gulp.task('build', ['images', 'stylus', 'html', 'browserify']);
 gulp.task('dev', ['build', 'server', 'watch']);

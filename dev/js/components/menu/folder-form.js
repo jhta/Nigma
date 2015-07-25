@@ -5,31 +5,36 @@ const MenuActions = require('../../actions/menu-actions');
 var FormFolder = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       folderName: ""
     };
   },
-  _handleClick: function (e) {
+  _handleClick(e) {
     MenuActions.addFolder(this.state.folderName);
+    //React.findDOMNode(this.refs.folderInput).value = "";
+    console.log(React.findDOMNode(this.refs.folderInput));
   },
-  render: function() {
+  render() {
     return (
       <div className="FolderForm">
-        <div className="row">
-          <div className="col s7 m7 l7">
-            <div className="input-field col s12">
+            <div className="FolderForm-input input-field">
               <input
                 id="folder_name"
                 type="text"
+                ref="folderInput"
                 valueLink={this.linkState('folderName')}/>
               <label htmlFor="folder_name">Nombre</label>
             </div>
-          </div>
-          <div className="col s5 m5 l5">
-            <button className="form-folder-button waves-effect waves-light truncate btn" onClick={this._handleClick}>Agregar folder <i className="material-icons right">done</i></button>
-          </div>
-        </div>
+            <button
+              className="FolderForm-button waves-effect waves-light truncate btn"
+              onClick={this._handleClick}
+              >
+                Agregar folder
+              <i className="material-icons right">
+                done
+              </i>
+            </button>
       </div>
     );
   }

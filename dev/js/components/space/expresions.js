@@ -1,4 +1,5 @@
 const React = require("react");
+const Expresion = require('./expresion');
 
 const Expresions = React.createClass({
 
@@ -49,7 +50,19 @@ Expresions.Collapse = React.createClass({
     return (
       <li>
         <div className="collapsible-header">First</div>
-        <div className="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+        <div className="collapsible-body Expresions-Content__wrapper">
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png"/>
+        </div>
       </li>
 
     );

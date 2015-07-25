@@ -49,7 +49,7 @@ FolderItem.List = React.createClass({
                       {item.title}
                     </a>
 
-                    <a href="#!" className="secondary-content">
+                    <a href="javascript:void(0)" className="secondary-content">
                       <i className="material-icons">send</i>
                     </a>
                   </div>

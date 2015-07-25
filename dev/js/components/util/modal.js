@@ -1,6 +1,7 @@
 const React = require('react');
 
 var Modal = React.createClass({
+
   getDefaultProps: function() {
     return {
       positiveButtonText: "Aceptar",
@@ -9,6 +10,7 @@ var Modal = React.createClass({
       showNegativeButton: true
     };
   },
+
   propTypes: {
     headerText: React.PropTypes.string.isRequired,
     positiveButtonText: React.PropTypes.string,
@@ -17,11 +19,13 @@ var Modal = React.createClass({
     negativeCallback: React.PropTypes.func,
     positiveCallback: React.PropTypes.func
   },
+
   _handlePositiveClick: function(){
     if(this.props.positiveCallback)
       this.props.positiveCallback();
     $(this.getDOMNode()).closeModal();
   },
+
   _handleNegativeClick: function() {
     if(this.props.negativeCallback)
       this.props.negativeCallback();
@@ -31,9 +35,11 @@ var Modal = React.createClass({
   openModal: function() {
     $(this.getDOMNode()).openModal();
   },
+
   closeModal: function() {
     $(this.getDOMNode()).closeModal();
   },
+
   render: function() {
     var positiveButton;
     var negativeButton;

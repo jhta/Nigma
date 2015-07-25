@@ -1,8 +1,12 @@
+$widthButton = 180px;
 .FolderForm
-  .row
-    padding: 10px
-  .input-field
-    margin 10px
-    padding 0px
-  .form-folder-button
-    margin 10px
+  display: flex;
+  align-items: center;
+
+  &-input
+    margin-top: 10px;
+    width: calc(100% - 190px);
+
+  &-button
+    width: $widthButton;
+    margin-left: 10px;

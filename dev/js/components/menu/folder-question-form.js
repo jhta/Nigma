@@ -5,7 +5,7 @@ var Modal = require('../util/modal');
 
 var FolderQuestionForm = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
-  getInitialState: function() {
+  getInitialState() {
     return {
       questionName: ""
     };
@@ -13,13 +13,13 @@ var FolderQuestionForm = React.createClass({
   propTypes: {
     folderIndex: React.PropTypes.number.isRequired,
   },
-  _handleClick: function(e) {
+  _handleClick(e) {
     this.refs.modal.openModal();
   },
-  _addQuestion: function() {
+  _addQuestion() {
     MenuActions.addQuestion(this.props.folderIndex, this.state.questionName);
   },
-  render: function() {
+  render() {
     let folderIndex = this.props.folderIndex;
     return (
       <div className="FolderQuestionForm">
