@@ -38,7 +38,7 @@ var LoginComplete =
       }
     },
 
-    onChange: function () {
+     onChange: function () {
       this.setState({key: this.getComponentData()});
       this.redirect();
 
