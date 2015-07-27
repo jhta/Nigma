@@ -18,7 +18,7 @@ $(document).ready(function () {
       url: url + "/users",
       data: JSON.stringify(data)
     }).done(function (data) {
-      $(location).attr('href', 'http://localhost:8000');
+      $(location).attr('href', 'http://localhost:8000/sigin/' + data.token);
     })
       .fail(function (data) {
         alert("Datos inválidos, intenta de nuevo");
@@ -42,7 +42,7 @@ $(document).ready(function () {
       data: JSON.stringify(data)
     })
       .done(function (data) {
-        $(location).attr('href', 'http://localhost:8000');
+        $(location).attr('href', 'http://localhost:8000/sigin/' + data.token);
       })
       .fail(function (data) {
         alert("Correo electrónico o password incorrecto");
