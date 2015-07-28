@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var url = "http://localhost:4000/api";
+  var url = "http://alexsotocx.me:4000/api";
 
   //Sign up
   $("#signUp").click(function (e) {
