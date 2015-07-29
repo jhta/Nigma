@@ -13,7 +13,7 @@ const FolderItem  = React.createClass({
     let item = this.props.item;
     return (
       <a  className="FolderItem collection-item">
-        {item.title}
+        {item.name}
       </a>
     );
   }
@@ -32,7 +32,7 @@ const Folder  = React.createClass({
     let folder = this.props.folder;
     let folderIndex = this.props.folderIndex;
 
-    var questions = folder.items.map((question, index)=>{
+    var questions = folder.questions.map((question, index) => {
       return <FolderItem item={question} key={index}/>
     });
 
@@ -77,10 +77,10 @@ const FolderList = React.createClass({
   render(){
     let folders = this.props.folders;
     var folderComponents = folders.map((folder, index)=>{
-      return <Folder folder={folder} folderIndex={index} key={folder.id}/>
+      return <Folder folder={folder} folderIndex={index} key={folder._id}/>
     });
     return(
-      <ul className="collapsible popout FolderList">
+      <ul className="FolderList collapsible popout">
         {folderComponents}
       </ul>
     );

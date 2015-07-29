@@ -4,42 +4,37 @@ const CHANGE_EVENT = 'change';
 var Dispatcher = require('../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-const 
-var _folders = {};
+var _folders = [];
 
 function _addFolder(folderName) {
-  var folder = {
-    id: _folders.length + 1,
-    name: folderName,
-    items: []
-  }
-  _folders.push(folder);
+
+}
+
+function _setFolders(folders) {
+  _folders = folders;
 }
 
 function _addQuestion(folderIndex, question) {
-  if(folderIndex >= 0 && folderIndex < _folders.length){
-    _folders[folderIndex].items.push({
-      title: question
-    });
-  }
+
 }
 
 var MenuStore = assign({}, EventEmitter.prototype, {
-  emitChange: function() {
+  emitChange() {
     this.emit(CHANGE_EVENT);
   },
 
   /**
    * @param {function} callback
    */
-  addChangeListener: function(callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function(callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
-  getFolders: function() {
+
+  getFolders(){
     return _folders;
   }
 });
@@ -47,14 +42,15 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 MenuStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
-      _addFolder(action.folderName);
-      MenuStore.emitChange();
+      _addFolder(action.folderName, MenuStore);
       break;
     case MenuActionsConstants.ADD_QUESTION:
-      console.log(action);
       _addQuestion(action.folderIndex, action.question);
       MenuStore.emitChange();
       break;
+    case MenuActionsConstants.LIST_FOLDERS:
+      _setFolders(action.folders);
+      MenuStore.emitChange();
     default:
   }
 });

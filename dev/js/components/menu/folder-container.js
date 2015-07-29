@@ -1,10 +1,9 @@
 const React = require("react");
-
-
+var MenuStore    = require('../../stores/menu-store');
+const MenuActions = require('../../actions/menu-actions');
 //USED COMPONENTS
 const FolderForm = require('./folder-form');
 const FolderList = require('./folder-list');
-var MenuStore    = require('../../stores/menu-store');
 
 var FolderContainer = React.createClass({
   getInitialState: function() {
@@ -15,6 +14,7 @@ var FolderContainer = React.createClass({
 
   componentWillMount: function() {
     MenuStore.addChangeListener(this._handleChange);
+    MenuActions.listFolders();
   },
 
   componentWillUnmount: function() {
@@ -28,6 +28,7 @@ var FolderContainer = React.createClass({
   },
 
   render() {
+    console.log(this.state.folderItems);
     return (
       <div className="FolderContainer container">
         <div className="FolderContainer-header z-depth-1">

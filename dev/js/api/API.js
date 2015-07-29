@@ -1,15 +1,8 @@
 const request     = require('superagent');
 const _           = require('lodash');
-const _URL 	= "http://alexsotcx.me:4000/api";
-const Auth = require('./utils/auth');
+const _URL 	= "http://alexsotocx.me:4000/api";
+const Auth = require('../utils/auth');
 
-const _REQUEST_METHOD = {
-  get: "GET",
-  post: "POST",
-  delete: "DELETE",
-  put: "PUT",
-  patch: "PATCH"
-}
 
 /**
  * OBJECT FOR AJAX METHODS AND CONNECT WITH THE TRINITY API
@@ -18,25 +11,12 @@ const _REQUEST_METHOD = {
  */
 const API = {
 
-  routes: {
-    folder:{
-      create: {
-        route: "/folders",
-        method: _REQUEST_METHOD.post
-      },
-      update: {
-        route: "/folders/:folderid",
-        method: _REQUEST_METHOD.put
-      },
-      delete: {
-        route: "/folders/:folderid",
-        method: _REQUEST_METHOD.delete
-      },
-      get: {
-        route: "/folders",
-        method: _REQUEST_METHOD.get
-      }
-    }
+  _REQUEST_METHOD: {
+    get: "GET",
+    post: "POST",
+    delete: "DELETE",
+    put: "PUT",
+    patch: "PATCH"
   },
 
   getToken() {
@@ -94,8 +74,8 @@ const API = {
 
   _parseRoute(routeObject, data) {
     var route = routeObject.route;
-    var simbols = route.match(/\:[^\/]+/g);
-    simbols.each(function (simbol) {
+    var simbols = route.match(/\:[^\/]+/g) || [];
+    simbols.forEach(function (simbol) {
       var dataSimbol = simbol.substring(1); //Removes the ':' of the simbol
       route.replace(simbol, data[dataSimbol]);
     });
@@ -105,13 +85,13 @@ const API = {
   callAjaxRequest(routeObject, data, cb) {
     var route = this._parseRoute(routeObject, data);
     switch (routeObject.method) {
-      case _REQUEST_METHOD.get:
-        return this.callAjaxGet(route, data, cb);
-      case _REQUEST_METHOD.post:
+      case this._REQUEST_METHOD.get:
+        return this.callAjaxGet(route, cb);
+      case this._REQUEST_METHOD.post:
         return this.callAjaxPost(route, data, cb);
-      case _REQUEST_METHOD.put:
+      case this._REQUEST_METHOD.put:
         return this.callAjaxUpdate(route, data, cb);
-      case _REQUEST_METHOD.delete:
+      case this._REQUEST_METHOD.delete:
         return this.callAjaxDelete(route, data, cb);
       default:
         return null;
