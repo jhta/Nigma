@@ -6,8 +6,8 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _folders = [];
 
-function _addFolder(folderName) {
-
+function _addFolder(folder) {
+  _folders.push(folder);
 }
 
 function _setFolders(folders) {
@@ -42,7 +42,8 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 MenuStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
-      _addFolder(action.folderName, MenuStore);
+      _addFolder(action.folder);
+      MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
       _addQuestion(action.folderIndex, action.question);

@@ -30,7 +30,13 @@ const FolderAPI = {
   },
   createFolder(data, cb){
     const route = this._routes.create;
-    API.callAjaxRequest(route, data, db);
+    API.callAjaxRequest(route, data, (err, res) => {
+      if(err){
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body.folder);
+      }
+    });
   },
 }
 

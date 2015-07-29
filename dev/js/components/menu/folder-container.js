@@ -28,7 +28,6 @@ var FolderContainer = React.createClass({
   },
 
   render() {
-    console.log(this.state.folderItems);
     return (
       <div className="FolderContainer container">
         <div className="FolderContainer-header z-depth-1">

@@ -31,13 +31,14 @@ const Folder  = React.createClass({
   render() {
     let folder = this.props.folder;
     let folderIndex = this.props.folderIndex;
-
-    var questions = folder.questions.map((question, index) => {
-      return <FolderItem item={question} key={index}/>
-    });
+    var questions = null;
+    if(folder.questions){
+      questions = folder.questions.map((question, index) => {
+        return <FolderItem item={question} key={question._id}/>
+      });
+    }
 
     return (
-      
       <li className="Folder">
         <div className="collapsible-header Folder-header">
           <i className="material-icons Folder-header__icon">

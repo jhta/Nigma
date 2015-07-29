@@ -3,11 +3,20 @@ const FolderAPI = require('../api/utils/folder');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
-  addFolder(folderName) {
-    Dispatcher.dispatch({
-      type: MenuActionConstants.ADD_FOLDER,
-      folderName: folderName
+  createFolder(folderName) {
+    FolderAPI.createFolder({
+      folder: {
+        name: folderName
+      }
+    }, (err, folder) => {
+      if(!err){
+        Dispatcher.dispatch({
+          type: MenuActionConstants.ADD_FOLDER,
+          folder: folder
+        });
+      }
     });
+
   },
   addQuestion(folderIndex, question) {
     Dispatcher.dispatch({
