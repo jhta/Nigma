@@ -37,6 +37,7 @@ const Folder  = React.createClass({
     });
 
     return (
+      
       <li className="Folder">
         <div className="collapsible-header Folder-header">
           <i className="material-icons Folder-header__icon">
