@@ -1,30 +1,41 @@
 const React = require("react");
-const mui   = require("material-ui");
-const { AppBar, Avatar} = mui;
 
-const ThemeMixin = require("../mixins/ui-theme");
 
 const TopBar = React.createClass({
 
-  mixins: [ThemeMixin],
 
   render(){
-
-    let User = (
-      <Avatar
-        src="https://pbs.twimg.com/profile_images/570337268579348480/bVPLdLkK_400x400.jpeg"
-        />
-    );
-
     return (
-      <div>
-        <AppBar
-          title='NIGMA'
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
-          iconElementRight={User}
-           />
+      <div className="TopBar">
+        <TopBar.Dropdown />
+        <nav className="teal">
+          <div className="nav-wrapper">
+            <a href="#" className="TopBar__brand brand-logo">Nigma</a>
+            <ul className="right hide-on-med-and-down">
+              {/* Dropdown Trigger */}
+              <li>
+                <a className="dropdown-button" href="javascript:void(0)" data-activates="dropdown1">
+                  {this.props.user}
+                  <i className="material-icons right">arrow_drop_down</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
-      )
+    )
+  }
+});
+
+TopBar.Dropdown = React.createClass({
+  render() {
+    return (
+      <ul id="dropdown1" className="dropdown-content">
+        <li><a href="javascript:void(0)">Perfile</a></li>
+        <li className="divider" />
+        <li><a href="javascript:void(0)">Sign Out</a></li>
+      </ul>
+    )
   }
 });
 
