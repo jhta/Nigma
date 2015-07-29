@@ -4,8 +4,8 @@ const CHANGE_EVENT = 'change';
 var Dispatcher = require('../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-
-var _folders = require('../components/menu/example-items');
+const 
+var _folders = {};
 
 function _addFolder(folderName) {
   var folder = {
