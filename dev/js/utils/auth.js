@@ -13,6 +13,11 @@ const Auth = {
     localStorage.setItem("token", token);
   },
 
+  logout(cb) {
+    localStorage.clear();
+    cb(false);
+  },
+
   getToken() {
     return localStorage.getItem("token");
   },
