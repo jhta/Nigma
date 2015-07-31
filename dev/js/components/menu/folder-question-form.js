@@ -22,13 +22,12 @@ var FolderQuestionForm = React.createClass({
   render() {
     let folderIndex = this.props.folderIndex;
     return (
-      <div className="FolderQuestionForm">
-        <div className="row">
-          <div className="col s5 offset-s7">
-            <div className="right-align">
-              <a onClick={this._handleClick} className="new-question waves-effect waves-light btn">Nueva pregunta</a>
-            </div>
-          </div>
+      <div>
+        <div className="FolderQuestionForm">
+          <a onClick={this._handleClick}
+            className="new-question waves-effect waves-light btn">
+              Nueva pregunta
+          </a>
         </div>
         <Modal headerText="Nueva pregunta" ref="modal" positiveCallback={this._addQuestion}>
           <div className="input-field col s12">
