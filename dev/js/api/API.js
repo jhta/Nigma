@@ -77,7 +77,7 @@ const API = {
     var simbols = route.match(/\:[^\/]+/g) || [];
     simbols.forEach(function (simbol) {
       var dataSimbol = simbol.substring(1); //Removes the ':' of the simbol
-      route.replace(simbol, data[dataSimbol]);
+      route = route.replace(simbol, data[dataSimbol]);
     });
     return route;
   },
@@ -92,7 +92,7 @@ const API = {
       case this._REQUEST_METHOD.put:
         return this.callAjaxUpdate(route, data, cb);
       case this._REQUEST_METHOD.delete:
-        return this.callAjaxDelete(route, data, cb);
+        return this.callAjaxDelete(route, cb);
       default:
         return null;
     }

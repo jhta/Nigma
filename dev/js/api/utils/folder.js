@@ -38,6 +38,26 @@ const FolderAPI = {
       }
     });
   },
+  deleteFolder(data, cb){
+    const route = this._routes.delete;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if(err){
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body.ok);
+      }
+    });
+  },
+  editFolder(data, cb){
+    const route = this._routes.update;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if(err){
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body.ok);
+      }
+    });
+  }
 }
 
 module.exports = FolderAPI;

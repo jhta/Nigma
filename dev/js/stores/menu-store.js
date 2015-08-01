@@ -15,7 +15,18 @@ function _setFolders(folders) {
 }
 
 function _addQuestion(folderIndex, question) {
+  _folders[folderIndex].questions.push(question)
+}
+function _deleteFolder(folderIndex, folder) {
+  if(_folders[folderIndex]._id == folder._id){
+    _folders.splice(folderIndex, 1)
+  }
+}
 
+function _editFolder(folderIndex, folder, folderName) {
+  if(_folders[folderIndex]._id == folder._id){
+    _folders[folderIndex].name = folderName
+  }
 }
 
 var MenuStore = assign({}, EventEmitter.prototype, {
@@ -52,6 +63,15 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
     case MenuActionsConstants.LIST_FOLDERS:
       _setFolders(action.folders);
       MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.DELETE_FOLDER:
+      _deleteFolder(action.folderIndex, action.folder);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.EDIT_FOLDER:
+      _editFolder(action.folderIndex, action.folder, action.folderName);
+      MenuStore.emitChange();
+      break;
     default:
   }
 });

@@ -1,5 +1,5 @@
 const React = require("react");
-
+const MenuActions = require('../../actions/menu-actions');
 //Components
 const FolderQuestionForm = require('./folder-question-form');
 
@@ -38,6 +38,12 @@ FolderList.Folder  = React.createClass({
     folder: React.PropTypes.object.isRequired,
     folderIndex: React.PropTypes.number.isRequired,
   },
+  _deleteFolder(evt) {
+    MenuActions.deleteFolder(this.props.folderIndex, this.props.folder)
+  },
+  _editFolder(evt){
+    MenuActions.editFolder(this.props.folderIndex, this.props.folder)
+  },
 
   render() {
     let folder = this.props.folder;
@@ -45,7 +51,7 @@ FolderList.Folder  = React.createClass({
     var questions = null;
     if(folder.questions){
       questions = folder.questions.map((question, index) => {
-        return <FolderList.Folder.Item item={question} key={question._id}/>
+        return <FolderList.Folder.Item item={question} folder={folder} key={question._id}/>
       });
     }
 
@@ -61,12 +67,12 @@ FolderList.Folder  = React.createClass({
         </div>
         <div className="Folder-body collapsible-body">
           <div className="Folder-body_actions">
-            <a className="Folder-body_actions__edit">
-              <i className="material-icons">
+            <a className="Folder-body_actions__edit" onClick={this._editFolder}>
+              <i className="material-icons" >
                 create
               </i>
             </a>
-            <a className="Folder-body_actions__trash">
+            <a className="Folder-body_actions__trash" onClick={this._deleteFolder}>
               <i className="material-icons">
                 delete
               </i>
@@ -77,7 +83,7 @@ FolderList.Folder  = React.createClass({
             {questions}
           </div>
           <div>
-            <FolderQuestionForm folderIndex={folderIndex} />
+            <FolderQuestionForm folderIndex={folderIndex} folder={folder} />
           </div>
         </div>
       </li>

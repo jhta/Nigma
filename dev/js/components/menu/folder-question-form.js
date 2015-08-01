@@ -13,6 +13,7 @@ var FolderQuestionForm = React.createClass({
   },
   propTypes: {
     folderIndex: React.PropTypes.number.isRequired,
+    folder: React.PropTypes.object.isRequired
   },
   _handleClick(e) {
     this.setState({
@@ -20,7 +21,7 @@ var FolderQuestionForm = React.createClass({
     });
   },
   _addQuestion() {
-    MenuActions.addQuestion(this.props.folderIndex, this.state.questionName);
+    MenuActions.addQuestion(this.props.folderIndex, this.props.folder, this.state.questionName);
     this.setState({
       modalCreated: false
     });
