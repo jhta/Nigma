@@ -41,8 +41,8 @@ FolderList.Folder  = React.createClass({
   _deleteFolder(evt) {
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder)
   },
-  _editFolder(evt){
-    MenuActions.editFolder(this.props.folderIndex, this.props.folder)
+  _updateFolder(evt){
+    MenuActions.updateFolder(this.props.folderIndex, this.props.folder)
   },
 
   render() {
@@ -67,7 +67,7 @@ FolderList.Folder  = React.createClass({
         </div>
         <div className="Folder-body collapsible-body">
           <div className="Folder-body_actions">
-            <a className="Folder-body_actions__edit" onClick={this._editFolder}>
+            <a className="Folder-body_actions__edit" onClick={this._updateFolder}>
               <i className="material-icons" >
                 create
               </i>

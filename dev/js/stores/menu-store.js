@@ -14,7 +14,7 @@ function _setFolders(folders) {
   _folders = folders;
 }
 
-function _addQuestion(folderIndex, question) {
+function _createQuestion(folderIndex, question) {
   _folders[folderIndex].questions.push(question)
 }
 function _deleteFolder(folderIndex, folder) {
@@ -57,7 +57,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
-      _addQuestion(action.folderIndex, action.question);
+      _createQuestion(action.folderIndex, action.question);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.LIST_FOLDERS:

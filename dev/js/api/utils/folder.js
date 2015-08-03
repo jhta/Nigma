@@ -48,7 +48,7 @@ const FolderAPI = {
       }
     });
   },
-  editFolder(data, cb){
+  updateFolder(data, cb){
     const route = this._routes.update;
     API.callAjaxRequest(route, data, (err, res) => {
       if(err){
