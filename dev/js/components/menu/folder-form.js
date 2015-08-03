@@ -11,9 +11,7 @@ var FormFolder = React.createClass({
     };
   },
   _handleClick(e) {
-    MenuActions.addFolder(this.state.folderName);
-    //React.findDOMNode(this.refs.folderInput).value = "";
-    console.log(React.findDOMNode(this.refs.folderInput));
+    MenuActions.createFolder(this.state.folderName);
   },
   render() {
     return (
