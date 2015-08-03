@@ -1,9 +1,8 @@
 const request     = require('superagent');
 const _           = require('lodash');
-const _URL 	= "https://soylaurl.com";
-//const _URL 	= "http://apidev.workep.com";
+const _URL 	= "http://alexsotocx.me:4000/api";
+const Auth = require('../utils/auth');
 
-//localStorage.setItem("url",_URL);
 
 /**
  * OBJECT FOR AJAX METHODS AND CONNECT WITH THE TRINITY API
@@ -12,10 +11,16 @@ const _URL 	= "https://soylaurl.com";
  */
 const API = {
 
+  _REQUEST_METHOD: {
+    get: "GET",
+    post: "POST",
+    delete: "DELETE",
+    put: "PUT",
+    patch: "PATCH"
+  },
 
   getToken() {
-    //get token of cookie ...
-    return "hola soy el token";
+    return Auth.getToken();
   },
 
 	/**
@@ -36,7 +41,7 @@ const API = {
 	},
 
 	callAjaxPost(route, data, cb) {
-		request.post(_URL+route )
+		request.post(_URL + route)
 			.set('Accept', 'application/json')
   		.set('Authorization', 'Bearer ' + this.getToken())
   		.type('application/json')
@@ -57,7 +62,7 @@ const API = {
 	},
 
 	callAjaxUpdate(route, data, cb) {
-		request.put(_URL+route )
+		request.put(_URL + route)
 			.set('Accept', 'application/json')
   		.set('Authorization', 'Bearer ' + this.getToken())
   		.type('application/json')
@@ -67,6 +72,32 @@ const API = {
 			});
 	},
 
+  _parseRoute(routeObject, data) {
+    var route = routeObject.route;
+    var simbols = route.match(/\:[^\/]+/g) || [];
+    simbols.forEach(function (simbol) {
+      var dataSimbol = simbol.substring(1); //Removes the ':' of the simbol
+      route = route.replace(simbol, data[dataSimbol]);
+    });
+    return route;
+  },
+
+  callAjaxRequest(routeObject, data, cb) {
+    var route = this._parseRoute(routeObject, data);
+    switch (routeObject.method) {
+      case this._REQUEST_METHOD.get:
+        return this.callAjaxGet(route, cb);
+      case this._REQUEST_METHOD.post:
+        return this.callAjaxPost(route, data, cb);
+      case this._REQUEST_METHOD.put:
+        return this.callAjaxUpdate(route, data, cb);
+      case this._REQUEST_METHOD.delete:
+        return this.callAjaxDelete(route, cb);
+      default:
+        return null;
+    }
+  },
+
 	/**
 	 * AJAX METHODS WITHOUT TOKEN AUTHENTICATION
 	 * **************************************
@@ -75,7 +106,7 @@ const API = {
 	 */
 
 	callAjaxPostWithoutToken(route, data, cb) {
-	    request.post(_URL+route )
+	    request.post(_URL + route)
 	      .set('Accept', 'application/json')
 	      .type('application/json')
 	      .send( data )
@@ -92,6 +123,8 @@ const API = {
     			cb(err, res);
     		});
 	},
+
+
 
 }
 
