@@ -20,8 +20,8 @@ var FolderQuestionForm = React.createClass({
       modalCreated: true
     });
   },
-  _addQuestion() {
-    MenuActions.addQuestion(this.props.folderIndex, this.props.folder, this.state.questionName);
+  _createQuestion() {
+    MenuActions.createQuestion(this.props.folderIndex, this.props.folder, this.state.questionName);
     this.setState({
       modalCreated: false
     });
@@ -36,7 +36,7 @@ var FolderQuestionForm = React.createClass({
     var modal;
     if(this.state.modalCreated){
       modal = (
-        <Modal headerText="Nueva pregunta" ref="modal" positiveCallback={this._addQuestion} negativeCallback={this._cancelQuestion}>
+        <Modal headerText="Nueva pregunta" ref="modal" positiveCallback={this._createQuestion} negativeCallback={this._cancelQuestion}>
           <div className="input-field col s12">
             <input
               id="question-name"

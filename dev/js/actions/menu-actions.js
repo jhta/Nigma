@@ -19,10 +19,12 @@ var MenuActions = {
     });
 
   },
-  addQuestion(folderIndex, folder, questionName) {
+  createQuestion(folderIndex, folder, questionName) {
     QuestionAPI.createQuestion({
         folderid: folder._id,
-        name: questionName
+        question: {
+          name: questionName
+        }
       }, (err, question) => {
       if(!err){
         Dispatcher.dispatch({
@@ -55,9 +57,15 @@ var MenuActions = {
       }
     });
   },
-  editFolder(folderIndex, folder, folderName){
+  updateFolder(folderIndex, folder, folderName){
     folderName = "LALAL ESTO ESTA QUEMADO EN ACTIONS"
-    FolderAPI.editFolder({folderid: folder._id, name: folderName}, (err, res) => {
+    var data = {
+      folderid: folder._id,
+      folder: {
+        name: folderName
+      }
+    }
+    FolderAPI.updateFolder(data, (err, res) => {
       if(!err){
         Dispatcher.dispatch({
           type: MenuActionConstants.EDIT_FOLDER,
