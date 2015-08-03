@@ -1,12 +1,25 @@
-const Disptcher 	= require('../dispatchers/dispatcher.js');
+const Dispatcher 	= require('../dispatchers/dispatcher.js');
+const UserApi = require('../api/utils/user');
+const LoginActionConstants = require('../constants/login-constants');
 
 const LoginActions = {
 
-  LoginComplete( data ) {
-    Disptcher.dispatch({
-      type: "LOGIN_COMPLETE",
+  loginComplete( data ) {
+    Dispatcher.dispatch({
+      type: LoginActionConstants.LOGIN_COMPLETE,
       data: data
     })
+  },
+
+  userData (){
+    UserApi.getData(function(err, user) {
+      if(!err){
+        Dispatcher.dispatch({
+          type: LoginActionConstants.USER_DATA,
+          user: user
+        });
+      }
+    });
   }
 
 };

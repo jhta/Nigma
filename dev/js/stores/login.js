@@ -4,6 +4,8 @@ var CHANGE_EVENT = "change";
 var _redirect = false;
 var assign        = require("object-assign");
 var Auth = require("../utils/auth");
+const LoginActionConstants = require('../constants/login-constants');
+
 
 var LoginStore = assign(EventEmitter.prototype, {
 
@@ -21,7 +23,6 @@ var LoginStore = assign(EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  //GETTERS
 
   getLoggedIn: function () {
     return Auth.loggedIn();
@@ -33,6 +34,10 @@ var LoginStore = assign(EventEmitter.prototype, {
 
   loginComplete: function (data) {
     Auth.loginComplete(data.token);
+  },
+
+  userData: function(user){
+    Auth.saveUserData(user);
   }
 
 });
@@ -45,8 +50,13 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 
   switch (action.type) {
 
-    case "LOGIN_COMPLETE":
+    case LoginActionConstants.LOGIN_COMPLETE:
       LoginStore.loginComplete(action.data);
+      LoginStore.emitChange();
+      break;
+
+    case LoginActionConstants.USER_DATA:
+      LoginStore.userData(action.user);
       LoginStore.emitChange();
       break;
 

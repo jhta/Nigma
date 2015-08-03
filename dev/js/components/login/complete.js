@@ -1,6 +1,7 @@
 const React = require('react');
 const Router = require('react-router');
 const LoginActions = require('../../actions/login');
+
 const LoginStore = require('../../stores/login');
 const Auth = require("../../utils/auth");
 
@@ -20,7 +21,8 @@ var LoginComplete =
     },
 
     componentWillMount: function () {
-      LoginActions.LoginComplete(this.getComponentData());
+      LoginActions.loginComplete(this.getComponentData());
+      LoginActions.userData();
 
       this.redirect();
 
@@ -46,7 +48,7 @@ var LoginComplete =
 
     render: function () {
       return (
-        <p>No importa lo que muestre esto</p>
+        <p></p>
       )
     }
   });

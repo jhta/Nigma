@@ -3,7 +3,6 @@ var Auth = require("../utils/auth");
 
 const TopBar = React.createClass({
 
-
   render(){
     return (
       <div className="TopBar">
@@ -40,7 +39,7 @@ TopBar.Dropdown = React.createClass({
   render() {
     return (
       <ul id="dropdown1" className="dropdown-content">
-        <li><a href="javascript:void(0)">Perfile</a></li>
+        <li><a href="javascript:void(0)">Profile</a></li>
         <li className="divider"/>
         <li><a href="javascript:void(0)" onClick={this.logout}>Sign Out</a></li>
       </ul>

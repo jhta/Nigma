@@ -1,6 +1,6 @@
-const request     = require('superagent');
-const _           = require('lodash');
-const _URL 	= "http://alexsotocx.me:4000/api";
+const request = require('superagent');
+const _ = require('lodash');
+const _URL = "http://localhost:4000/api";
 const Auth = require('../utils/auth');
 
 
@@ -23,54 +23,54 @@ const API = {
     return Auth.getToken();
   },
 
-	/**
-	 * AJAX METHODS WITH TOKEN AUTHENTICATION
-	 * **************************************
-	 * All methods receive route and callback, return into the
-	 * callback the error and the response
-	 */
+  /**
+   * AJAX METHODS WITH TOKEN AUTHENTICATION
+   * **************************************
+   * All methods receive route and callback, return into the
+   * callback the error and the response
+   */
 
-	callAjaxGet(route, cb) {
-		request.get( _URL + route )
-			.set('Accept', 'application/json')
-  		.set('Authorization', 'Bearer ' + this.getToken())
-			.type('application/json')
-			.end((err, res)=>{
-				cb(err, res);
-			});
-	},
+    callAjaxGet(route, cb) {
+    request.get(_URL + route)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + this.getToken())
+      .type('application/json')
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
-	callAjaxPost(route, data, cb) {
-		request.post(_URL + route)
-			.set('Accept', 'application/json')
-  		.set('Authorization', 'Bearer ' + this.getToken())
-  		.type('application/json')
-			.send(data)
-			.end((err, res)=>{
-				cb(err, res);
-			});
-	},
+  callAjaxPost(route, data, cb) {
+    request.post(_URL + route)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + this.getToken())
+      .type('application/json')
+      .send(data)
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
-	callAjaxDelete(route,  cb) {
-		request.del(_URL + route)
-			.set('Accept', 'application/json')
-  		.set('Authorization', 'Bearer ' + this.getToken())
-  		.type('application/json')
-			.end(( err, res )=>{
-				cb(err, res);
-			});
-	},
+  callAjaxDelete(route, cb) {
+    request.del(_URL + route)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + this.getToken())
+      .type('application/json')
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
-	callAjaxUpdate(route, data, cb) {
-		request.put(_URL + route)
-			.set('Accept', 'application/json')
-  		.set('Authorization', 'Bearer ' + this.getToken())
-  		.type('application/json')
-			.send(data)
-			.end(( err, res )=>{
-				cb(err, res);
-			});
-	},
+  callAjaxUpdate(route, data, cb) {
+    request.put(_URL + route)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + this.getToken())
+      .type('application/json')
+      .send(data)
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
   _parseRoute(routeObject, data) {
     var route = routeObject.route;
@@ -98,32 +98,31 @@ const API = {
     }
   },
 
-	/**
-	 * AJAX METHODS WITHOUT TOKEN AUTHENTICATION
-	 * **************************************
-	 * All methods receive route and callback, return into the
-	 * callback the error and the response
-	 */
+  /**
+   * AJAX METHODS WITHOUT TOKEN AUTHENTICATION
+   * **************************************
+   * All methods receive route and callback, return into the
+   * callback the error and the response
+   */
 
-	callAjaxPostWithoutToken(route, data, cb) {
-	    request.post(_URL + route)
-	      .set('Accept', 'application/json')
-	      .type('application/json')
-	      .send( data )
-	      .end((err, res)=>{
-	        cb(err, res);
-	      });
-  	},
+    callAjaxPostWithoutToken(route, data, cb) {
+    request.post(_URL + route)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(data)
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
-	callAjaxGetWithoutToken(route, cb) {
-    	request.get( _URL + route )
-    		.set('Accept', 'application/json')
-    		.type('application/json')
-    		.end((err, res)=>{
-    			cb(err, res);
-    		});
-	},
-
+  callAjaxGetWithoutToken(route, cb) {
+    request.get(_URL + route)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .end((err, res)=> {
+        cb(err, res);
+      });
+  },
 
 
 }

@@ -13,6 +13,15 @@ const Auth = {
     localStorage.setItem("token", token);
   },
 
+  saveUserData(user){
+    localStorage.setItem("user", JSON.stringify(user));
+  },
+
+  getUserName(){
+    var user = JSON.parse(localStorage.getItem("user"));
+    return user.name
+  },
+
   logout(cb) {
     localStorage.clear();
     cb(false);
