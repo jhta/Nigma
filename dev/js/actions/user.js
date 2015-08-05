@@ -18,6 +18,13 @@ const LoginActions = {
         })
       }
     });
+  },
+
+  setUserStore (){
+    console.log("Si se ejecuta");
+    Dispatcher.dispatch({
+      type: UserActionConstants.SET_USER
+    })
   }
 
 };

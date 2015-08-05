@@ -51,6 +51,12 @@ UserStore.dispatchToken = Dispatcher.register(function (action) {
       UserStore.emitChange();
       break;
 
+    case UserActionConstants.SET_USER:
+      UserStore.saveUser(Auth.getUser());
+      UserStore.emitChange();
+      break;
+
+
   }
   return true;
 });

@@ -1,6 +1,6 @@
 module.exports = {
 
   LOGIN_COMPLETE: "LOGIN_COMPLETE",
-  USER_DATA: "USER_DATA"
+  SET_USER: "SET_USER"
 
 };

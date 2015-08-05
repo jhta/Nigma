@@ -14,8 +14,8 @@ const Auth = {
     localStorage.setItem("user", JSON.stringify(user));
   },
 
-  getUserName(){
-    //var user = JSON.parse(localStorage.getItem("user"));
+  getUser(){
+    return JSON.parse(localStorage.getItem("user"));
   },
 
   logout(cb) {
