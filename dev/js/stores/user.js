@@ -25,7 +25,7 @@ var UserStore = assign(EventEmitter.prototype, {
   },
 
   getUser: function () {
-    return User;
+    return _user;
   },
 
   redirect: function () {
