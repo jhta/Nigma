@@ -14,10 +14,10 @@ var VariableParser = {
         case Uniform.prototype.identifier:
           type =  Uniform
           break;
-        case Specific.identifier:
+        case Specific.prototype.identifier:
           type =  Specific
           break;
-        case Categorical.identifier:
+        case Categorical.prototype.identifier:
           type =  Categorical
           break;
       }
@@ -45,21 +45,20 @@ var VariableParser = {
       code: []
     }
     var _detect = this._detectVariableType;
-    console.log(_detect);
     nigmaCode.forEach(function (codeFragment) {
       var variableType = _detect(codeFragment)
       if(variableType.error){
         output.error.push(variableType.errorMessage)
       } else {
-        var variable = new variableType.type(codeFragment);
+        var variable = new variableType.variable.type(codeFragment);
         if(variable.checkSyntax()){
-          console.log(variable.getParameters());
-          output.code.push(variable.generateCode())
+          output.code.push(variable.generateCode().code)
         } else {
+          console.log("Somethning is not right", variable.checkSyntax());
           /** **/
         }
       }
-    }).bind(this);
+    });
 
     return output
   }

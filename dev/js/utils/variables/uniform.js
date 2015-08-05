@@ -4,7 +4,7 @@ var Uniform = function(codeFragment) {
 
   self.checkSyntax = function () {
     var match = self.codeFragment.match(self.syntax);
-    var emptyParameters = true;
+    var emptyParameters = false;
     if(match){
       emptyParameters = [match[3].trim(), match[4].trim(), match[5].trim()].some(function (element) {
         return element == '';
@@ -13,7 +13,7 @@ var Uniform = function(codeFragment) {
 
     if(!match || emptyParameters){
       return false;
-    } else if (match && emptyParameters){
+    } else if (match && !emptyParameters){
       return true;
     } else {
       return false
