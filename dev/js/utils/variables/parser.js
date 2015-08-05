@@ -1,23 +1,24 @@
-const UNIFORM = require('./uniform');
-const SPECIFIC = require('./specific');
-const CATEGORICAL = require('./categorical');
+const Uniform = require('./uniform');
+const Specific = require('./specific');
+const Categorical = require('./categorical');
 
 
-const VariableParser = {
-  _detectVariableType: function(nigmaCode){
+var VariableParser = {
+
+  _detectVariableType(nigmaCode){
     var regex = /([a-zA-Z\_\-]+[0-9A-Za-z\_\-\$]*)*\s*=\s*(u|e|c|U|E|C)(\[|\{)/
     var match = nigmaCode.match(regex)
     if(match){
       var type;
       switch (match[2].toUpperCase()) {
-        case UNIFORM.identifier:
-          type =  UNIFORM
+        case Uniform.prototype.identifier:
+          type =  Uniform
           break;
-        case SPECIFIC.identifier:
-          type =  SPECIFIC
+        case Specific.identifier:
+          type =  Specific
           break;
-        case CATEGORICAL.identifier:
-          type =  CATEGORICAL
+        case Categorical.identifier:
+          type =  Categorical
           break;
       }
       return {
@@ -37,28 +38,30 @@ const VariableParser = {
       }
     }
   },
-  _checkSyntax: function (nigmaCode) {
-    var self = this
-    const typeOutput = self._detectVariableType(nigmaCode)
-    if(!typeOutput.error){
-      var variableObj = typeOutput.variable.type.checkSyntax(nigmaCode);
-      if(variableObj.error){
-        return {
-          error: true
-        }
-      }else{
-        return variableObj.variable.generateCode(variableObj.variable)
-      }
-    } else {
-      return {
-        error: true,
-        errorMessage: typeOutput.errorMessage
-      };
+
+  generateCode(nigmaCode) {
+    var output = {
+      errors: [],
+      code: []
     }
-  },
-  generateCode: function (nigmaCode) {
+    var _detect = this._detectVariableType;
+    console.log(_detect);
+    nigmaCode.forEach(function (codeFragment) {
+      var variableType = _detect(codeFragment)
+      if(variableType.error){
+        output.error.push(variableType.errorMessage)
+      } else {
+        var variable = new variableType.type(codeFragment);
+        if(variable.checkSyntax()){
+          console.log(variable.getParameters());
+          output.code.push(variable.generateCode())
+        } else {
+          /** **/
+        }
+      }
+    }).bind(this);
 
-
+    return output
   }
 }
 
