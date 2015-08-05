@@ -5,9 +5,6 @@
 
 const Auth = {
 
-  loggedIn() {
-    return localStorage.getItem("token");
-  },
 
   loginComplete(token){
     localStorage.setItem("token", token);
@@ -18,8 +15,7 @@ const Auth = {
   },
 
   getUserName(){
-    var user = JSON.parse(localStorage.getItem("user"));
-    return user.name
+    //var user = JSON.parse(localStorage.getItem("user"));
   },
 
   logout(cb) {

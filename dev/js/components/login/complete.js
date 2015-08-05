@@ -1,9 +1,9 @@
 const React = require('react');
 const Router = require('react-router');
-const LoginActions = require('../../actions/login');
-
-const LoginStore = require('../../stores/login');
+const UserActions = require('../../actions/user');
+const UserStore = require('../../stores/user');
 const Auth = require("../../utils/auth");
+
 
 var LoginComplete =
   React.createClass({
@@ -21,21 +21,20 @@ var LoginComplete =
     },
 
     componentWillMount: function () {
-      LoginActions.loginComplete(this.getComponentData());
-      LoginActions.userData();
+      UserActions.loginComplete(this.getComponentData());
 
       this.redirect();
 
-      LoginStore.addChangeListener(this.onChange);
+      UserStore.addChangeListener(this.onChange);
     },
 
     componentWillUnmount: function () {
-      LoginStore.removeChangeListener(this.onChange);
+      UserStore.removeChangeListener(this.onChange);
     },
 
     redirect: function () {
-      var loggedIn = LoginStore.getLoggedIn();
-      if (loggedIn) {
+      var user = UserStore.getUser();
+      if (user) {
         this.transitionTo("folders");
       }
     },
