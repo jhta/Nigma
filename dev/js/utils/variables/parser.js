@@ -67,6 +67,19 @@ var VariableParser = {
       }
     });
     return output;
+  },
+  executeCode(javascriptCode, variables) {
+    for(var i=0; i < javascriptCode.length; i++){
+      try{
+        eval(javascriptCode[i])
+      } catch(exception) {
+        console.log(`Error at line ${i + 1}: ${exception.message}`);
+      }
+    }
+    var output = {};
+    variables.forEach(variable => output[variable.name] = eval(`${variable.name}`))
+    console.log(output);
+
   }
 }
 

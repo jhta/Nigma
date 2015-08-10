@@ -49,7 +49,7 @@ var Uniform = function(codeFragment) {
     } else {
       var parameters = this.getParameters();
       var variable = parameters.variable;
-      variable.code = `var ${variable.name} = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step};`
+      variable.code = `window.${variable.name} = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step}`
       return {
         error: false,
         variable: variable

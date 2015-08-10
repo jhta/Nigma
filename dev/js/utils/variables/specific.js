@@ -57,7 +57,7 @@ let Specific = function(codeFragment) {
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `var ${variable.name} = ${vectorName}[${randomName}]`
+        `window.${variable.name} = ${vectorName}[${randomName}]`
       ]
       variable.code = code.join(";");
       return {
