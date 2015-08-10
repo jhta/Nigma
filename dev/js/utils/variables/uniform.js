@@ -1,16 +1,14 @@
 var Uniform = function(codeFragment) {
-  var self = this;
-  self.codeFragment = codeFragment;
+  this.codeFragment = codeFragment;
 
-  self.checkSyntax = function () {
-    var match = self.codeFragment.match(self.syntax);
+  this.checkSyntax = function() {
+    var match = this.codeFragment.match(this.syntax);
     var emptyParameters = false;
     if(match){
       emptyParameters = [match[3].trim(), match[4].trim(), match[5].trim()].some(function (element) {
         return element == '';
       });
     }
-
     if(!match || emptyParameters){
       return false;
     } else if (match && !emptyParameters){
@@ -20,16 +18,16 @@ var Uniform = function(codeFragment) {
     }
   }
 
-  self.getParameters = function () {
-    var match = self.codeFragment.match(self.syntax);
+  this.getParameters = function() {
+    var match = this.codeFragment.match(this.syntax);
     if(match){
       return {
         error: false,
         variable: {
           name: match[1].trim(),
-          min: parseInt(match[3].trim()),
-          max: parseInt(match[4].trim()),
-          step: parseInt(match[5].trim()),
+          min: match[3].trim(),
+          max: match[4].trim(),
+          step: match[5].trim(),
         }
       }
     } else {
@@ -40,8 +38,8 @@ var Uniform = function(codeFragment) {
     }
   }
 
-  self.generateCode = function () {
-    var variableParameters = self.getParameters();
+  this.generateCode = function() {
+    var variableParameters = this.getParameters();
     if(variableParameters.error){
       return {
         error: true,
@@ -49,27 +47,21 @@ var Uniform = function(codeFragment) {
       }
     }else {
       var variable = variableParameters.variable;
-      var vector = []
-      for(var i = variable.min; i <= variable.max; i+= variable.min){
-        vector.push(i);
-      }
-      var vectorName = "vector_" + variable.name;
+
       var randomName = "random_" + variable.name;
 
       var code = [
-        ["var ", vectorName , "=[", vector, "];"].join(""),
-        ["var ", randomName, "=", "Math.floor((Math.random() * ", vector.length ,"))"].join(""),
-        ["var ", variable.name, "=", vectorName, "[", randomName, "];"].join("")
+        `var ${variable.name} = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step}`,
       ]
+      variable["code"] = code;
       return {
         error: false,
-        code: code
+        variable: variable
       };
     }
   }
 
-
 }
 Uniform.prototype.identifier = 'U'
-Uniform.prototype.syntax =  /([a-zA-Z\_\-]+[0-9A-Za-z\_\-\$]*)*\s*=\s*(u|U)\[([^\;]+)\;([^\;]+)\;([^\]]+)\]/
+Uniform.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\;]+)\;([^\;]+)\;([^\]]+)\]/
 module.exports = Uniform;

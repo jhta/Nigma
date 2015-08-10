@@ -6,7 +6,7 @@ const Categorical = require('./categorical');
 var VariableParser = {
 
   _detectVariableType(nigmaCode){
-    var regex = /([a-zA-Z\_\-]+[0-9A-Za-z\_\-\$]*)*\s*=\s*(u|e|c|U|E|C)(\[|\{)/
+    var regex = /(\$[a-zA-Z])\s*=\s*(u|e|c|U|E|C)(\[|\{)/
     var match = nigmaCode.match(regex)
     if(match){
       var type;
@@ -42,17 +42,17 @@ var VariableParser = {
   generateCode(nigmaCode) {
     var output = {
       errors: [],
-      code: []
+      result: []
     }
     var _detect = this._detectVariableType;
     nigmaCode.forEach(function (codeFragment) {
       var variableType = _detect(codeFragment)
       if(variableType.error){
-        output.error.push(variableType.errorMessage)
+        output.errors.push(variableType.errorMessage)
       } else {
         var variable = new variableType.variable.type(codeFragment);
         if(variable.checkSyntax()){
-          output.code.push(variable.generateCode().code)
+          output.result.push(variable.generateCode())
         } else {
           console.log("Somethning is not right", variable.checkSyntax());
           /** **/

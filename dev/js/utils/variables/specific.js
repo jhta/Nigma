@@ -1,8 +1,8 @@
-var Specific = function (codeFragment) {
-  var self = this;
-  self.codeFragment = codeFragment;
+var Specific = function(codeFragment) {
 
-  self.checkSyntax =  function () {
+  this.codeFragment = codeFragment;
+
+  this.checkSyntax = function() {
     var regex = this.syntax;
     var match = this.codeFragment.match(regex);
     var elementsFilled = true;
@@ -25,8 +25,8 @@ var Specific = function (codeFragment) {
     }
   }
 
-  self.getParameters = function () {
-    var match = self.codeFragment.match(self.syntax);
+  this.getParameters = function() {
+    var match = this.codeFragment.match(this.syntax);
     if(match){
       var elements = match[3].split(',');
       for(var i = 0;i < elements.length; i++){
@@ -51,8 +51,8 @@ var Specific = function (codeFragment) {
     }
   }
 
-  self.generateCode = function () {
-    var variableParameters = self.getParameters();
+  this.generateCode = function() {
+    var variableParameters = this.getParameters();
     if(variableParameters.error){
       return {
         error: true,
@@ -65,17 +65,18 @@ var Specific = function (codeFragment) {
       var randomName = "random_" + variable.name;
 
       var code = [
-        ["var ", vectorName , "=[", vector, "];"].join(""),
+        ["var ", vectorName , "=[", vector, "]"].join(""),
         ["var ", randomName, "=", "Math.floor((Math.random() * ", vector.length ,"))"].join(""),
-        ["var ", variable.name, "=", vectorName, "[", randomName, "];"].join("")
+        ["var ", variable.name, "=", vectorName, "[", randomName, "]"].join("")
       ]
+      variable["code"] = code;
       return {
         error: false,
-        code: code
+        variable: variable
       };
     }
   }
 }
 Specific.prototype.identifier = 'E'
-Specific.prototype.syntax =  /([a-zA-Z\_\-]+[0-9A-Za-z\_\-\$]*)*\s*=\s*(e|E)\{([^\}]+)\}/
+Specific.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/
 module.exports = Specific;
