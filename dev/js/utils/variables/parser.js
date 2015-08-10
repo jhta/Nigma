@@ -23,18 +23,15 @@ var VariableParser = {
       }
       return {
         error: false,
-        errorMessage: null,
-        variable: {
-          name: match[1],
-          type: type
-        }
+        message: null,
+        type: type
       }
 
     }else{
       return {
         error: true,
-        errorMessage: "Variable is not well formated or type could not be determined",
-        variable: null
+        message: "Variable is not well formated or type could not be determined. Uniform: $x = U[min; max; step], Specific: $x = E{exp1, exp2,..., expn}, Categorical: $x = C{'text 1', 'text 2', ... , 'text 3'}",
+        type: null
       }
     }
   },
@@ -42,25 +39,34 @@ var VariableParser = {
   generateCode(nigmaCode) {
     var output = {
       errors: [],
-      result: []
+      code: [],
+      variables: []
     }
     var _detect = this._detectVariableType;
+    var line = 0;
     nigmaCode.forEach(function (codeFragment) {
+      line++;
       var variableType = _detect(codeFragment)
       if(variableType.error){
-        output.errors.push(variableType.errorMessage)
+        output.errors.push({
+          message: `Error at line ${line}: ${variableType.message}`,
+          line: line
+        });
       } else {
-        var variable = new variableType.variable.type(codeFragment);
-        if(variable.checkSyntax()){
-          output.result.push(variable.generateCode())
+        var variable = new variableType.type(codeFragment);
+        var variableOuput = variable.generateCode();
+        if(variableOuput.error){
+          output.errors.push({
+            message: `Error at line ${line}: ${variable.message}`,
+            line: line
+          });
         } else {
-          console.log("Somethning is not right", variable.checkSyntax());
-          /** **/
+          output.code.push(variableOuput.variable.code);
+          output.variables.push(variableOuput.variable);
         }
       }
     });
-
-    return output
+    return output;
   }
 }
 

@@ -1,75 +1,65 @@
-var Specific = function(codeFragment) {
+let Specific = function(codeFragment) {
 
   this.codeFragment = codeFragment;
 
   this.checkSyntax = function() {
-    var regex = this.syntax;
-    var match = this.codeFragment.match(regex);
-    var elementsFilled = true;
+    let regex = this.syntax;
+    let match = this.codeFragment.match(regex);
+    let elementsFilled = true;
     if(match){
-      var elements = match[3].split(',');
-      for(var i = 0;i < elements.length; i++){
-        elements[i] = elements[i].trim();
-        if(elements[i] == ''){
-          elementsFilled = false;
-          break;
-        }
-      }
+      let elements = match[3].split(',');
+      elementsFilled = elements.every(element => element.trim() != '');
     }
-    if(!match || !elementsFilled){
-      return false;
-    } else if(match && elementsFilled) {
-      return true;
+
+    if(match && !elementsFilled){
+      return {
+        error: true,
+        message: 'Incorrect syntax for specific variable. Some of the parameters of the Specific variable are empty'
+      };
+    } else if (!match){
+      return {
+        error: true,
+        message: 'Incorrect syntax for specific variable. The syntax used to create a Specific variable is $x = E{exp1, exp2,..., expn}'
+      };
     } else {
-      return false
+      return {
+        error: false,
+        message: null
+      }
     }
   }
 
   this.getParameters = function() {
-    var match = this.codeFragment.match(this.syntax);
-    if(match){
-      var elements = match[3].split(',');
-      for(var i = 0;i < elements.length; i++){
-        elements[i] = elements[i].trim();
-        if(elements[i] == ''){
-          elementsFilled = false;
-          break;
-        }
-      }
-      return {
-        error: false,
-        variable: {
-          name: match[1].trim(),
-          elements: elements
-        }
-      }
-    } else {
-      return {
-        error: true,
-        variable: null
+    let match = this.codeFragment.match(this.syntax);
+    let elements = match[3].split(',');
+    elements = elements.map(element => (element.trim()));
+    return {
+      error: false,
+      variable: {
+        name: match[1].trim(),
+        elements: elements,
+        code: null
       }
     }
   }
 
   this.generateCode = function() {
-    var variableParameters = this.getParameters();
-    if(variableParameters.error){
-      return {
-        error: true,
-        code: null
-      }
+    let syntaxValidation = this.checkSyntax();
+    if(syntaxValidation.error){
+      return syntaxValidation
     } else {
-      var variable = variableParameters.variable;
-      var vector = variable.elements
-      var vectorName = "vector_" + variable.name;
-      var randomName = "random_" + variable.name;
+      let parameters = this.getParameters();
+      let variable = parameters.variable;
+      let vector = variable.elements
+      let vectorName = "vector_" + variable.name;
+      let randomName = "random_" + variable.name;
 
-      var code = [
-        ["var ", vectorName , "=[", vector, "]"].join(""),
-        ["var ", randomName, "=", "Math.floor((Math.random() * ", vector.length ,"))"].join(""),
-        ["var ", variable.name, "=", vectorName, "[", randomName, "]"].join("")
+      let code = [
+        `var ${vectorName} = [${vector}]`,
+        `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
+        `var ${variable.name} = ${vectorName}[${randomName}]`
       ]
-      variable["code"] = code;
+      variable.code = code.join(";");
       return {
         error: false,
         variable: variable
