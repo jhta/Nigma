@@ -21,11 +21,11 @@ var MenuActions = {
   },
   createQuestion(folderIndex, folder, questionName) {
     QuestionAPI.createQuestion({
-        folderid: folder._id,
-        question: {
-          name: questionName
-        }
-      }, (err, question) => {
+      folderid: folder._id,
+      question: {
+        name: questionName
+      }
+    }, (err, question) => {
       if(!err){
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
@@ -58,13 +58,12 @@ var MenuActions = {
     });
   },
   updateFolder(folderIndex, folder, folderName){
-    folderName = "LALAL ESTO ESTA QUEMADO EN ACTIONS"
     var data = {
       folderid: folder._id,
       folder: {
         name: folderName
       }
-    }
+    };
     FolderAPI.updateFolder(data, (err, res) => {
       if(!err){
         Dispatcher.dispatch({
