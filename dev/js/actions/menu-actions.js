@@ -4,13 +4,14 @@ const QuestionAPI = require('../api/utils/question');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
+
   createFolder(folderName) {
     FolderAPI.createFolder({
       folder: {
         name: folderName
       }
     }, (err, folder) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
           folder: folder
@@ -19,6 +20,7 @@ var MenuActions = {
     });
 
   },
+
   createQuestion(folderIndex, folder, questionName) {
     QuestionAPI.createQuestion({
       folderid: folder._id,
@@ -26,7 +28,7 @@ var MenuActions = {
         name: questionName
       }
     }, (err, question) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
           folderIndex: folderIndex,
@@ -34,11 +36,11 @@ var MenuActions = {
         });
       }
     });
-
   },
+
   listFolders() {
     FolderAPI.listFolders({}, (err, folders) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
           folders: folders
@@ -46,9 +48,10 @@ var MenuActions = {
       }
     });
   },
+
   deleteFolder(folderIndex, folder){
     FolderAPI.deleteFolder({folderid: folder._id}, (err, res) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.DELETE_FOLDER,
           folderIndex: folderIndex,
@@ -57,6 +60,7 @@ var MenuActions = {
       }
     });
   },
+
   updateFolder(folderIndex, folder, folderName){
     var data = {
       folderid: folder._id,
@@ -64,8 +68,9 @@ var MenuActions = {
         name: folderName
       }
     };
+
     FolderAPI.updateFolder(data, (err, res) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.EDIT_FOLDER,
           folderIndex: folderIndex,
@@ -74,8 +79,21 @@ var MenuActions = {
         });
       }
     });
+  },
+
+  deleteQuestion(questionId, folder, folderIndex){
+    QuestionAPI.deleteQuestion({questionid: questionId}, (err, res) => {
+      if (!err) {
+        Dispatcher.dispatch({
+          type: MenuActionConstants.DELETE_QUESTION,
+          questionId: questionId,
+          folder: folder,
+          folderIndex: folderIndex
+        });
+      }
+    });
   }
 
-}
+};
 
 module.exports = MenuActions;

@@ -45,7 +45,6 @@ var FolderNameForm = React.createClass({
         <Modal headerText="Editar carpeta" ref="modal" positiveCallback={this._updateFolder}
                negativeCallback={this._cancelUpdate}>
           <div className="input-field col s12">
-            <label htmlFor="folder-name">Nombre</label>
             <input
               type="text"
               valueLink={this.linkState('folderName')}

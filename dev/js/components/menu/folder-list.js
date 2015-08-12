@@ -49,7 +49,7 @@ FolderList.Folder = React.createClass({
     var questions = null;
     if (folder.questions) {
       questions = folder.questions.map((question, index) => {
-        return <FolderList.Folder.Item item={question} folder={folder} key={question._id}/>
+        return <FolderList.Folder.Item item={question} folderIndex={folderIndex} folder={folder}/>
       });
     }
 
@@ -92,12 +92,27 @@ FolderList.Folder.Item = React.createClass({
     item: React.PropTypes.object.isRequired
   },
 
+  _deleteQuestion(evt) {
+    MenuActions.deleteQuestion(this.props.item._id, this.props.folder, this.props.folderIndex)
+  },
+
   render() {
     let item = this.props.item;
     return (
-      <a className="FolderItem collection-item">
-        {item.name}
-      </a>
+      <div className="collection-item">
+        <a className="FolderItem">
+          {item.name}
+        </a>
+
+        <div className="Folder-body_actions">
+          <a className="Folder-body_actions__trash" onClick={this._deleteQuestion}>
+            <i className="material-icons">
+              delete
+            </i>
+          </a>
+        </div>
+      </div>
+
     );
   }
 

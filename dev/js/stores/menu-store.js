@@ -17,15 +17,26 @@ function _setFolders(folders) {
 function _createQuestion(folderIndex, question) {
   _folders[folderIndex].questions.push(question)
 }
+
 function _deleteFolder(folderIndex, folder) {
-  if(_folders[folderIndex]._id == folder._id){
+  if (_folders[folderIndex]._id == folder._id) {
     _folders.splice(folderIndex, 1)
   }
 }
 
 function _editFolder(folderIndex, folder, folderName) {
-  if(_folders[folderIndex]._id == folder._id){
+  if (_folders[folderIndex]._id == folder._id) {
     _folders[folderIndex].name = folderName
+  }
+}
+
+function _deleteQuestion(questionId, folder, folderIndex) {
+  if (_folders[folderIndex]._id == folder._id) {
+    _folders[folderIndex].questions.map((question, index) => {
+      if (question._id == questionId) {
+        _folders[folderIndex].questions.splice(index, 1);
+      }
+    })
   }
 }
 
@@ -37,7 +48,7 @@ var MenuStore = assign({}, EventEmitter.prototype, {
   /**
    * @param {function} callback
    */
-  addChangeListener(callback) {
+    addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
@@ -50,7 +61,7 @@ var MenuStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-MenuStore.dispatchToken = Dispatcher.register(function(action) {
+MenuStore.dispatchToken = Dispatcher.register(function (action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
       _addFolder(action.folder);
@@ -70,6 +81,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case MenuActionsConstants.EDIT_FOLDER:
       _editFolder(action.folderIndex, action.folder, action.folderName);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.DELETE_QUESTION:
+      _deleteQuestion(action.questionId, action.folder, action.folderIndex);
       MenuStore.emitChange();
       break;
     default:
