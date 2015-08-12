@@ -4,42 +4,48 @@ const CHANGE_EVENT = 'change';
 var Dispatcher = require('../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var _folders = [];
 
-var _folders = require('../components/menu/example-items');
-
-function _addFolder(folderName) {
-  var folder = {
-    id: _folders.length + 1,
-    name: folderName,
-    items: []
-  }
+function _addFolder(folder) {
   _folders.push(folder);
 }
 
-function _addQuestion(folderIndex, question) {
-  if(folderIndex >= 0 && folderIndex < _folders.length){
-    _folders[folderIndex].items.push({
-      title: question
-    });
+function _setFolders(folders) {
+  _folders = folders;
+}
+
+function _createQuestion(folderIndex, question) {
+  _folders[folderIndex].questions.push(question)
+}
+function _deleteFolder(folderIndex, folder) {
+  if(_folders[folderIndex]._id == folder._id){
+    _folders.splice(folderIndex, 1)
+  }
+}
+
+function _editFolder(folderIndex, folder, folderName) {
+  if(_folders[folderIndex]._id == folder._id){
+    _folders[folderIndex].name = folderName
   }
 }
 
 var MenuStore = assign({}, EventEmitter.prototype, {
-  emitChange: function() {
+  emitChange() {
     this.emit(CHANGE_EVENT);
   },
 
   /**
    * @param {function} callback
    */
-  addChangeListener: function(callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function(callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
-  getFolders: function() {
+
+  getFolders(){
     return _folders;
   }
 });
@@ -47,12 +53,23 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 MenuStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
-      _addFolder(action.folderName);
+      _addFolder(action.folder);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
-      console.log(action);
-      _addQuestion(action.folderIndex, action.question);
+      _createQuestion(action.folderIndex, action.question);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.LIST_FOLDERS:
+      _setFolders(action.folders);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.DELETE_FOLDER:
+      _deleteFolder(action.folderIndex, action.folder);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.EDIT_FOLDER:
+      _editFolder(action.folderIndex, action.folder, action.folderName);
       MenuStore.emitChange();
       break;
     default:

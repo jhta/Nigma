@@ -5,12 +5,22 @@
 
 const Auth = {
 
-  loggedIn() {
-    return localStorage.getItem("token");
-  },
 
   loginComplete(token){
     localStorage.setItem("token", token);
+  },
+
+  saveUserData(user){
+    localStorage.setItem("user", JSON.stringify(user));
+  },
+
+  getUser(){
+    return JSON.parse(localStorage.getItem("user"));
+  },
+
+  logout(cb) {
+    localStorage.clear();
+    cb(false);
   },
 
   getToken() {

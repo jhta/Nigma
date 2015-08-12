@@ -33,7 +33,9 @@ var Modal = React.createClass({
   },
 
   openModal: function() {
-    $(this.getDOMNode()).openModal();
+    $(this.getDOMNode()).openModal({
+      dismissible: false
+    });
   },
 
   closeModal: function() {
