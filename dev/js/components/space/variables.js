@@ -4,6 +4,11 @@ const React = require("react");
 const Modal = require('./../util/modal');
 
 
+//Variables
+var Uniform = require('../../utils/variables/uniform');
+var Specific = require('../../utils/variables/specific');
+var Categorical = require('../../utils/variables/categorical');
+
 const Variables = React.createClass({
 
   getInitialState() {
@@ -23,12 +28,7 @@ const Variables = React.createClass({
       <div className="Space-right z-depth-1">
         <div className="Variables">
           <Variables.Header />
-          <Variables.Content
-            onOpenModal = {this._openModal}
-          />
-          <Variables.Modal
-            showModal = {this.state.showModal}
-          />
+          <Variables.Content/>
         </div>
     </div>
     );
@@ -52,91 +52,43 @@ Variables.Header = React.createClass({
 });
 
 Variables.Content = React.createClass({
+
   render() {
     return (
       <div className="Variables-Content">
-        Nothing here yet...
-        <Variables.Dropdown {...this.props}/>
+        <Variables.Content.Create />
       </div>
     )
   }
 });
 
-Variables.Dropdown = React.createClass({
-
-  _selectType(type) {
-    return ()=>{
-      this.props.onOpenModal(type);
-    }
+Variables.Content.Create = React.createClass({
+  _createVariable(variableIndentifier) {
+    console.log(variableIndentifier);
   },
-
   render() {
     return (
-      <div>
-        {/* Dropdown Trigger */}
-        <div className="dropdown-button btn" data-activates="dropdown-variables">
-          Drop Me!
-        </div>
-        {/* Dropdown Structure */}
-        <ul id="dropdown-variables" className="dropdown-content">
-          <li>
-            <a
-              onClick = {this._selectType(0)}
-              href="javascript:void(0)"
-            >
-              one
-            </a>
+      <div className="Variables-Content__actions">
+        <i className="small material-icons dropdown-button" data-activates='dropme' data-beloworigin='true' data-constrainwidth='false'>add_box</i>
+        <ul id='dropme' className='dropdown-content'>
+          <li
+            onClick={this._createVariable(Uniform.prototype.identifier)}>
+              <a>Uniforme</a>
           </li>
-          <li><a href="javascript:void(0)">two</a></li>
-          <li><a href="javascript:void(0)">three</a></li>
+          <li
+            onClick={this._createVariable(Categorical.prototype.identifier)}>
+              <a>Categorica</a>
+          </li>
+          <li
+            onClick={this._createVariable(Specific.prototype.identifier)}>
+            <a>Especifica</a>
+          </li>
         </ul>
       </div>
-
-    );
-  }
-});
-
-Variables.Modal = React.createClass({
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.showModal) {
-      this._openModal();
-    }
-  },
-
-  _openModal() {
-    this.refs.modal.openModal();
-  },
-
-  _selectType() {
-    let type = this.props.type;
-    switch(type) {
-      case 0:
-        console.log("0");
-        break;
-
-      case 1:
-        console.log("0");
-        break;
-    }
-  },
-
-  render() {
-    return (
-      <Modal
-        headerText="Nueva pregunta"
-        ref="modal"
-        positiveCallback={console.log("holi")}
-      >
-        <div className="input-field col s12">
-          <input
-            type="text"
-          />
-          <label htmlFor="question-name">Nombre</label>
-        </div>
-      </Modal>
     )
   }
 });
+
+
 
 module.exports = Variables;
