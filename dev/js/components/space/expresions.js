@@ -16,7 +16,7 @@ const Expresions = React.createClass({
       <div className="Space-right z-depth-1">
         <div className="Expresions z-depth-1">
           <Expresions.Header />
-          <Expresions.Content />
+          <Expresions.Content  {...this.props}/>
         </div>
     </div>
     );
@@ -44,9 +44,9 @@ Expresions.Content = React.createClass({
     return (
       <div className="Expresions-Content">
         <ul className="Expresions-Content__collapse collapsible z-depth-0" data-collapsible="accordion">
-          <Expresions.Collapse />
-          <Expresions.Collapse />
-          <Expresions.Collapse />
+          <Expresions.Collapse {...this.props}/>
+          <Expresions.Collapse {...this.props}/>
+          <Expresions.Collapse {...this.props}/>
         </ul>
       </div>
     )
@@ -59,17 +59,12 @@ Expresions.Collapse = React.createClass({
       <li>
         <div className="collapsible-header">First</div>
         <div className="collapsible-body Expresions-Content__wrapper">
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
-          <Expresion img="images/arsec.png"/>
+          <Expresion img="images/arsec.png" {...this.props}/>
+          <Expresion img="images/arsec.png" {...this.props}/>
+          <Expresion img="images/arsec.png" {...this.props}/>
+          <Expresion img="images/arsec.png" {...this.props}/>
+          <Expresion img="images/arsec.png" {...this.props}/>
+          <Expresion img="images/arsec.png" {...this.props}/>
         </div>
       </li>
 

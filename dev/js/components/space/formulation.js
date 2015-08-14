@@ -18,12 +18,19 @@ const Formulation = React.createClass({
   getInitialState() {
     return {
       html: "escribe algo...",
-      showGenerator: false
     }
   },
 
   componentDidMount() {
     setTimeout(Ckeditor.start(this._onOpen, this._onClose),100);
+    this.props.changeDialogTex(Ckeditor.getTeX);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    console.log("receive props");
+    if(this.props.dialogTeX != nextProps.dialogTeX) {
+      Ckeditor.addTeX(nextProps.dialogTeX);
+    }
   },
 
   _onOpen() {
@@ -42,8 +49,8 @@ const Formulation = React.createClass({
     this.setState({html: e.target.value})
   },
 
-  _addExpresion() {
-    this.setState({showGenerator: true});
+  _addExpresion(TeX) {
+    CKEditor.addTeX(TeX);
   },
 
   render() {
@@ -54,21 +61,6 @@ const Formulation = React.createClass({
             <p>{this.state.html}</p>
           </div>
         </div>
-
-        <div className="row">
-          <Button
-            label = "Expresion"
-            icon  = "code"
-            cssClass = "Button"
-            onClick  = {this._addExpresion}
-          />
-          <Button
-            label = "Imagen"
-            icon  = "attach_file"
-            cssClass = "Button"
-          />
-        </div>
-        <ExpresionGenerator show={this.state.showGenerator}/>
       </div>
     )
   }

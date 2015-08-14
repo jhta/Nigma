@@ -70,13 +70,24 @@ const CKEditor = {
     if(window.DialogTEXOpen) {
       setTimeout(() => {
         window.TeXCloseButton = document.getElementById("cke_dialog_close_button_75");
-        console.log("textClosebutton", TeXCloseButton);
         window.TeXCloseButton.addEventListener("click", () => {
           cb();
         });
-        //captureText();
       }, 400)
     }
+  },
+
+  addTeX(TeX) {
+    //CAMBIAR EL JQUERY!!!
+    console.log("fuck yeah", TeX);
+    setTimeout(() => {
+      window.TeXNode = document.getElementById("cke_80_textarea");
+      if(window.TeXNode) {
+        console.log(window.TeXNode, TeX);
+        let lastVal = window.TeXNode.value;
+        window.TeXNode.value = lastVal + TeX;
+      }
+    }, 400);
   },
 
   changeTeX(cb) {
@@ -89,6 +100,10 @@ const CKEditor = {
       //var newVal = $("#cke_80_textarea").val();
       //console.log(newVal);
     }, 400);
+  },
+
+  getTeX() {
+    return (window.TeX)? window.TeX:"";
   }
 }
 

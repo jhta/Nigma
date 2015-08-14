@@ -14,12 +14,19 @@ const Space = React.createClass({
 
   getInitialState() {
     return {
-      expresions: false
+      expresions: false,
+      dialogTeX: ""
     }
   },
 
   showExpresions(flag=true) {
     this.setState({expresions: flag});
+  },
+
+  changeDialogTex(TeX) {
+    console.log("TeX", TeX);
+    //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
+    this.setState({dialogTeX: TeX});
   },
 
   render() {
@@ -37,6 +44,8 @@ const Space = React.createClass({
                   expresions={this.state.expresions}
                   showExpresions={this.showExpresions}
                   closeExpresions={this.closeExpresions}
+                  changeDialogTex={this.changeDialogTex}
+                  dialogTeX={this.state.dialogTeX}
                 />
               </Tab>
               <Tab label="Respuestas" style={styleTab}>
@@ -52,6 +61,8 @@ const Space = React.createClass({
         </div>
         <RightPanel
           expresions={this.state.expresions}
+          changeDialogTex={this.changeDialogTex}
+          dialogTeX={this.state.dialogTeX}
         />
       </div>
     )
