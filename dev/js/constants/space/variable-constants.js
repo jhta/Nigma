@@ -1,3 +1,4 @@
 module.exports = {
   ADD_VARIABLE: "ADD_VARIABLE",
+  VALIDATE_CODE: "VALIDATE_CODE",
 };

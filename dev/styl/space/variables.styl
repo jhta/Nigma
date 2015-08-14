@@ -1,6 +1,7 @@
 .Variables
   margin-bottom: 30px;
 
+
   &-Header
     height: 50px;
     padding: 0 10px;
@@ -26,5 +27,14 @@
         .material-icons
           cursor pointer
           color #039be5
+
+.spin
+  animation spin 2s infinite linear
+
+@keyframes spin
+  0%
+    transform rotate(359deg)
+  100%
+    transform rotate(0deg)
 
 

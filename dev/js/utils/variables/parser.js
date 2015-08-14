@@ -39,7 +39,6 @@ var VariableParser = {
   generateCode(nigmaCode) {
     var output = {
       errors: [],
-      code: [],
       variables: []
     }
     var _detect = this._detectVariableType;
@@ -61,25 +60,31 @@ var VariableParser = {
             line: line
           });
         } else {
-          output.code.push(variableOuput.variable.code);
           output.variables.push(variableOuput.variable);
         }
       }
     });
     return output;
   },
-  executeCode(javascriptCode, variables) {
+  executeCode(variables) {
+    var output = {
+      errors: [],
+      result: null
+    };
+    var javascriptCode = variables.map(variable => variable.code);
     for(var i=0; i < javascriptCode.length; i++){
       try{
         eval(javascriptCode[i])
       } catch(exception) {
-        console.log(`Error at line ${i + 1}: ${exception.message}`);
+        output.errors.push({message: `Error at line ${i + 1}: ${exception.message}`, line: i + 1 });
       }
     }
-    var output = {};
-    variables.forEach(variable => output[variable.name] = eval(`${variable.name}`))
-    console.log(output);
+    if(output.errors.length == 0){
+      output.result = {}
+      variables.forEach(variable => output.result[variable.name] = eval(`${variable.name}`))
+    }
 
+    return output;
   }
 }
 

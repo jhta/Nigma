@@ -56,6 +56,7 @@ Variables.Header = React.createClass({
 
 Variables.Content = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
+  type: 'Content',
 
   getInitialState: function() {
     return {
@@ -64,13 +65,17 @@ Variables.Content = React.createClass({
   },
 
   componentWillMount() {
-    VariableStore.addChangeListener(this._handleChange)
+    VariableStore.addChangeListener(this._handleChange.bind(this, this.type))
   },
 
-  _handleChange(){
+  _handleChange(type){
     this.setState({
       variables: VariableStore.getVariables()
     });
+  },
+
+  _getVariables() {
+    return this.state.variables;
   },
 
   render() {
@@ -80,7 +85,7 @@ Variables.Content = React.createClass({
         <div className="Variables-Content__actions">
           <textarea valueLink={this.linkState('variables')} />
         </div>
-        <Variables.Content.SaveAndCheck variables={this.state.variables} />
+        <Variables.Content.SaveAndCheck getVariables={this._getVariables} />
       </div>
     )
   },
@@ -115,11 +120,45 @@ Variables.Content.Create = React.createClass({
 
 
 Variables.Content.SaveAndCheck =  React.createClass({
+  type: "SaveAndCheck",
+
+  getInitialState: function() {
+    return {
+      validating: false
+    };
+  },
+
+  _validate() {
+    this.setState({
+      validating: true
+    });
+    VariableActions.validateCode(this.props.getVariables());
+  },
+
+  componentWillMount() {
+    VariableStore.addChangeListener(this._handleChange)
+  },
+
+  _handleChange(type){
+    var validationOutput = VariableStore.getValidationOutPut();
+      this.setState({
+        validating: false
+      });
+    if(validationOutput && validationOutput.error){
+      alert(validationOutput.errors.map(error => error.message).join("\n"));
+    }
+    console.log("Salida", validationOutput);
+
+  },
+
   render() {
-    console.log(this.props.variables);
+    var classCSS = { css: "small material-icons", icon: "done"}
+    if (this.state.validating) {
+      classCSS = {css: "small material-icons spin", icon: "loop"}
+    }
     return (
       <div className="Variables-Content-actions__check_save">
-         <i className="small material-icons dropdown-button">done</i>
+         <i className={classCSS.css} onClick={this._validate}>{classCSS.icon}</i>
       </div>
     );
   }
