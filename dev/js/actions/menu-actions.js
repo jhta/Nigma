@@ -22,6 +22,8 @@ var MenuActions = {
   },
 
   createQuestion(folderIndex, folder, questionName) {
+    console.log("Estamos en el action");
+    console.log(folder);
     QuestionAPI.createQuestion({
       folderid: folder._id,
       question: {
@@ -39,11 +41,12 @@ var MenuActions = {
   },
 
   listFolders() {
-    FolderAPI.listFolders({}, (err, folders) => {
+    FolderAPI.listFolders({}, (err, folders, default_folder) => {
       if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          folders: folders
+          folders: folders,
+          default_folder: default_folder
         });
       }
     });

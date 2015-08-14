@@ -24,7 +24,7 @@ const FolderAPI = {
       if(err){
         cb(true, null);
       } else {
-        cb(!res.body.ok, res.body.folders);
+        cb(!res.body.ok, res.body.folders, res.body.default_folder);
       }
     });
   },

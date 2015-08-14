@@ -4,7 +4,9 @@ const CHANGE_EVENT = 'change';
 var Dispatcher = require('../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+
 var _folders = [];
+var _default_folder;
 
 function _addFolder(folder) {
   _folders.push(folder);
@@ -14,8 +16,16 @@ function _setFolders(folders) {
   _folders = folders;
 }
 
+function _setDefaultFolder(folder) {
+  _default_folder = folder;
+}
+
 function _createQuestion(folderIndex, question) {
-  _folders[folderIndex].questions.push(question)
+  if (folderIndex == -1) {
+    _default_folder.questions.push(question);
+    return;
+  }
+  _folders[folderIndex].questions.push(question);
 }
 
 function _deleteFolder(folderIndex, folder) {
@@ -58,6 +68,10 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 
   getFolders(){
     return _folders;
+  },
+
+  getDefaultFolder(){
+    return _default_folder;
   }
 });
 
@@ -73,6 +87,7 @@ MenuStore.dispatchToken = Dispatcher.register(function (action) {
       break;
     case MenuActionsConstants.LIST_FOLDERS:
       _setFolders(action.folders);
+      _setDefaultFolder(action.default_folder);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.DELETE_FOLDER:
