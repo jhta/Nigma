@@ -69,4 +69,8 @@ var Categorical = function(codeFragment) {
 }
 Categorical.prototype.identifier = 'C'
 Categorical.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/
+Categorical.prototype.createSkeleton = function(){
+  return "$C = C{'texto 1', 'texto 2'}";
+}
+
 module.exports = Categorical;

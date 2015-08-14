@@ -2,12 +2,15 @@ const React = require("react");
 
 //USED
 const Modal = require('./../util/modal');
-
+const VariableActions = require('../../actions/space/variable-actions');
 
 //Variables
-var Uniform = require('../../utils/variables/uniform');
-var Specific = require('../../utils/variables/specific');
-var Categorical = require('../../utils/variables/categorical');
+const Uniform = require('../../utils/variables/uniform');
+const Specific = require('../../utils/variables/specific');
+const Categorical = require('../../utils/variables/categorical');
+
+//Stores
+const VariableStore = require('../../stores/space/variable-store');
 
 const Variables = React.createClass({
 
@@ -52,35 +55,56 @@ Variables.Header = React.createClass({
 });
 
 Variables.Content = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function() {
+    return {
+      variables: ""
+    };
+  },
+
+  componentWillMount() {
+    VariableStore.addChangeListener(this._handleChange)
+  },
+
+  _handleChange(){
+    this.setState({
+      variables: VariableStore.getVariables()
+    });
+  },
 
   render() {
     return (
       <div className="Variables-Content">
         <Variables.Content.Create />
+        <div className="Variables-Content__actions">
+          <textarea valueLink={this.linkState('variables')} />
+        </div>
+        <Variables.Content.SaveAndCheck variables={this.state.variables} />
       </div>
     )
+  },
+  componentWillUnmount() {
+    VariableStore.removeChangeListener()
   }
 });
 
 Variables.Content.Create = React.createClass({
-  _createVariable(variableIndentifier) {
-    console.log(variableIndentifier);
+  _addVariable(varType) {
+    VariableActions.addVariable(varType.prototype.createSkeleton());
   },
   render() {
     return (
-      <div className="Variables-Content__actions">
+      <div className="Variables-Content-actions__create">
         <i className="small material-icons dropdown-button" data-activates='dropme' data-beloworigin='true' data-constrainwidth='false'>add_box</i>
         <ul id='dropme' className='dropdown-content'>
-          <li
-            onClick={this._createVariable(Uniform.prototype.identifier)}>
+          <li onClick={this._addVariable.bind(this, Uniform)}>
               <a>Uniforme</a>
           </li>
-          <li
-            onClick={this._createVariable(Categorical.prototype.identifier)}>
+          <li onClick={this._addVariable.bind(this, Categorical)}>
               <a>Categorica</a>
           </li>
-          <li
-            onClick={this._createVariable(Specific.prototype.identifier)}>
+          <li onClick={this._addVariable.bind(this, Specific)}>
             <a>Especifica</a>
           </li>
         </ul>
@@ -90,5 +114,15 @@ Variables.Content.Create = React.createClass({
 });
 
 
+Variables.Content.SaveAndCheck =  React.createClass({
+  render() {
+    console.log(this.props.variables);
+    return (
+      <div className="Variables-Content-actions__check_save">
+         <i className="small material-icons dropdown-button">done</i>
+      </div>
+    );
+  }
+});
 
 module.exports = Variables;

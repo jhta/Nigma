@@ -69,4 +69,8 @@ let Specific = function(codeFragment) {
 }
 Specific.prototype.identifier = 'E'
 Specific.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/
+Specific.prototype.createSkeleton = function(){
+  return "$E = E{numero 1, numero 2}";
+}
+
 module.exports = Specific;

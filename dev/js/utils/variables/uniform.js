@@ -55,10 +55,11 @@ var Uniform = function(codeFragment) {
         variable: variable
       };
     }
-
   }
-
 }
 Uniform.prototype.identifier = 'U'
-Uniform.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\;]+)\;([^\;]+)\;([^\]]+)\]/
+Uniform.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/
+Uniform.prototype.createSkeleton = function(){
+  return "$U = U[min, max, paso]";
+}
 module.exports = Uniform;
