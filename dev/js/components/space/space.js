@@ -12,27 +12,47 @@ const Space = React.createClass({
 
   mixins: [ThemeMixin],
 
+  getInitialState() {
+    return {
+      expresions: false
+    }
+  },
+
+  showExpresions(flag=true) {
+    this.setState({expresions: flag});
+  },
+
   render() {
+    const styleTab = {
+      background: '#009688',
+      opacity: '1'
+    };
     return (
       <div className="Space row">
         <div className="col s8">
           <div className="Space-content z-depth-1 ">
             <Tabs>
-              <Tab label="Formulacion" >
-                <Formulation />
+              <Tab label="Formulacion" style={styleTab}>
+                <Formulation
+                  expresions={this.state.expresions}
+                  showExpresions={this.showExpresions}
+                  closeExpresions={this.closeExpresions}
+                />
               </Tab>
-              <Tab label="Respuestas" >
+              <Tab label="Respuestas" style={styleTab}>
                 <Answers />
               </Tab>
 
-              <Tab label="Metadatos" >
+              <Tab label="Metadatos" style={styleTab}>
                 <Metadata />
               </Tab>
 
             </Tabs>
           </div>
         </div>
-        <RightPanel />
+        <RightPanel
+          expresions={this.state.expresions}
+        />
       </div>
     )
   }

@@ -3,10 +3,18 @@ const Expresion = require('./expresion');
 
 const Expresions = React.createClass({
 
+  propTypes: {
+    expresions: React.PropTypes.bool
+  },
+
   render() {
+    if(!this.props.expresions) {
+      return null;
+    }
+
     return (
       <div className="Space-right z-depth-1">
-        <div className="Expresions">
+        <div className="Expresions z-depth-1">
           <Expresions.Header />
           <Expresions.Content />
         </div>

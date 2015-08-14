@@ -99,8 +99,8 @@ gulp.task('images', function() {
 
 
 gulp.task('ckeditor', function() {
-  gulp.src('dev/js/libs/ckeditor.js')
-    .pipe(gulp.dest('dist/js'))
+  gulp.src('dev/ckeditor/**/**.*')
+    .pipe(gulp.dest('dist/ckeditor'))
 });
 
 
