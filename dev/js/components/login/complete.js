@@ -21,9 +21,7 @@ var LoginComplete =
 
     componentWillMount: function () {
       LoginActions.LoginComplete(this.getComponentData());
-
       this.redirect();
-
       LoginStore.addChangeListener(this.onChange);
     },
 
@@ -41,12 +39,11 @@ var LoginComplete =
      onChange: function () {
       this.setState({key: this.getComponentData()});
       this.redirect();
-
     },
 
     render: function () {
       return (
-        <p>No importa lo que muestre esto</p>
+        <p></p>
       )
     }
   });
