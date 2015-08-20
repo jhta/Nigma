@@ -14,7 +14,9 @@ function _addVariable (variableCode) {
 }
 
 function _setVariables (code) {
-  _variables = code.join("\n");
+  console.log("codigo", code);
+  if(code.length != 0)
+    _variables = code.join("\n") + "\n";
 }
 
 function _validateCode (code) {
@@ -69,6 +71,7 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
   _validationOutput = null;
   switch (action.type) {
     case VariableConstants.ADD_VARIABLE:
+      _setVariables(action.code);
       _addVariable(action.variableCode);
       VariableStore.emitChange();
       break;

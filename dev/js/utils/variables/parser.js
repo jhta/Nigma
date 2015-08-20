@@ -43,7 +43,8 @@ var VariableParser = {
     }
     var _detect = this._detectVariableType;
     var line = 0;
-    nigmaCode.forEach(function (codeFragment) {
+    for(var j = 0; j < nigmaCode.length; j++){
+      var codeFragment = nigmaCode[j];
       line++;
       var variableType = _detect(codeFragment)
       if(variableType.error){
@@ -51,6 +52,7 @@ var VariableParser = {
           message: `Error at line ${line}: ${variableType.message}`,
           line: line
         });
+        break;
       } else {
         var variable = new variableType.type(codeFragment);
         var variableOuput = variable.generateCode();
@@ -63,10 +65,11 @@ var VariableParser = {
           output.variables.push(variableOuput.variable);
         }
       }
-    });
+    };
     return output;
   },
   executeCode(variables) {
+    window.outputValues = {}
     var output = {
       errors: [],
       result: null
@@ -81,7 +84,7 @@ var VariableParser = {
     }
     if(output.errors.length == 0){
       output.result = {}
-      variables.forEach(variable => output.result[variable.name] = eval(`${variable.name}`))
+      variables.forEach(variable => output.result[variable.name] = eval(`window.outputValues['${variable.name}']`))
     }
 
     return output;

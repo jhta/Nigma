@@ -1,6 +1,13 @@
 var Uniform = function(codeFragment) {
   this.codeFragment = codeFragment;
 
+
+  var replaceVariables = function (parameter) {
+    if(parameter.match(/(\$[A-Za-z])/g))
+      parameter = parameter.replace(/(\$[A-Za-z])/g, `window.outputValues['$1']`);
+    return parameter;
+  }
+
   this.checkSyntax = function() {
     var match = this.codeFragment.match(this.syntax);
     var emptyParameters = false;
@@ -30,6 +37,9 @@ var Uniform = function(codeFragment) {
 
   this.getParameters = function() {
     var match = this.codeFragment.match(this.syntax);
+    match[3] = replaceVariables(match[3]);
+    match[4] = replaceVariables(match[4]);
+    match[5] = replaceVariables(match[5]);
     return {
       error: false,
       variable: {
@@ -49,13 +59,15 @@ var Uniform = function(codeFragment) {
     } else {
       var parameters = this.getParameters();
       var variable = parameters.variable;
-      variable.code = `window.${variable.name} = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step}`
+      variable.code = `window.outputValues['${variable.name}'] = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step}`
       return {
         error: false,
         variable: variable
       };
     }
   }
+
+
 }
 Uniform.prototype.identifier = 'U'
 Uniform.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/

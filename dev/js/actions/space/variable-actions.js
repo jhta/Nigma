@@ -2,10 +2,12 @@ const VariableConstants = require('../../constants/space/variable-constants');
 var Dispatcher = require('../../dispatchers/dispatcher');
 
 var VariableActions = {
-  addVariable(variableCode) {
+  addVariable(variableCode, code) {
+    code = code.split("\n").filter(variable => variable != '')
     Dispatcher.dispatch({
       type: VariableConstants.ADD_VARIABLE,
-      variableCode: variableCode
+      variableCode: variableCode,
+      code: code
     });
   },
   validateCode(code) {

@@ -56,7 +56,6 @@ Variables.Header = React.createClass({
 
 Variables.Content = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
-  type: 'Content',
 
   getInitialState: function() {
     return {
@@ -65,7 +64,7 @@ Variables.Content = React.createClass({
   },
 
   componentWillMount() {
-    VariableStore.addChangeListener(this._handleChange.bind(this, this.type))
+    VariableStore.addChangeListener(this._handleChange)
   },
 
   _handleChange(type){
@@ -74,18 +73,25 @@ Variables.Content = React.createClass({
     });
   },
 
-  _getVariables() {
-    return this.state.variables;
+  _validateCode() {
+    setTimeout( () => {
+      VariableActions.validateCode(this.state.variables);
+    }, 500);
+  },
+
+  _addVariable(varType) {
+    var currentCode = this.refs.codeArea.getDOMNode().value;
+    VariableActions.addVariable(varType.prototype.createSkeleton(), currentCode);
   },
 
   render() {
     return (
       <div className="Variables-Content">
-        <Variables.Content.Create />
+        <Variables.Content.Create  actionAddVariable={this._addVariable}/>
         <div className="Variables-Content__actions">
-          <textarea valueLink={this.linkState('variables')} />
+          <textarea valueLink={this.linkState('variables')} ref="codeArea"/>
         </div>
-        <Variables.Content.SaveAndCheck getVariables={this._getVariables} />
+        <Variables.Content.SaveAndCheck validationOutput={VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
       </div>
     )
   },
@@ -95,21 +101,18 @@ Variables.Content = React.createClass({
 });
 
 Variables.Content.Create = React.createClass({
-  _addVariable(varType) {
-    VariableActions.addVariable(varType.prototype.createSkeleton());
-  },
   render() {
     return (
       <div className="Variables-Content-actions__create">
         <i className="small material-icons dropdown-button" data-activates='dropme' data-beloworigin='true' data-constrainwidth='false'>add_box</i>
         <ul id='dropme' className='dropdown-content'>
-          <li onClick={this._addVariable.bind(this, Uniform)}>
+          <li onClick={this.props.actionAddVariable.bind(null, Uniform)}>
               <a>Uniforme</a>
           </li>
-          <li onClick={this._addVariable.bind(this, Categorical)}>
+          <li onClick={this.props.actionAddVariable.bind(null, Categorical)}>
               <a>Categorica</a>
           </li>
-          <li onClick={this._addVariable.bind(this, Specific)}>
+          <li onClick={this.props.actionAddVariable.bind(null, Specific)}>
             <a>Especifica</a>
           </li>
         </ul>
@@ -120,7 +123,6 @@ Variables.Content.Create = React.createClass({
 
 
 Variables.Content.SaveAndCheck =  React.createClass({
-  type: "SaveAndCheck",
 
   getInitialState: function() {
     return {
@@ -129,38 +131,31 @@ Variables.Content.SaveAndCheck =  React.createClass({
   },
 
   _validate() {
-    this.setState({
-      validating: true
-    });
-    VariableActions.validateCode(this.props.getVariables());
+    this.setState({validating: true});
+    this.props.validateCode();
   },
 
-  componentWillMount() {
-    VariableStore.addChangeListener(this._handleChange)
-  },
-
-  _handleChange(type){
-    var validationOutput = VariableStore.getValidationOutPut();
-      this.setState({
-        validating: false
-      });
-    if(validationOutput && validationOutput.error){
+  _handleChange(validationOutput){
+    this.setState({ validating: false });
+    console.log(validationOutput);
+    if(validationOutput != null && validationOutput.error){
       alert(validationOutput.errors.map(error => error.message).join("\n"));
     }
-    console.log("Salida", validationOutput);
-
   },
 
   render() {
-    var classCSS = { css: "small material-icons", icon: "done"}
-    if (this.state.validating) {
-      classCSS = {css: "small material-icons spin", icon: "loop"}
-    }
+    var classCSS = !this.state.validating ? { css: "small material-icons", icon: "done"} : {css: "small material-icons spin", icon: "loop"}
     return (
       <div className="Variables-Content-actions__check_save">
-         <i className={classCSS.css} onClick={this._validate}>{classCSS.icon}</i>
+        <i className={classCSS.css} onClick={this._validate}>{classCSS.icon}</i>
       </div>
     );
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.validationOutput && this.state.validating){
+      this._handleChange(nextProps.validationOutput)
+    }
   }
 });
 

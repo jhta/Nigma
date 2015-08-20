@@ -2,6 +2,12 @@ let Specific = function(codeFragment) {
 
   this.codeFragment = codeFragment;
 
+  var replaceVariables = function (parameter) {
+    if(parameter.match(/(\$[A-Za-z])/g))
+      parameter = parameter.replace(/(\$[A-Za-z])/g, `window.outputValues['$1']`);
+    return parameter;
+  }
+
   this.checkSyntax = function() {
     let regex = this.syntax;
     let match = this.codeFragment.match(regex);
@@ -32,7 +38,7 @@ let Specific = function(codeFragment) {
   this.getParameters = function() {
     let match = this.codeFragment.match(this.syntax);
     let elements = match[3].split(',');
-    elements = elements.map(element => (element.trim()));
+    elements = elements.map(element => replaceVariables(element.trim()));
     return {
       error: false,
       variable: {
@@ -43,7 +49,7 @@ let Specific = function(codeFragment) {
     }
   }
 
-  this.generateCode = function() {
+  this.generateCode = function(definedVariables) {
     let syntaxValidation = this.checkSyntax();
     if(syntaxValidation.error){
       return syntaxValidation
@@ -57,7 +63,7 @@ let Specific = function(codeFragment) {
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `window.${variable.name} = ${vectorName}[${randomName}]`
+        `window.outputValues['${variable.name}'] = ${vectorName}[${randomName}]`
       ]
       variable.code = code.join(";");
       return {

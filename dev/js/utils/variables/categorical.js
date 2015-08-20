@@ -50,14 +50,14 @@ var Categorical = function(codeFragment) {
     } else {
       var parameters = this.getParameters();
       var variable = parameters.variable;
-      var vector = variable.elements
+      var vector = variable.elements;
       var vectorName = "vector_" + variable.name;
       var randomName = "random_" + variable.name;
 
       var code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `window.${variable.name} = ${vectorName}[${randomName}]`
+        `window.outputValues['${variable.name}'] = ${vectorName}[${randomName}]`
       ]
       variable.code = code.join(";");
       return {
