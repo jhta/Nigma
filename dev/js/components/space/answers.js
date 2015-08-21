@@ -1,20 +1,64 @@
 const React = require("react");
-const mui         = require("material-ui");
-const {Tabs, Tab} = mui;
-const ThemeMixin  = require("../../mixins/ui-theme");
 
-
-const Metadata = React.createClass({
-
-  mixins: [ThemeMixin],
-
+var AnswerContent = React.createClass({
+  getInitialState: function() {
+    return {
+      answers: [{
+        _id: 1,
+        correctValue: "$a - $b",
+        precision: 2,
+        commonErrors: [
+          {
+            value: "$b - $a",
+            message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
+          },
+          {
+            value: "$b * $a",
+            message: "Recordar tal formula"
+          }
+        ]
+      }]
+    };
+  },
   render() {
     return (
       <div className="Formulation u-tab-content">
-        Metadata
+        <ul className="collapsible" data-collapsible="expandable">
+          {this.state.answers.map((answer, index) => <AnswerContent.Answer key={answer._id} index={index} answer={answer} />)}
+        </ul>
       </div>
     )
   }
 });
 
-module.exports = Metadata;
+AnswerContent.Answer = React.createClass({
+
+  render() {
+    return (
+      <li>
+        <div className="collapsible-header"><i className="material-icons">whatshot</i>{`Respuesta ${this.props.index + 1}`}</div>
+        <div className="collapsible-body">
+          <div className="row">
+            <ul>
+              <li>Correcta: {this.props.answer.correctValue}</li>
+              <li>Precisión: {this.props.answer.precision}</li>
+              <li>Errores comunes: {this.props.answer.commonErrors.map((error, index) => <AnswerContent.Answer.CommonError key={index} index={index} error={error} />)}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
+});
+
+AnswerContent.Answer.CommonError = React.createClass({
+  render() {
+    return (
+      <span>* {this.props.error.value}: {this.props.error.message}</span>
+    );
+  }
+});
+
+module.exports = AnswerContent;

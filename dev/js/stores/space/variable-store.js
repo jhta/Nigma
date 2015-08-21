@@ -3,7 +3,7 @@ const CHANGE_EVENT = 'VariableStoreChange';
 var Dispatcher = require('../../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var Parser = require('../../utils/variables/parser');
+var Parser = require('../../utils/parser');
 
 
 var _variables = "";

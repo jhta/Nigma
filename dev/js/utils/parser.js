@@ -1,6 +1,7 @@
-const Uniform = require('./uniform');
-const Specific = require('./specific');
-const Categorical = require('./categorical');
+const Uniform = require('./variables/uniform');
+const Specific = require('./variables/specific');
+const Categorical = require('./variables/categorical');
+
 
 
 var VariableParser = {
