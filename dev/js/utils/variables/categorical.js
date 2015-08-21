@@ -1,9 +1,9 @@
-var Categorical = function(codeFragment) {
+var Specific = require('./specific');
+class Categorical extends Specific {
 
-  this.codeFragment = codeFragment;
-
-  this.checkSyntax = function() {
-    var regex = this.syntax;
+  checkSyntax() {
+    let regex = this.syntax();
+    console.log(regex);
     var match = this.codeFragment.match(regex);
     var elementsFilled = true;
     if(match){
@@ -29,48 +29,18 @@ var Categorical = function(codeFragment) {
     }
   }
 
-  this.getParameters = function() {
-    var match = this.codeFragment.match(this.syntax);
-    var elements = match[3].split(',');
-    elements = elements.map(element => (element.trim()));
-    return {
-      error: false,
-      variable: {
-        name: match[1].trim(),
-        elements: elements,
-        code: null
-      }
-    }
+  static identifier() {
+    return 'C';
   }
 
-  this.generateCode = function() {
-    var syntaxValidation = this.checkSyntax();
-    if(syntaxValidation.error){
-      return syntaxValidation
-    } else {
-      var parameters = this.getParameters();
-      var variable = parameters.variable;
-      var vector = variable.elements;
-      var vectorName = "vector_" + variable.name;
-      var randomName = "random_" + variable.name;
-
-      var code = [
-        `var ${vectorName} = [${vector}]`,
-        `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `window.outputValues['${variable.name}'] = ${vectorName}[${randomName}]`
-      ]
-      variable.code = code.join(";");
-      return {
-        error: false,
-        variable: variable
-      };
-    }
+  syntax() {
+    return /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/;
   }
-}
-Categorical.prototype.identifier = 'C'
-Categorical.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/
-Categorical.prototype.createSkeleton = function(){
-  return "$C = C{'texto 1', 'texto 2'}";
+
+  static createSkeleton() {
+    return "$C = C{'texto 1', 'texto 2'}";
+  }
+
 }
 
 module.exports = Categorical;

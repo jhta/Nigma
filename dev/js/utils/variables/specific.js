@@ -1,16 +1,10 @@
-let Specific = function(codeFragment) {
+var Variable = require('./variable');
+class Specific extends Variable {
 
-  this.codeFragment = codeFragment;
-
-  var replaceVariables = function (parameter) {
-    if(parameter.match(/(\$[A-Za-z])/g))
-      parameter = parameter.replace(/(\$[A-Za-z])/g, `window.outputValues['$1']`);
-    return parameter;
-  }
-
-  this.checkSyntax = function() {
-    let regex = this.syntax;
+  checkSyntax() {
+    let regex = Specific.syntax();
     let match = this.codeFragment.match(regex);
+
     let elementsFilled = true;
     if(match){
       let elements = match[3].split(',');
@@ -35,48 +29,51 @@ let Specific = function(codeFragment) {
     }
   }
 
-  this.getParameters = function() {
-    let match = this.codeFragment.match(this.syntax);
+  parseCode() {
+    let match = this.codeFragment.match(this.syntax());
     let elements = match[3].split(',');
-    elements = elements.map(element => replaceVariables(element.trim()));
-    return {
-      error: false,
-      variable: {
-        name: match[1].trim(),
-        elements: elements,
-        code: null
-      }
+    elements = elements.map(element => element.trim());
+    this.parameters = {
+      elements: elements
     }
+    this.name = match[1]
   }
 
-  this.generateCode = function(definedVariables) {
+  generateCode() {
     let syntaxValidation = this.checkSyntax();
     if(syntaxValidation.error){
       return syntaxValidation
     } else {
-      let parameters = this.getParameters();
-      let variable = parameters.variable;
-      let vector = variable.elements
-      let vectorName = "vector_" + variable.name;
-      let randomName = "random_" + variable.name;
+      this.parseCode();
+      let vector = this.parameters.elements;
+      let vectorName = "_vector_";
+      let randomName = "_random_";
 
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `window.outputValues['${variable.name}'] = ${vectorName}[${randomName}]`
+        `${this.name} = ${vectorName}[${randomName}]`
       ]
-      variable.code = code.join(";");
+      this.code = `${code.join(";")};`;
       return {
         error: false,
-        variable: variable
+        variable: this
       };
     }
   }
-}
-Specific.prototype.identifier = 'E'
-Specific.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/
-Specific.prototype.createSkeleton = function(){
-  return "$E = E{numero 1, numero 2}";
+
+  static identifier() {
+    return 'E';
+  }
+
+  syntax() {
+    return /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/;
+  }
+
+  static createSkeleton() {
+    return "$E = E{numero 1, numero 2}";
+  }
+
 }
 
 module.exports = Specific;

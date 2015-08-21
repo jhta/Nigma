@@ -1,15 +1,8 @@
-var Uniform = function(codeFragment) {
-  this.codeFragment = codeFragment;
+var Variable = require('./variable');
+class Uniform extends Variable {
 
-
-  var replaceVariables = function (parameter) {
-    if(parameter.match(/(\$[A-Za-z])/g))
-      parameter = parameter.replace(/(\$[A-Za-z])/g, `window.outputValues['$1']`);
-    return parameter;
-  }
-
-  this.checkSyntax = function() {
-    var match = this.codeFragment.match(this.syntax);
+  checkSyntax() {
+    var match = this.codeFragment.match(Uniform.syntax());
     var emptyParameters = false;
     if(match){
       emptyParameters = [match[3].trim(), match[4].trim(), match[5].trim()].some(element  => element == '');
@@ -18,60 +11,56 @@ var Uniform = function(codeFragment) {
       return {
         error: true,
         message: 'Incorrect syntax for uniform variable. Some of the parameters of the Uniform variable are empty',
-        variable: null
       };
     } else if (!match){
       return {
         error: true,
         message: 'Incorrect syntax for uniform variable. The syntax used to create an Uniform variable is $x = U[min; max; step]',
-        variable: null
       };
     } else {
       return {
         error: false,
         message: null,
-        variable: null
       }
     }
   }
 
-  this.getParameters = function() {
-    var match = this.codeFragment.match(this.syntax);
-    match[3] = replaceVariables(match[3]);
-    match[4] = replaceVariables(match[4]);
-    match[5] = replaceVariables(match[5]);
-    return {
-      error: false,
-      variable: {
-        name: match[1].trim(),
-        min: match[3].trim(),
-        max: match[4].trim(),
-        step: match[5].trim(),
-        code: null
-      }
+  parseCode() {
+    var match = this.codeFragment.match(this.syntax());
+    this.parameters = {
+      min: match[3].trim(),
+      max: match[4].trim(),
+      step: match[5].trim(),
     }
+    this.name = match[1];
   }
 
-  this.generateCode = function() {
+  generateCode() {
     var syntaxValidation = this.checkSyntax();
     if(syntaxValidation.error){
       return syntaxValidation
     } else {
-      var parameters = this.getParameters();
-      var variable = parameters.variable;
-      variable.code = `window.outputValues['${variable.name}'] = ${variable.min} + Math.floor(((${variable.max} - ${variable.min}) * Math.random()/${variable.step})) * ${variable.step}`
+      this.parseCode();
+      this.code = `${this.name} = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step}`
       return {
         error: false,
-        variable: variable
+        variable: this
       };
     }
   }
 
+  static identifier() {
+    return 'U';
+  }
+
+  syntax() {
+    return /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/;
+  }
+
+  static createSkeleton() {
+    return "$U = U[min, max, paso]";
+  }
 
 }
-Uniform.prototype.identifier = 'U'
-Uniform.prototype.syntax =  /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/
-Uniform.prototype.createSkeleton = function(){
-  return "$U = U[min, max, paso]";
-}
+
 module.exports = Uniform;

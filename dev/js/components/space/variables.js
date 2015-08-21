@@ -80,8 +80,9 @@ Variables.Content = React.createClass({
   },
 
   _addVariable(varType) {
+    console.log(varType);
     var currentCode = this.refs.codeArea.getDOMNode().value;
-    VariableActions.addVariable(varType.prototype.createSkeleton(), currentCode);
+    VariableActions.addVariable(varType.createSkeleton(), currentCode);
   },
 
   render() {

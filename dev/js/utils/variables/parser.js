@@ -4,20 +4,19 @@ const Categorical = require('./categorical');
 
 
 var VariableParser = {
-
-  _detectVariableType(nigmaCode){
+  _detectType(nigmaCode) {
     var regex = /(\$[a-zA-Z])\s*=\s*(u|e|c|U|E|C)(\[|\{)/
     var match = nigmaCode.match(regex)
     if(match){
       var type;
       switch (match[2].toUpperCase()) {
-        case Uniform.prototype.identifier:
+        case Uniform.identifier():
           type =  Uniform
           break;
-        case Specific.prototype.identifier:
+        case Specific.identifier():
           type =  Specific
           break;
-        case Categorical.prototype.identifier:
+        case Categorical.identifier():
           type =  Categorical
           break;
       }
@@ -27,7 +26,7 @@ var VariableParser = {
         type: type
       }
 
-    }else{
+    } else {
       return {
         error: true,
         message: "Variable is not well formated or type could not be determined. Uniform: $x = U[min; max; step], Specific: $x = E{exp1, exp2,..., expn}, Categorical: $x = C{'text 1', 'text 2', ... , 'text 3'}",
@@ -37,54 +36,60 @@ var VariableParser = {
   },
 
   generateCode(nigmaCode) {
-    var output = {
-      errors: [],
-      variables: []
-    }
-    var _detect = this._detectVariableType;
-    var line = 0;
+    var errors =  [], variables =  [];
     for(var j = 0; j < nigmaCode.length; j++){
       var codeFragment = nigmaCode[j];
-      line++;
-      var variableType = _detect(codeFragment)
+      var variableType = this._detectType(codeFragment);
       if(variableType.error){
-        output.errors.push({
+        errors.push({
           message: `Error at line ${line}: ${variableType.message}`,
-          line: line
+          line: j + 1
         });
         break;
       } else {
         var variable = new variableType.type(codeFragment);
         var variableOuput = variable.generateCode();
-        if(variableOuput.error){
-          output.errors.push({
+        console.log(variableOuput, "lalal");
+        if (variableOuput.error) {
+          errors.push({
             message: `Error at line ${line}: ${variable.message}`,
-            line: line
+            line: j + 1
           });
+          break;
         } else {
-          output.variables.push(variableOuput.variable);
+          variables.push(variableOuput.variable);
         }
+
       }
+    }
+    return {
+      errors: errors,
+      variables: variables
     };
-    return output;
   },
+
   executeCode(variables) {
     window.outputValues = {}
     var output = {
       errors: [],
       result: null
     };
+    var replaceVariables = Uniform.replaceVariables;
     var javascriptCode = variables.map(variable => variable.code);
     for(var i=0; i < javascriptCode.length; i++){
       try{
-        eval(javascriptCode[i])
+        var jCode = replaceVariables(javascriptCode[i]);
+        eval(jCode);
       } catch(exception) {
         output.errors.push({message: `Error at line ${i + 1}: ${exception.message}`, line: i + 1 });
+        break;
       }
     }
     if(output.errors.length == 0){
       output.result = {}
-      variables.forEach(variable => output.result[variable.name] = eval(`window.outputValues['${variable.name}']`))
+      variables.forEach(variable => output.result[variable.name] = eval(replaceVariables(variable.name)))
+    } else {
+      window.outputValues = {}
     }
 
     return output;
