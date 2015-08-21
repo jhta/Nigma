@@ -16,9 +16,10 @@ const Expresion = React.createClass({
   },
 
   render() {
+    var classExpresion = this.props.content.type == 'trigonometric'? 'Expresion-trigonometric' : 'Expresion';
     return (
-      <div className="Expresion" onClick={this._addExp}>
-        <img src={this.props.img} width="13" height="16"/>
+      <div className={classExpresion} onClick={this._addExp}>
+        <img src={this.props.img} width={this.props.content.width} height={this.props.content.height} />
       </div>
     )
   }

@@ -86,6 +86,7 @@ const CKEditor = {
         console.log(window.TeXNode, TeX);
         let lastVal = window.TeXNode.value;
         window.TeXNode.value = lastVal + TeX;
+        window.TeXNode.focus();
       }
     }, 400);
   },
