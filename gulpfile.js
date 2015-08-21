@@ -87,7 +87,7 @@ gulp.task('stylus', function() {
  */
 
 gulp.task('images', function() {
-  gulp.src('dev/images/**.*')
+  gulp.src('dev/images/**/*')
     .pipe(gulp.dest('dist/images'))
 });
 

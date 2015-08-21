@@ -24,6 +24,7 @@ const Expresions = React.createClass({
 
 });
 
+
 Expresions.Header = React.createClass({
   render() {
     return (
@@ -40,13 +41,26 @@ Expresions.Header = React.createClass({
 
 Expresions.Content = React.createClass({
 
+  _getSymbols(){
+    return(
+      [ {script: '<', img:'images/symbols/menor.png'},
+        {script:'\\leq ', img:'images/symbols/leq.png'},
+        {script:'\\ll',img:'images/symbols/ll.png'},
+        {script:'\\subset',img:'images/symbols/subset.png'},
+        {script:'\\subseteq',img:'images/symbols/subseteq.png'},
+        {script:'\\nsubseteq',img:'images/symbols/nsubseteq.png'},
+        {script:'\\sqsubset',img:'images/symbols/sqsubset.png'},
+        {script:'\\sqsubseteq',img:'images/symbols/sqsubseteq.png'},
+        {script:'\\preceq',img:'images/symbols/preceq.png'},
+      ]
+    );
+  },
+
   render() {
     return (
       <div className="Expresions-Content">
         <ul className="Expresions-Content__collapse collapsible z-depth-0" data-collapsible="accordion">
-          <Expresions.Collapse {...this.props}/>
-          <Expresions.Collapse {...this.props}/>
-          <Expresions.Collapse {...this.props}/>
+          <Expresions.Collapse symbols={this._getSymbols()} {...this.props}/>        
         </ul>
       </div>
     )
@@ -57,14 +71,11 @@ Expresions.Collapse = React.createClass({
   render() {
     return (
       <li>
-        <div className="collapsible-header">First</div>
+        <div className="collapsible-header">Symbols</div>
         <div className="collapsible-body Expresions-Content__wrapper">
-          <Expresion img="images/arsec.png" {...this.props}/>
-          <Expresion img="images/arsec.png" {...this.props}/>
-          <Expresion img="images/arsec.png" {...this.props}/>
-          <Expresion img="images/arsec.png" {...this.props}/>
-          <Expresion img="images/arsec.png" {...this.props}/>
-          <Expresion img="images/arsec.png" {...this.props}/>
+          { this.props.symbols.map((symbol,index)=>{
+            return(<Expresion img={symbol.img} source={symbol.script} {...this.props}/> );
+          })}        
         </div>
       </li>
 

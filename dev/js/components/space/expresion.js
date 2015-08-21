@@ -12,7 +12,7 @@ const Expresion = React.createClass({
   },
 
   _addExp() {
-    this.props.changeDialogTex("nuevo TeX");
+    this.props.changeDialogTex(this.props.source);
   },
 
   render() {
