@@ -1,7 +1,7 @@
 var Variable = require('./variable');
 class Specific extends Variable {
 
-  checkSyntax() {
+  checkSyntax(currentVariables) {
     let regex = Specific.syntax();
     let match = this.codeFragment.match(regex);
 
@@ -15,6 +15,11 @@ class Specific extends Variable {
       return {
         error: true,
         message: 'Incorrect syntax for specific variable. Some of the parameters of the Specific variable are empty'
+      };
+    } else if (match && !this.validName(currentVariables, match[1])) {
+      return {
+        error: true,
+        message: `Repeated variable name ${match[1]}`,
       };
     } else if (!match){
       return {
@@ -39,8 +44,8 @@ class Specific extends Variable {
     this.name = match[1]
   }
 
-  generateCode() {
-    let syntaxValidation = this.checkSyntax();
+  generateCode(currentVariables) {
+    let syntaxValidation = this.checkSyntax(currentVariables);
     if(syntaxValidation.error){
       return syntaxValidation
     } else {

@@ -14,7 +14,6 @@ function _addVariable (variableCode) {
 }
 
 function _setVariables (code) {
-  console.log("codigo", code);
   if(code.length != 0)
     _variables = code.join("\n") + "\n";
 }

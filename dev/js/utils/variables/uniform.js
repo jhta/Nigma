@@ -1,7 +1,7 @@
 var Variable = require('./variable');
 class Uniform extends Variable {
 
-  checkSyntax() {
+  checkSyntax(currentVariables) {
     var match = this.codeFragment.match(Uniform.syntax());
     var emptyParameters = false;
     if(match){
@@ -11,6 +11,11 @@ class Uniform extends Variable {
       return {
         error: true,
         message: 'Incorrect syntax for uniform variable. Some of the parameters of the Uniform variable are empty',
+      };
+    } else if (match && !this.validName(currentVariables, match[1])) {
+      return {
+        error: true,
+        message: `Repeated variable name ${match[1]}`,
       };
     } else if (!match){
       return {
@@ -35,8 +40,8 @@ class Uniform extends Variable {
     this.name = match[1];
   }
 
-  generateCode() {
-    var syntaxValidation = this.checkSyntax();
+  generateCode(currentVariables) {
+    var syntaxValidation = this.checkSyntax(currentVariables);
     if(syntaxValidation.error){
       return syntaxValidation
     } else {
@@ -47,6 +52,10 @@ class Uniform extends Variable {
         variable: this
       };
     }
+  }
+
+  executeCode() {
+
   }
 
   static identifier() {

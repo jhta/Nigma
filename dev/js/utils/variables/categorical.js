@@ -1,9 +1,8 @@
 var Specific = require('./specific');
 class Categorical extends Specific {
 
-  checkSyntax() {
+  checkSyntax(currentVariables) {
     let regex = this.syntax();
-    console.log(regex);
     var match = this.codeFragment.match(regex);
     var elementsFilled = true;
     if(match){
@@ -15,6 +14,11 @@ class Categorical extends Specific {
       return {
         error: true,
         message: 'Incorrect syntax for categorical variable. Some of the parameters of the Categorical variable are empty'
+      };
+    } else if (match && !this.validName(currentVariables, match[1])) {
+      return {
+        error: true,
+        message: `Repeated variable name ${match[1]}`,
       };
     } else if (!match){
       return {

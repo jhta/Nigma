@@ -42,17 +42,16 @@ var VariableParser = {
       var variableType = this._detectType(codeFragment);
       if(variableType.error){
         errors.push({
-          message: `Error at line ${line}: ${variableType.message}`,
+          message: `Error at line ${j + 1}: ${variableType.message}`,
           line: j + 1
         });
         break;
       } else {
         var variable = new variableType.type(codeFragment);
-        var variableOuput = variable.generateCode();
-        console.log(variableOuput, "lalal");
+        var variableOuput = variable.generateCode(variables.map(variable => variable.name));
         if (variableOuput.error) {
           errors.push({
-            message: `Error at line ${line}: ${variable.message}`,
+            message: `Error at line ${ j + 1}: ${variableOuput.message}`,
             line: j + 1
           });
           break;

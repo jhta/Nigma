@@ -22,7 +22,6 @@ const Variables = React.createClass({
   },
 
   _openModal(type) {
-    console.log("0pen");
     this.setState({showModal: true, typeOfVariable: type});
   },
 
@@ -80,7 +79,6 @@ Variables.Content = React.createClass({
   },
 
   _addVariable(varType) {
-    console.log(varType);
     var currentCode = this.refs.codeArea.getDOMNode().value;
     VariableActions.addVariable(varType.createSkeleton(), currentCode);
   },
@@ -138,7 +136,6 @@ Variables.Content.SaveAndCheck =  React.createClass({
 
   _handleChange(validationOutput){
     this.setState({ validating: false });
-    console.log(validationOutput);
     if(validationOutput != null && validationOutput.error){
       alert(validationOutput.errors.map(error => error.message).join("\n"));
     }
