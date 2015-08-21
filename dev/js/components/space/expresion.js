@@ -18,7 +18,7 @@ const Expresion = React.createClass({
   render() {
     return (
       <div className="Expresion" onClick={this._addExp}>
-        <img src={this.props.img} width="53" height="40"/>
+        <img src={this.props.img} width="13" height="16"/>
       </div>
     )
   }
