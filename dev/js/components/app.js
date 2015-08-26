@@ -40,7 +40,7 @@ const Nigma = React.createClass({
 
   render(){
     return (
-      <div>
+      <div className="Nigma">
         <TopBar user={this.state.user}/>
         <RouteHandler />
       </div>

@@ -7,6 +7,7 @@ const Formulation = require("./formulation");
 const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
+const FileSideBar = require("./file-sidebar");
 
 const Space = React.createClass({
 
@@ -14,25 +15,27 @@ const Space = React.createClass({
 
   render() {
     return (
-      <div className="Space row">
-        <div className="col s8">
-          <div className="Space-content z-depth-1 ">
-            <Tabs>
-              <Tab label="Formulacion" >
-                <Formulation />
-              </Tab>
-              <Tab label="Respuestas" >
-                <Answers />
-              </Tab>
+      <div className="Wrapper ">
+        <FileSideBar />
+        <div className="Space">
+          <div className="Space-inner">
+            <div className="Space-content z-depth-1 ">
+              <Tabs>
+                <Tab label="Formulacion" >
+                  <Formulation />
+                </Tab>
+                <Tab label="Respuestas" >
+                  <Answers />
+                </Tab>
 
-              <Tab label="Metadatos" >
-                <Metadata />
-              </Tab>
-
-            </Tabs>
+                <Tab label="Metadatos" >
+                  <Metadata />
+                </Tab>
+              </Tabs>
+            </div>
           </div>
+          <RightPanel />
         </div>
-        <RightPanel />
       </div>
     )
   }

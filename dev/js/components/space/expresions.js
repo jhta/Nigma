@@ -5,7 +5,7 @@ const Expresions = React.createClass({
 
   render() {
     return (
-      <div className="Space-right z-depth-1">
+      <div className="z-depth-1">
         <div className="Expresions">
           <Expresions.Header />
           <Expresions.Content />

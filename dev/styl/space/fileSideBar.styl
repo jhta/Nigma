@@ -1,0 +1,44 @@
+.FileSideBar
+  width: 30%;
+  height: 100%;
+  min-width: 200px;
+  max-width: 350px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+
+  &-header
+    //padding: 1em;
+    border-bottom: 2px solid gray;
+    background-color: #ddd;
+    font-size: $MediumFontSize;
+    display: flex;
+    align-items: center;
+
+  &-icon
+    padding: 0.5em;
+    border-right: 1px solid gray;
+    cursor: pointer;
+    &:hover
+      background-color: #ccc;
+
+  &-body
+    display: flex;
+    flex-direction: column;
+
+
+  &-list
+    padding: 1em;
+
+  &-item
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: .8em;
+    font-size: 16px;
+    &:hover
+      background-color: #ddd;
+      cursor: pointer;
+    i
+      margin-right: .5em;
+      font-size: 20px;

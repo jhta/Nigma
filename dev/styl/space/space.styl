@@ -1,15 +1,30 @@
-.Space
-  margin: 30px 2%;
+$margin = 1.5em;
 
+.Wrapper
+  display: flex;
+  height: 100%;
+  width: 100%;
+  position: relative;
+
+.Space
+  margin: $margin;
+  width: 100%;
+  display: flex;
+
+  &-inner
+    margin-right:1em;
+    width: 65%;
 
   &-content
     padding: 0 !important;
     background: white;
+    padding-right: $margin / 2;
 
   &-right
     padding: 0 !important;
-    background: white;
+    width: 35%;
 
 @import "formulation"
 @import "variables"
 @import "expresions"
+@import "fileSideBar"

@@ -7,7 +7,7 @@ const RightPanel = React.createClass({
 
   render() {
     return (
-      <div className="col s4">
+      <div className="Space-right">
         <Variables />
         <Expresions />
       </div>
