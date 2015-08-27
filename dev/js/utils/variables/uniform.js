@@ -2,7 +2,7 @@ var Variable = require('./variable');
 class Uniform extends Variable {
 
   checkSyntax(currentVariables) {
-    var match = this.codeFragment.match(Uniform.syntax());
+    var match = this.codeFragment.match(this.syntax());
     var emptyParameters = false;
     if(match){
       emptyParameters = [match[3].trim(), match[4].trim(), match[5].trim()].some(element  => element == '');
