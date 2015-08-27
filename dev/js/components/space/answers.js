@@ -1,11 +1,12 @@
 const React = require("react");
-var AnswerContent = React.createClass({
+var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
       answers: [{
         _id: 1,
         name: "Area",
         correctValue: "$a * $b",
+        showLabel: true,
         precision: 2,
         commonErrors: [
           {
@@ -23,6 +24,7 @@ var AnswerContent = React.createClass({
         name: "Perimetro",
         correctValue: "$a * 2 + 2 * $b",
         precision: 3,
+        showLabel: false,
         commonErrors: [
           {
             value: "$b - $a",
@@ -61,77 +63,101 @@ var AnswerContent = React.createClass({
 
   render() {
     return (
-      <div className="Formulation u-tab-content">
-        <AnswerContent.Validation />
+      <div className="Formulation-AnswerContainer u-tab-content">
+        <AnswerContainer.Validation />
         <ul className="collapsible" data-collapsible="expandable">
-          {this.state.answers.map((answer, index) => <AnswerContent.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)}
+          {
+            this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
+          }
         </ul>
-        <AnswerContent.Validation />
+        <AnswerContainer.Validation />
 
       </div>
     )
   }
 });
 
-AnswerContent.Answer = React.createClass({
+AnswerContainer.Answer = React.createClass({
   _handleChange(evt) {
-    var changedVal = $(evt.target);
+    const changedVal = $(evt.target);
     this.props.handleChange(this.props.index, changedVal.data("path"), evt.target.value);
+  },
+  _generatePresicion() {
+    var presicion = [];
+    for (var i = 0; i < 16; i++) {
+      presicion.push(i);
+    }
+    return presicion;
   },
   render() {
     return (
-      <li>
-        <div className="collapsible-header">
-            <i className="material-icons">whatshot</i>
-            {this.props.answer.name}
+      <li className="Formulation-AnswerContainer-Answer">
+        <div className="collapsible-header header">
+            <i className="material-icons">help</i>
+            <span className="title">{this.props.answer.name}</span>
         </div>
         <div className="collapsible-body">
-          <div className="right-align">
-            <i className="material-icons">delete</i>
-          </div>
-
-          <ul className="collection" >
-            <li className="collection-item">
+          <ul className="collection main-answer-content" >
+            <li className="collection-item main-answer-form">
               <div className="row">
                 <div className="input-field col s4">
                   <input  id="correct_value" value={this.props.answer.correctValue} onChange={this._handleChange} data-path="correctValue" type="text" className="validate"/>
                   <label htmlFor="correct_value">Valor correcto</label>
                 </div>
+                <div className="input-field col s2">
+                  <select ref="presicion_select" value={this.props.answer.precision} onChange={this._handleChange}>
+                    {this._generatePresicion().map((optionValue, index) => <option key={index} value={optionValue}>{optionValue}</option>)}
+                  </select>
+                  <label htmlFor="presicion">Precision</label>
+                </div>
+
                 <div className="input-field col s4">
                   <input id="answer_name" value={this.props.answer.name} onChange={this._handleChange} data-path="name" type="text" className="validate"/>
                   <label htmlFor="answer_name">Label</label>
                 </div>
-                <div className="input-field col s4">
-                  <input id="presicion"  value={this.props.answer.precision} onChange={this._handleChange} data-path="precision" type="text" className="validate"/>
-                  <label htmlFor="presicion">Precision</label>
-                </div>
+
+                  <div className="input-field switch col s2">
+                    <label>
+                      Off
+                      <input type="checkbox" id="answer_name" checked={this.props.answer.showLabel} onChange={this._handleChange} data-path="showLabel" className="validate"/>
+                      <span className="lever"></span>
+                      On
+                    </label>
+                  </div>
+
               </div>
             </li>
-            <li className="collection-item">Precisión: {this.props.answer.precision}</li>
-            <li className="collection-item">Errores comunes:
-             <ul className="collection">
-               {this.props.answer.commonErrors.map((error, index) => <AnswerContent.Answer.CommonError key={index} index={index} error={error} />)}
-             </ul>
+            <li className="collection-item">
+              <span className="header">
+                <i className="material-icons">error</i>
+                <span className="title">Errores comunes</span>
+              </span>
+            <ul className="collection">
+              {this.props.answer.commonErrors.map((error, index) => <AnswerContainer.Answer.CommonError key={index} index={index} error={error} />)}
+            </ul>
             </li>
           </ul>
         </div>
       </li>
     );
+  },
+  componentDidMount() {
+    $(this.refs.presicion_select.getDOMNode()).material_select();
   }
 
 });
 
-AnswerContent.Answer.CommonError = React.createClass({
+AnswerContainer.Answer.CommonError = React.createClass({
   render() {
     return (
       <li className="collection-item"><span className="bold">{this.props.error.value}</span>: {this.props.error.message}</li>
     );
   }
 });
-AnswerContent.Validation = React.createClass({
+AnswerContainer.Validation = React.createClass({
   render() {
     return (
-      <div className="right-align">
+      <div className="Formulation-AnswerContainer-Validation">
         <i className="material-icons">done</i>
       </div>
     )
@@ -139,4 +165,4 @@ AnswerContent.Validation = React.createClass({
 });
 
 
-module.exports = AnswerContent;
+module.exports = AnswerContainer;
