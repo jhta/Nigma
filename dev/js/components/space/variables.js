@@ -10,6 +10,7 @@ const Specific = require('../../utils/variables/specific');
 const Categorical = require('../../utils/variables/categorical');
 
 //Stores
+/*VariableStore is global*/
 
 const Variables = React.createClass({
 
@@ -29,7 +30,7 @@ const Variables = React.createClass({
       <div className="Space-right z-depth-1">
         <div className="Variables">
           <Variables.Header />
-          <Variables.Content VariableStore={this.props.VariableStore}/>
+          <Variables.Content />
         </div>
     </div>
     );
@@ -62,12 +63,12 @@ Variables.Content = React.createClass({
   },
 
   componentWillMount() {
-    this.props.VariableStore.addChangeListener(this._handleChange)
+    VariableStore.addChangeListener(this._handleChange)
   },
 
   _handleChange(type){
     this.setState({
-      variables: this.props.VariableStore.getVariables()
+      variables: VariableStore.getVariables()
     });
   },
 
@@ -89,12 +90,12 @@ Variables.Content = React.createClass({
         <div className="Variables-Content__actions">
           <textarea valueLink={this.linkState('variables')} ref="codeArea"/>
         </div>
-        <Variables.Content.SaveAndCheck validationOutput={this.props.VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
+        <Variables.Content.SaveAndCheck validationOutput={VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
       </div>
     )
   },
   componentWillUnmount() {
-    this.props.VariableStore.removeChangeListener()
+    VariableStore.removeChangeListener()
   }
 });
 

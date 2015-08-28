@@ -9,8 +9,8 @@ const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 
 /*Stores*/
-var VariableStore = require('../../stores/space/variable-store');
-var AnswerStore = require('../../stores/space/answer-store');
+window.VariableStore = require('../../stores/space/variable-store');
+window.AnswerStore = require('../../stores/space/answer-store');
 
 const Space = React.createClass({
 
@@ -26,7 +26,7 @@ const Space = React.createClass({
                 <Formulation />
               </Tab>
               <Tab label="Respuestas" >
-                <Answers AnswerStore={AnswerStore}/>
+                <Answers/>
               </Tab>
 
               <Tab label="Metadatos" >
@@ -36,7 +36,7 @@ const Space = React.createClass({
             </Tabs>
           </div>
         </div>
-        <RightPanel VariableStore={VariableStore}/>
+        <RightPanel/>
       </div>
     )
   }

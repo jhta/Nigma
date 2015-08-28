@@ -14,7 +14,8 @@ class Answer {
     this.commonErrors.push(new CommonError());
   }
 
-  validate() {
+  isValid() {
+    console.log(this);
     return true;
   }
 

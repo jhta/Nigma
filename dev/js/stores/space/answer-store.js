@@ -45,13 +45,21 @@ const static_values = [
 ]
 
 var _answers = static_values.map(answer => Answer.createFromResponse(answer));
+var _validationOutput = null;
+
 
 function _setAnswers(answers) {
   _answers = answers;
 }
 
-function _addAnswer(answer) {
-  _answers.push(answer)
+function _addNewAnswer() {
+  _answers.push(new Answer());
+}
+
+function _validateAnswers(answers, questions) {
+  _setAnswers(answers);
+  var valid = answers.every(answer => answer.isValid());
+  return valid;
 }
 
 
@@ -74,9 +82,17 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
 });
 
 AnswerStore.dispatchToken = Dispatcher.register(function(action) {
+  _validationOutput = null;
   switch (action.type) {
     case AnswerConstants.LIST_ANSWERS:
-      //Set answers
+      AnswerStore.emitChange();
+      break;
+    case AnswerConstants.VALIDATE_ANSWERS:
+      _validationOutput = _validateAnswers(action.answers, action.variables)
+      AnswerStore.emitChange();
+      break;
+    case AnswerConstants.ADD_NEW_ANSWER:
+      _addNewAnswer();
       AnswerStore.emitChange();
       break;
     default:

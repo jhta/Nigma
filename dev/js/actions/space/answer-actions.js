@@ -7,6 +7,19 @@ var AnswerActions = {
     Dispatcher.dispatch({
       type: AnswerConstants.LIST_ANSWERS,
     });
+  },
+
+  validateAnswers(answers, variables) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.VALIDATE_ANSWERS,
+      answers: answers,
+      variables: variables
+    });
+  },
+  addNewAnswer() {
+    Dispatcher.dispatch({
+      type: AnswerConstants.ADD_NEW_ANSWER,
+    });
   }
 }
 

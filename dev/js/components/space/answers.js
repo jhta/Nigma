@@ -1,9 +1,9 @@
 const React = require("react");
-
+const AnswerActions = require('../../actions/space/answer-actions');
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
-      answers: this.props.AnswerStore.getAnswers(),
+      answers: AnswerStore.getAnswers(),
       validating: false
     };
   },
@@ -37,6 +37,22 @@ var AnswerContainer = React.createClass({
     this.setState({
       validating: true
     });
+    setTimeout(() => AnswerActions.validateAnswers(this.state.answers, VariableStore.getVariables()), 1000);
+  },
+
+  componentWillMount() {
+    AnswerStore.addChangeListener(this._handleChange)
+  },
+
+  _handleChange() {
+    this.setState({
+      answers: AnswerStore.getAnswers(),
+      validating: false
+    });
+  },
+
+  _addNewAnswer() {
+    AnswerActions.addNewAnswer();
   },
 
 
@@ -51,9 +67,21 @@ var AnswerContainer = React.createClass({
           }
         </ul>
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
+        <a className="btn-floating btn-large waves-effect waves-light red" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
       </div>
     )
-  }
+  },
+
+  componentWillUnmount() {
+    AnswerStore.removeChangeListener();
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+
+  },
+  componentDidUpdate(prevProps, prevState) {
+    $('.collapsible').collapsible();
+  },
 });
 
 AnswerContainer.Answer = React.createClass({
