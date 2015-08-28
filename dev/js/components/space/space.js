@@ -9,6 +9,33 @@ const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
 
+const items = [
+  {
+    isFolder: true,
+    shared: true,
+    name: "folder1",
+    url: 'otrosItems'
+  },
+  {
+    isFolder: false,
+    shared: true,
+    name: "item1",
+    url: 'otrosItems'
+  },
+  {
+    isFolder: false,
+    shared: false,
+    name: "item2",
+    url: 'otrosItems'
+  },
+  {
+    isFolder: false,
+    shared: false,
+    name: "item3",
+    url: 'otrosItems'
+  },
+]
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -16,7 +43,7 @@ const Space = React.createClass({
   render() {
     return (
       <div className="Wrapper ">
-        <FileSideBar />
+        <FileSideBar items={items}/>
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">

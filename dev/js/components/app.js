@@ -21,7 +21,7 @@ const Nigma = React.createClass({
 
   componentWillMount: function () {
     UserStore.addChangeListener(this._handleChange);
-    UserActions.setUserStore();
+    //UserActions.setUserStore();
   },
 
   componentWillUnmount: function () {

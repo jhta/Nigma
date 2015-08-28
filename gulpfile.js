@@ -15,8 +15,6 @@ var gulp       = require("gulp"),
     nib        = require("nib");
 
 
-
-
 function bundleScripts(watch){
   var bundler = browserify('./dev/js/main.js',{
     debug: true,
@@ -100,7 +98,8 @@ gulp.task('server', function() {
       livereload: true,
       directoryListing: false,
       open: false,
-      fallback : 'index.html'
+      fallback : 'index.html',
+      port: 8001
   }));
 });
 

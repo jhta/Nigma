@@ -11,17 +11,13 @@ const FileSideBar = React.createClass({
         <div className="FileSideBar-body">
           <input type="text" />
           <ul className="FileSideBar-list">
-            <li className="FileSideBar-item">
-              <i className="material-icons">folder</i>
-              Soy un item :)
-            </li>
-            <li className="FileSideBar-item">
-              Soy un item :)
-            </li>
-            <li className="FileSideBar-item">
-              Soy un item :)
-            </li>
-
+          {
+            this.props.items.map((item) => {
+              return (
+                <FileSideBar.Item item={item}/>
+              )
+            })
+          }
           </ul>
         </div>
 
@@ -29,6 +25,19 @@ const FileSideBar = React.createClass({
 
     );
   }
-})
+});
+
+FileSideBar.Item = React.createClass({
+  render() {
+    const item = this.props.item;
+    const icon = item.isFolder? "folder" : "description";
+    return (
+      <li className="FileSideBar-item">
+        <i className="material-icons">{icon}</i>
+          {item.name}
+      </li>
+    )
+  }
+});
 
 module.exports = FileSideBar;
