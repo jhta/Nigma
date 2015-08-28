@@ -3,43 +3,11 @@ const React = require("react");
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
-      answers: [{
-        _id: 1,
-        name: "Area",
-        correctValue: "$a * $b",
-        showLabel: true,
-        precision: 2,
-        commonErrors: [
-          {
-            value: "$b - $a",
-            message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
-          },
-          {
-            value: "$a * $a",
-            message: "Recordar tal formula"
-          }
-        ]
-      },
-      {
-        _id: 2,
-        name: "Perimetro",
-        correctValue: "$a * 2 + 2 * $b",
-        precision: 3,
-        showLabel: false,
-        commonErrors: [
-          {
-            value: "$b - $a",
-            message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
-          },
-          {
-            value: "$b / $a",
-            message: "Recordar tal formula"
-          }
-        ]
-      }
-      ]
+      answers: this.props.AnswerStore.getAnswers(),
+      validating: false
     };
   },
+
 
   _changeAnswer(index, path, value) {
 
@@ -65,19 +33,24 @@ var AnswerContainer = React.createClass({
     });
   },
 
+  _validateForm() {
+    this.setState({
+      validating: true
+    });
+  },
+
 
 
   render() {
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
-        <AnswerContainer.Validation />
+        <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
         <ul className="collapsible" data-collapsible="expandable">
           {
             this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
           }
         </ul>
-        <AnswerContainer.Validation />
-
+        <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
       </div>
     )
   }
@@ -118,7 +91,7 @@ AnswerContainer.Answer = React.createClass({
             <li className="collection-item">
               <div className="collapsible-header header">
                 <i className="material-icons">error</i>
-                <span className="title">Errores Comunes</span>
+                <span className="title">Errores comunes</span>
               </div>
               <div>
                 <ul className="collection">
@@ -196,12 +169,14 @@ AnswerContainer.Answer.CommonError = React.createClass({
   }
 });
 AnswerContainer.Validation = React.createClass({
+
   render() {
+    var classCSS = !this.props.validating ? { css: "material-icons", icon: "done"} : {css: "material-icons spin", icon: "loop"}
     return (
       <div className="Formulation-AnswerContainer-Validation">
-        <i className="material-icons">done</i>
+        <i className={classCSS.css} onClick={this.props.validateForm} >{classCSS.icon}</i>
       </div>
-    )
+    );
   }
 });
 
