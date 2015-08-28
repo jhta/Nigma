@@ -30,12 +30,19 @@
   &-list
     padding: 1em;
 
-  &-item
+  &-Item
     display: flex;
+    justify-content: space-between;
     align-items: center;
     border: 1px solid #ddd;
     padding: .8em;
     font-size: 16px;
+    &-left
+      display: flex;
+      align-items: center;
+    &-right
+      display: flex;
+      align-items: center;
     &:hover
       background-color: #ddd;
       cursor: pointer;

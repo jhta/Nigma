@@ -11,24 +11,28 @@ const FileSideBar = require("./file-sidebar");
 
 const items = [
   {
+    father: '/',
     isFolder: true,
     shared: true,
     name: "folder1",
     url: 'otrosItems'
   },
   {
+    father: '/',
     isFolder: false,
     shared: true,
     name: "item1",
     url: 'otrosItems'
   },
   {
+    father: '/',
     isFolder: false,
     shared: false,
     name: "item2",
     url: 'otrosItems'
   },
   {
+    father: '/',
     isFolder: false,
     shared: false,
     name: "item3",
@@ -36,14 +40,63 @@ const items = [
   },
 ]
 
+const folderChilds = [
+  {
+    url: 'otrosItems',
+    items: [
+      {
+        father: '/',
+        isFolder: false,
+        shared: true,
+        name: "item1",
+        url: 'otrosItems'
+      },
+      {
+        father: '/',
+        isFolder: false,
+        shared: false,
+        name: "item2",
+        url: 'otrosItems'
+      },
+      {
+        father: '/',
+        isFolder: false,
+        shared: false,
+        name: "item3",
+        url: 'otrosItems'
+      },
+    ]
+  }
+]
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
 
+  getInitialState() {
+    return {
+      items: items,
+    }
+  },
+
+  loadItems(url) {
+    const folder = folderChilds.filter((folder) => {
+      return folder.url == url
+    })
+    let that = this;
+    setTimeout(() => {
+      console.log(folder[0].items);
+      that.setState({
+        items: folder[0].items
+      });
+    },200);
+
+  },
+
   render() {
     return (
       <div className="Wrapper ">
-        <FileSideBar items={items}/>
+        <FileSideBar items={this.state.items} onLoadItems={this.loadItems}/>
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
