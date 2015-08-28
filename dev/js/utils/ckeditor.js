@@ -78,9 +78,7 @@ const CKEditor = {
   },
 
   addTeX(TeX) {
-    //CAMBIAR EL JQUERY!!!
-    console.log("fuck yeah", TeX);
-    setTimeout(() => {
+      setTimeout(() => {
       window.TeXNode = document.getElementById("cke_80_textarea");
       if(window.TeXNode) {
         console.log(window.TeXNode, TeX);
@@ -103,8 +101,9 @@ const CKEditor = {
     }, 400);
   },
 
-  getTeX() {
-    return (window.TeX)? window.TeX:"";
+  getValue() {    
+    return(CKEDITOR.instances.editor.getData());
+    //return (window.TeX)? window.TeX:"";
   }
 }
 

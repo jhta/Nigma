@@ -24,7 +24,7 @@ const Space = React.createClass({
   },
 
   changeDialogTex(TeX) {
-    console.log("TeX", TeX);
+    //console.log("TeX", TeX);
     //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
     this.setState({dialogTeX: TeX});
   },

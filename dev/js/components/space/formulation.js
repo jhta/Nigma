@@ -26,8 +26,7 @@ const Formulation = React.createClass({
     this.props.changeDialogTex(Ckeditor.getTeX);
   },
 
-  componentWillReceiveProps(nextProps) {
-    console.log("receive props");
+  componentWillReceiveProps(nextProps) {   
     if(this.props.dialogTeX != nextProps.dialogTeX) {
       Ckeditor.addTeX(nextProps.dialogTeX);
     }
@@ -46,11 +45,17 @@ const Formulation = React.createClass({
    * @param  {event} e [event target of input]
    */
   _onChangeContentEditable(e) {
-    this.setState({html: e.target.value})
+    this.setState({html: e.target.value})    
   },
 
   _addExpresion(TeX) {
-    CKEditor.addTeX(TeX);
+    Ckeditor.addTeX(TeX);
+  },
+
+  onAddQuestion(){
+   let question =Ckeditor.getValue();
+   console.log(question);
+   console.log('acá va el parseo con lo del sotillo');
   },
 
   render() {
@@ -60,6 +65,9 @@ const Formulation = React.createClass({
           <div id="editor">
             <p>{this.state.html}</p>
           </div>
+        </div>
+        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this.onAddQuestion} >
+          +
         </div>
       </div>
     )

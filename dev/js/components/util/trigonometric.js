@@ -1,5 +1,5 @@
 module.exports = {
-	trigonometric:[ 
+	symbols:[ 
         {script: '\\sin', img:'images/trigonometric/sin.png'},
         {script: '\\cos', img:'images/trigonometric/cos.png'},
         {script: '\\tan', img:'images/trigonometric/tan.png'},
