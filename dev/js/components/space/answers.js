@@ -63,6 +63,8 @@ var AnswerContainer = React.createClass({
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
         <ul className="collapsible" data-collapsible="expandable">
           {
+
+
             this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
           }
         </ul>
@@ -87,7 +89,9 @@ var AnswerContainer = React.createClass({
 AnswerContainer.Answer = React.createClass({
 
   _convertToNativeType(value) {
-    if(value === "false"){
+    if(value == "" || value == null || value == undefined){
+      return "";
+    } else if(value === "false"){
       value = false;
     } else if (value === "true"){
       value = true;
@@ -114,7 +118,7 @@ AnswerContainer.Answer = React.createClass({
         <div className="collapsible-body">
           <ul className="collection main-answer-content" >
             <li className="collection-item main-answer-form">
-              <AnswerContainer.Answer.Form answer={this.props.answer} handleChange={this._handleChange} />
+              <AnswerContainer.Answer.Form answer={this.props.answer} handleChange={this._handleChange} index={this.props.index}/>
             </li>
             <li className="collection-item">
               <div className="collapsible-header header">
@@ -150,8 +154,8 @@ AnswerContainer.Answer.Form = React.createClass({
       <div className="row">
 
         <div className="input-field col s4">
-          <input  id={`textbox_answer_correct_value${this.props.answer._id}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
-          <label htmlFor={`textbox_answer_correct_value${this.props.answer._id}`}>Valor correcto</label>
+          <input  id={`textbox_answer_correct_value${this.props.index}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
+          <label htmlFor={`textbox_answer_correct_value${this.props.index}`}>Valor correcto</label>
         </div>
 
         <div className="input-field col s2">
@@ -164,13 +168,13 @@ AnswerContainer.Answer.Form = React.createClass({
         </div>
 
         <div className="input-field col s4">
-          <input id={`textbox_answer_name${this.props.answer._id}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
-          <label htmlFor={`textbox_answer_name${this.props.answer._id}`}>Label</label>
+          <input id={`textbox_answer_name${this.props.index}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
+          <label htmlFor={`textbox_answer_name${this.props.index}`}>Label</label>
         </div>
 
         <div className="input-field col s2">
-          <input type="checkbox" id={`checkbox_answer${this.props.answer._id}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
-          <label htmlFor={`checkbox_answer${this.props.answer._id}`} >Mostrar</label>
+          <input type="checkbox" id={`checkbox_answer${this.props.index}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
+          <label htmlFor={`checkbox_answer${this.props.index}`} >Mostrar</label>
         </div>
       </div>
     )

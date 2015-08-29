@@ -93,6 +93,20 @@ var VariableParser = {
     }
 
     return output;
+  },
+
+  isEvaluable(expression, variables) {
+    var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
+    var match = expression.match(/\$[A-Za-z]/g) || [];
+    var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
+    if (compoundOfEvaluable) {
+
+    } else {
+      return {
+        error: true,
+        message: "lala"
+      }
+    }
   }
 }
 

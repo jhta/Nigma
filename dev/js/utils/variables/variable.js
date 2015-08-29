@@ -15,6 +15,17 @@ class Variable {
       codeText = codeText.replace(/(\$[A-Za-z])/g, `window.outputValues["$1"]`);
     return codeText;
   }
+
+  static retrieveEvaluableVariables(variables) {
+    var evaluableVariables = {}
+    for (var i = variables.length - 1; i >= 0; i--) {
+      var variable = variables[i];
+      if (variable.identifier == Uniform.identifier() || variable.identifier == Specific.identifier()) {
+        evaluableVariables[variable.name] = variable;
+      }
+    }
+    return evaluableVariables;
+  }
 }
 
 module.exports = Variable;
