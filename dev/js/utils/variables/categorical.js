@@ -37,6 +37,9 @@ class Categorical extends Specific {
     return 'C';
   }
 
+  identifier() {
+    return 'C';
+  }
   syntax() {
     return /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/;
   }

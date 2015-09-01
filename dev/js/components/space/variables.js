@@ -58,7 +58,8 @@ Variables.Content = React.createClass({
 
   getInitialState: function() {
     return {
-      variables: ""
+      text: "",
+      variables: []
     };
   },
 
@@ -66,15 +67,14 @@ Variables.Content = React.createClass({
     VariableStore.addChangeListener(this._handleChange)
   },
 
-  _handleChange(type){
-    this.setState({
-      variables: VariableStore.getVariables()
-    });
+  _handleChange(){
+    console.log(VariableStore.getVariables());
+    this.setState(VariableStore.getVariables());
   },
 
   _validateCode() {
     setTimeout( () => {
-      VariableActions.validateCode(this.state.variables);
+      VariableActions.validateCode(this.state.text);
     }, 500);
   },
 
@@ -88,7 +88,7 @@ Variables.Content = React.createClass({
       <div className="Variables-Content">
         <Variables.Content.Create  actionAddVariable={this._addVariable}/>
         <div className="Variables-Content__actions">
-          <textarea valueLink={this.linkState('variables')} ref="codeArea"/>
+          <textarea valueLink={this.linkState('text')} ref="codeArea"/>
         </div>
         <Variables.Content.SaveAndCheck validationOutput={VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
       </div>

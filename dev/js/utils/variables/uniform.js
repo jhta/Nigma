@@ -65,6 +65,10 @@ class Uniform extends Variable {
     return 'U';
   }
 
+  identifier() {
+    return 'U';
+  }
+
   syntax() {
     return /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/;
   }

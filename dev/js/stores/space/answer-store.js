@@ -56,9 +56,9 @@ function _addNewAnswer() {
   _answers.push(new Answer());
 }
 
-function _validateAnswers(answers, questions) {
+function _validateAnswers(answers, variables) {
   _setAnswers(answers);
-  var valid = answers.every(answer => answer.isValid());
+  var valid = answers.every(answer => answer.isValid(variables));
   return valid;
 }
 

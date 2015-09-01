@@ -2,7 +2,7 @@ var Variable = require('./variable');
 class Specific extends Variable {
 
   checkSyntax(currentVariables) {
-    let regex = Specific.syntax();
+    let regex = this.syntax();
     let match = this.codeFragment.match(regex);
 
     let elementsFilled = true;
@@ -68,6 +68,10 @@ class Specific extends Variable {
   }
 
   static identifier() {
+    return 'E';
+  }
+
+  identifier() {
     return 'E';
   }
 

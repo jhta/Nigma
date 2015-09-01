@@ -1,4 +1,5 @@
 const CommonError = require('./common-error');
+const Parser = require('../parser');
 
 class Answer {
   constructor() {
@@ -14,8 +15,10 @@ class Answer {
     this.commonErrors.push(new CommonError());
   }
 
-  isValid() {
+  isValid(variables) {
     console.log(this);
+    console.log(">>>>>>>>>>>>>>>>>>>>");
+    console.log(Parser.isEvaluable(this.correctValue, variables));
     return true;
   }
 

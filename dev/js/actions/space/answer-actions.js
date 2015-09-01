@@ -16,6 +16,7 @@ var AnswerActions = {
       variables: variables
     });
   },
+
   addNewAnswer() {
     Dispatcher.dispatch({
       type: AnswerConstants.ADD_NEW_ANSWER,

@@ -2,7 +2,8 @@
 const Uniform = require('./variables/uniform');
 const Specific = require('./variables/specific');
 const Categorical = require('./variables/categorical');
-const Variable = require('./variables/variable.js');
+const Variable = require('./variables/variable');
+const ExpressionEvaluator = require('./variables/expression-evaluator');
 
 var VariableParser = {
   _detectType(nigmaCode) {
@@ -36,7 +37,7 @@ var VariableParser = {
     }
   },
 
-  generateCode(nigmaCode) {
+  compile(nigmaCode) {
     var errors =  [], variables =  [];
     for(var j = 0; j < nigmaCode.length; j++){
       var codeFragment = nigmaCode[j];
@@ -96,11 +97,16 @@ var VariableParser = {
   },
 
   isEvaluable(expression, variables) {
+    console.log({
+      expression: expression,
+      variables: variables
+    });
     var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
     var match = expression.match(/\$[A-Za-z]/g) || [];
+    console.log(match);
     var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
     if (compoundOfEvaluable) {
-      var output = Variable.evaluate(expression, evaluableVariables);
+      var output = ExpressionEvaluator.evaluate(expression, evaluableVariables);
       console.log(output);
     } else {
       return {

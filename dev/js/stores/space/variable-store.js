@@ -6,23 +6,25 @@ var assign = require('object-assign');
 var Parser = require('../../utils/parser');
 
 
-var _variables = "";
+var _textVariables = "";
+var _variableObjects = [];
 var _validationOutput = {};
 
 function _addVariable (variableCode) {
-  _variables+= variableCode + "\n";
+  _textVariables+= variableCode + "\n";
 }
 
 function _setVariables (code) {
   if(code.length != 0)
-    _variables = code.join("\n") + "\n";
+    _textVariables = code.join("\n") + "\n";
 }
 
 function _validateCode (code) {
-  var outputCompilation = Parser.generateCode(code);
+  var outputCompilation = Parser.compile(code);
   if (outputCompilation.errors.length == 0) {
     var outputExecution = Parser.executeCode(outputCompilation.variables);
     if (outputExecution.errors.length == 0) {
+      _variableObjects = outputCompilation.variables;
       return {
         error: false,
         errors: [],
@@ -59,7 +61,7 @@ var VariableStore = assign({}, EventEmitter.prototype, {
   },
 
   getVariables() {
-    return _variables;
+    return {text: _textVariables, variables: _variableObjects};
   },
   getValidationOutPut() {
     return _validationOutput;

@@ -2,18 +2,22 @@ const Node = require('./node');
 
 class Stack {
   constructor() {
-    this.top = null;
+    this.front = null;
     this.size = 0;
   }
 
   push (value) {
     if(this.isEmpty()){
-      this.top = new Node(value);
+      var node = new Node(value);
+      console.log(node);
+      this.front = node;
     } else {
       var node = new Node(value);
-      this.top.next = node;
-      this.top = node;
+      console.log("adding a second", node);
+      node.next = this.front;
+      this.front = node;
     }
+    console.log(this.front, "lol isnot updating");
     this.size++;
   }
 
@@ -21,11 +25,11 @@ class Stack {
     if(this.isEmpty()){
       throw "Cannot pop of an empty stack";
     } else {
-      var value = this.top.value;
+      var value = this.front.value;
       if(this.size == 1){
-        this.top = null;
+        this.front = null;
       } else {
-        this.top = this.top.previous
+        this.front = this.front.next;
       }
       this.size--;
       return value;
@@ -38,7 +42,7 @@ class Stack {
 
   peek () {
     if(!this.isEmpty()){
-      return this.top.value;
+      return this.front.value;
     } else {
       throw "Cannot peek of an empty stack";
     }
