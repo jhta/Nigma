@@ -54,16 +54,11 @@ class Uniform extends Variable {
     }
   }
 
-  checkPreExecute() {
-    var errors = [];
+  getValue(currentVariables) {
+    var min = this.parameters.min;
+    var max = this.parameters.max;
+    var step = this.parameters.step;
 
-    window.validationAux = null;
-    /* Min < Max */
-    var validation = Uniform.replaceVariables(`validationAux = ${this.parameters.min} < ${this.parameters.max};`);
-    eval(validation);
-    if(validationAux == false) {
-      errors.push({})
-    }
   }
 
   static identifier() {

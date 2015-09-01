@@ -1,8 +1,8 @@
+//Variable Models
 const Uniform = require('./variables/uniform');
 const Specific = require('./variables/specific');
 const Categorical = require('./variables/categorical');
-
-
+const Variable = require('./variables/variable.js');
 
 var VariableParser = {
   _detectType(nigmaCode) {
@@ -100,14 +100,21 @@ var VariableParser = {
     var match = expression.match(/\$[A-Za-z]/g) || [];
     var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
     if (compoundOfEvaluable) {
-
+      var output = Variable.evaluate(expression, evaluableVariables);
+      console.log(output);
     } else {
       return {
         error: true,
         message: "lala"
       }
     }
-  }
+  },
+
+
+
+
+
+
 }
 
 module.exports = VariableParser;
