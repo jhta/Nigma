@@ -44,6 +44,11 @@ class Categorical extends Specific {
     return /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/;
   }
 
+  getPossibleValue(variables) {
+    var random = Math.floor(Math.random() * this.parameters.elements.length)
+    return this.parameters.elements[random];
+  }
+
   static createSkeleton() {
     return "$C = C{'texto 1', 'texto 2'}";
   }

@@ -1,4 +1,6 @@
-var Variable = require('./variable');
+const Variable = require('./variable');
+const ExpressionEvaluator = require('./expression-evaluator');
+
 class Uniform extends Variable {
 
   checkSyntax(currentVariables) {
@@ -54,19 +56,20 @@ class Uniform extends Variable {
     }
   }
 
-  getValue(currentVariables) {
-    var min = this.parameters.min;
-    var max = this.parameters.max;
-    var step = this.parameters.step;
-
-  }
-
   static identifier() {
     return 'U';
   }
 
   identifier() {
     return 'U';
+  }
+
+  getPossibleValue(variables) {
+    var min = ExpressionEvaluator.evaluate(this.parameters.min, variables).possibleValue;
+    var max = ExpressionEvaluator.evaluate(this.parameters.max, variables).possibleValue;
+    var step = ExpressionEvaluator.evaluate(this.parameters.step, variables).possibleValue;
+    var output = min + Math.floor(((max - min) * Math.random() / step)) * step;
+    return output;
   }
 
   syntax() {

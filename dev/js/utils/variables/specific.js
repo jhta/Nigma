@@ -1,4 +1,6 @@
-var Variable = require('./variable');
+const Variable = require('./variable');
+const ExpressionEvaluator = require('./expression-evaluator');
+
 class Specific extends Variable {
 
   checkSyntax(currentVariables) {
@@ -77,6 +79,12 @@ class Specific extends Variable {
 
   syntax() {
     return /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/;
+  }
+
+  getPossibleValue(variables) {
+    var random = Math.floor(Math.random() * this.parameters.elements.length)
+    var output = ExpressionEvaluator.evaluate(this.parameters.elements[random], variables);
+    return output.possibleValue;
   }
 
   static createSkeleton() {

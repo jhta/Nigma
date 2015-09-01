@@ -1,5 +1,6 @@
 //Data Sctructures
 const Stack = require('../data-stuctures/stack');
+const Variable = require('./variable');
 
 module.exports = {
 	evaluate(expression, variables) {
@@ -29,8 +30,9 @@ module.exports = {
           if(++i < expression.length && expression[i].toUpperCase() >= 'A' && expression[i].toUpperCase() <= 'Z') {
             variableText += expression[i];
             var variable = variables[variableText];
-            console.log(variable);
-            valuesStack.push(parseFloat(1));
+            var variableValue = variable.getPossibleValue(variables);
+            console.log("Variable encontrada", variable, "Con valor", variableValue);
+            valuesStack.push(variableValue);
           } else {
             throw "Invalid character"
           }
@@ -62,6 +64,26 @@ module.exports = {
     return output;
 
   },
+
+  isEvaluable(expression, variables) {
+    console.log({
+      expression: expression,
+      variables: variables
+    });
+    var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
+    var match = expression.match(/\$[A-Za-z]/g) || [];
+    var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
+    if (compoundOfEvaluable) {
+      var output = this.evaluate(expression, evaluableVariables);
+      console.log(output);
+    } else {
+      return {
+        error: true,
+        message: "lala"
+      }
+    }
+  },
+
   applyOperation(operation, operand1, operand2) {
     switch(operation) {
       case '+':

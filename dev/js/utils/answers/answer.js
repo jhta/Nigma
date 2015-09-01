@@ -1,5 +1,5 @@
 const CommonError = require('./common-error');
-const Parser = require('../parser');
+const ExpressionEvaluator = require('../variables/expression-evaluator');
 
 class Answer {
   constructor() {
@@ -18,7 +18,7 @@ class Answer {
   isValid(variables) {
     console.log(this);
     console.log(">>>>>>>>>>>>>>>>>>>>");
-    console.log(Parser.isEvaluable(this.correctValue, variables));
+    console.log(ExpressionEvaluator.isEvaluable(this.correctValue, variables));
     return true;
   }
 

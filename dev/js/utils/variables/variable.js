@@ -22,7 +22,6 @@ class Variable {
     var evaluableVariables = {}
     for (var i = variables.length - 1; i >= 0; i--) {
       var variable = variables[i];
-      console.log(variable);
       if (variable.identifier() == 'U' || variable.identifier() == 'E') {
         evaluableVariables[variable.name] = variable;
       }

@@ -9,15 +9,12 @@ class Stack {
   push (value) {
     if(this.isEmpty()){
       var node = new Node(value);
-      console.log(node);
       this.front = node;
     } else {
       var node = new Node(value);
-      console.log("adding a second", node);
       node.next = this.front;
       this.front = node;
     }
-    console.log(this.front, "lol isnot updating");
     this.size++;
   }
 
