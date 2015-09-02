@@ -8,7 +8,7 @@ const RightPanel = React.createClass({
   render() {
     return (
       <div className="col s4">
-        <Variables />
+        <Variables/>
         <Expresions />
       </div>
     )

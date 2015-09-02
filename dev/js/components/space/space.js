@@ -8,6 +8,10 @@ const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 
+/*Stores*/
+window.VariableStore = require('../../stores/space/variable-store');
+window.AnswerStore = require('../../stores/space/answer-store');
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -22,7 +26,7 @@ const Space = React.createClass({
                 <Formulation />
               </Tab>
               <Tab label="Respuestas" >
-                <Answers />
+                <Answers/>
               </Tab>
 
               <Tab label="Metadatos" >
@@ -32,7 +36,7 @@ const Space = React.createClass({
             </Tabs>
           </div>
         </div>
-        <RightPanel />
+        <RightPanel/>
       </div>
     )
   }
