@@ -16,10 +16,18 @@ class Answer {
   }
 
   isValid(variables) {
-    console.log(this);
-    console.log(">>>>>>>>>>>>>>>>>>>>");
-    console.log(ExpressionEvaluator.isEvaluable(this.correctValue, variables));
-    return true;
+    var output = ExpressionEvaluator.isEvaluable(this.correctValue, variables);
+    if(output.error)
+      output.messages = [`Answer correct value, ${this.correctValue}: ${output.messages}`];
+    else
+      output.messages = [];
+    for(var i = 0; i < this.commonErrors.length; i++){
+      var commonError = this.commonErrors[i];
+      var validation = commonError.isValid(variables);
+      output.error = output.error || validation.error;
+      output.messages = output.messages.concat(validation.messages);
+    }
+    return output;
   }
 
   static createFromResponse(jsonAnswer) {

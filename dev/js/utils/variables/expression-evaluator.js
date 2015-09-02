@@ -7,7 +7,8 @@ module.exports = {
     // Shunting Yard Algorithm by Edgar Dijkstra
     var output = {
       error: false,
-      possibleValue: null
+      possibleValue: null,
+      messages: []
     }
     try {
       var operationStack = new Stack();
@@ -30,11 +31,13 @@ module.exports = {
           if(++i < expression.length && expression[i].toUpperCase() >= 'A' && expression[i].toUpperCase() <= 'Z') {
             variableText += expression[i];
             var variable = variables[variableText];
-            var variableValue = variable.getPossibleValue(variables);
-            console.log("Variable encontrada", variable, "Con valor", variableValue);
-            valuesStack.push(variableValue);
+            if (variable == null) {
+              throw `Variable ${variableText} is not defined`;
+            } else {
+              valuesStack.push(variable.getPossibleValue(variables));
+            }
           } else {
-            throw "Invalid character"
+            throw "Invalid character in expression, expecting variable definition"
           }
         } else if (token == '(') {
           operationStack.push(token)
@@ -49,37 +52,36 @@ module.exports = {
             valuesStack.push(this.applyOperation(operationStack.pop(), valuesStack.pop(), valuesStack.pop()));
           operationStack.push(token);
         } else {
-          throw "Invalid character"
+          throw "Invalid character in expression"
         }
       }
       while (!operationStack.isEmpty())
         valuesStack.push(this.applyOperation(operationStack.pop(), valuesStack.pop(), valuesStack.pop()));
       output.error = false;
       output.possibleValue = valuesStack.pop();
+      if(!valuesStack.isEmpty()) {
+        throw "Expression is not well formed"
+      }
     } catch(exception) {
       output.error = true
-      output.message = "Expression is not wellformed"
-      console.log(exception.stack);
+      output.messages = exception
+      console.log(exception);
     }
     return output;
 
   },
 
   isEvaluable(expression, variables) {
-    console.log({
-      expression: expression,
-      variables: variables
-    });
     var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
     var match = expression.match(/\$[A-Za-z]/g) || [];
     var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
     if (compoundOfEvaluable) {
       var output = this.evaluate(expression, evaluableVariables);
-      console.log(output);
+      return output;
     } else {
       return {
         error: true,
-        message: "lala"
+        messages: "Expression may contain undefined variables or any of the variables used are not evaluables"
       }
     }
   },

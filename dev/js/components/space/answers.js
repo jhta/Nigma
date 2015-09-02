@@ -49,6 +49,7 @@ var AnswerContainer = React.createClass({
       answers: AnswerStore.getAnswers(),
       validating: false
     });
+    console.log(AnswerStore.getValidationOutPut());
   },
 
   _addNewAnswer() {

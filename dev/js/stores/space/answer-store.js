@@ -58,8 +58,13 @@ function _addNewAnswer() {
 
 function _validateAnswers(answers, variables) {
   _setAnswers(answers);
-  var valid = answers.every(answer => answer.isValid(variables));
-  return valid;
+  _validationOutput = {error: false, messages: []};
+  for(var i = 0; i < answers.length; i++) {
+    var answer = answers[i];
+    var validation = answer.isValid(variables);
+    _validationOutput.error = _validationOutput.error || validation.error;
+    _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
+  }
 }
 
 
@@ -78,6 +83,10 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
 
   getAnswers() {
     return _answers;
+  },
+
+  getValidationOutPut() {
+    return _validationOutput;
   }
 });
 
@@ -88,7 +97,7 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       AnswerStore.emitChange();
       break;
     case AnswerConstants.VALIDATE_ANSWERS:
-      _validationOutput = _validateAnswers(action.answers, action.variables)
+      _validateAnswers(action.answers, action.variables)
       AnswerStore.emitChange();
       break;
     case AnswerConstants.ADD_NEW_ANSWER:

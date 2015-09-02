@@ -20,7 +20,7 @@ class Stack {
 
   pop() {
     if(this.isEmpty()){
-      throw "Cannot pop of an empty stack";
+      throw "Expression is not well formed";
     } else {
       var value = this.front.value;
       if(this.size == 1){
@@ -41,7 +41,7 @@ class Stack {
     if(!this.isEmpty()){
       return this.front.value;
     } else {
-      throw "Cannot peek of an empty stack";
+      throw "Expression is not well formed";
     }
   }
 
