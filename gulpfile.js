@@ -79,11 +79,28 @@ gulp.task('stylus', function() {
     .pipe(gulp.dest('dist/css'))
 });
 
+/**
+ * IMAGES TASK
+ * ************
+ */
 
 gulp.task('images', function() {
-  gulp.src('dev/images/**.*')
+  gulp.src('dev/images/**/*')
     .pipe(gulp.dest('dist/images'))
 });
+
+/**
+ * CKEDITOR TASK
+ * ************
+ * Copy CKEDITOR library to dist
+ */
+
+
+gulp.task('ckeditor', function() {
+  gulp.src('dev/ckeditor/**/**.*')
+    .pipe(gulp.dest('dist/ckeditor'))
+});
+
 
 /**
  * SERVER TASK
@@ -125,10 +142,11 @@ gulp.task('html', function(){
 gulp.task('watch', function() {
   bundleScripts(true);
   gulp.watch('dev/styl/**/*.styl', ['stylus']);
+  gulp.watch('dev/js/libs/**/*.js', ['ckeditor']);
   gulp.watch('dev/**/*.html', ['html']);
   gulp.watch('dev/images/**.*', ['images']);
 })
 
 
-gulp.task('build', ['images', 'stylus', 'html', 'browserify']);
+gulp.task('build', ['images', 'stylus', 'ckeditor', 'html', 'browserify']);
 gulp.task('dev', ['build', 'server', 'watch']);

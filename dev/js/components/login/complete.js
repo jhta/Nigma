@@ -22,9 +22,7 @@ var LoginComplete =
 
     componentWillMount: function () {
       UserActions.loginComplete(this.getComponentData());
-
       this.redirect();
-
       UserStore.addChangeListener(this.onChange);
     },
 
@@ -42,7 +40,6 @@ var LoginComplete =
      onChange: function () {
       this.setState({key: this.getComponentData()});
       this.redirect();
-
     },
 
     render: function () {

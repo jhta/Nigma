@@ -69,6 +69,10 @@ const folderChilds = [
   }
 ]
 
+/*Stores*/
+window.VariableStore = require('../../stores/space/variable-store');
+window.AnswerStore = require('../../stores/space/answer-store');
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -76,6 +80,8 @@ const Space = React.createClass({
   getInitialState() {
     return {
       items: items,
+      expresions: false,
+      dialogTeX: ""
     }
   },
 
@@ -90,10 +96,23 @@ const Space = React.createClass({
         items: folder[0].items
       });
     },200);
+  },
 
+  showExpresions(flag=true) {
+    this.setState({expresions: flag});
+  },
+
+  changeDialogTex(TeX) {
+    //console.log("TeX", TeX);
+    //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
+    this.setState({dialogTeX: TeX});
   },
 
   render() {
+    const styleTab = {
+      background: '#009688',
+      opacity: '1'
+    };
     return (
       <div className="Wrapper ">
         <FileSideBar items={this.state.items} onLoadItems={this.loadItems}/>
@@ -101,20 +120,30 @@ const Space = React.createClass({
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
               <Tabs>
-                <Tab label="Formulacion" >
-                  <Formulation />
+                <Tab label="Formulacion" style={styleTab}>
+                  <Formulation
+                    expresions={this.state.expresions}
+                    showExpresions={this.showExpresions}
+                    closeExpresions={this.closeExpresions}
+                    changeDialogTex={this.changeDialogTex}
+                    dialogTeX={this.state.dialogTeX}
+                  />
                 </Tab>
-                <Tab label="Respuestas" >
+                <Tab label="Respuestas" style={styleTab}>
                   <Answers />
                 </Tab>
 
-                <Tab label="Metadatos" >
+                <Tab label="Metadatos" style={styleTab}>
                   <Metadata />
                 </Tab>
               </Tabs>
             </div>
           </div>
-          <RightPanel />
+          <RightPanel
+          expresions={this.state.expresions}
+          changeDialogTex={this.changeDialogTex}
+          dialogTeX={this.state.dialogTeX}
+        />
         </div>
       </div>
     )

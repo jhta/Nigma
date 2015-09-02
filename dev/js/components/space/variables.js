@@ -2,7 +2,15 @@ const React = require("react");
 
 //USED
 const Modal = require('./../util/modal');
+const VariableActions = require('../../actions/space/variable-actions');
 
+//Variables
+const Uniform = require('../../utils/variables/uniform');
+const Specific = require('../../utils/variables/specific');
+const Categorical = require('../../utils/variables/categorical');
+
+//Stores
+/*VariableStore is global*/
 
 const Variables = React.createClass({
 
@@ -14,7 +22,6 @@ const Variables = React.createClass({
   },
 
   _openModal(type) {
-    console.log("0pen");
     this.setState({showModal: true, typeOfVariable: type});
   },
 
@@ -23,12 +30,7 @@ const Variables = React.createClass({
       <div className="z-depth-1">
         <div className="Variables">
           <Variables.Header />
-          <Variables.Content
-            onOpenModal = {this._openModal}
-          />
-          <Variables.Modal
-            showModal = {this.state.showModal}
-          />
+          <Variables.Content />
         </div>
     </div>
     );
@@ -52,90 +54,106 @@ Variables.Header = React.createClass({
 });
 
 Variables.Content = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function() {
+    return {
+      text: "",
+      variables: []
+    };
+  },
+
+  componentWillMount() {
+    VariableStore.addChangeListener(this._handleChange)
+  },
+
+  _handleChange(){
+    console.log(VariableStore.getVariables());
+    this.setState(VariableStore.getVariables());
+  },
+
+  _validateCode() {
+    setTimeout( () => {
+      VariableActions.validateCode(this.state.text);
+    }, 500);
+  },
+
+  _addVariable(varType) {
+    var currentCode = this.refs.codeArea.getDOMNode().value;
+    VariableActions.addVariable(varType.createSkeleton(), currentCode);
+  },
+
   render() {
     return (
       <div className="Variables-Content">
-        Nothing here yet...
-        <Variables.Dropdown {...this.props}/>
+        <Variables.Content.Create  actionAddVariable={this._addVariable}/>
+        <div className="Variables-Content__actions">
+          <textarea valueLink={this.linkState('text')} ref="codeArea"/>
+        </div>
+        <Variables.Content.SaveAndCheck validationOutput={VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
       </div>
     )
+  },
+  componentWillUnmount() {
+    VariableStore.removeChangeListener()
   }
 });
 
-Variables.Dropdown = React.createClass({
-
-  _selectType(type) {
-    return ()=>{
-      this.props.onOpenModal(type);
-    }
-  },
-
+Variables.Content.Create = React.createClass({
   render() {
     return (
-      <div>
-        {/* Dropdown Trigger */}
-        <div className="dropdown-button btn" data-activates="dropdown-variables">
-          Drop Me!
-        </div>
-        {/* Dropdown Structure */}
-        <ul id="dropdown-variables" className="dropdown-content">
-          <li>
-            <a
-              onClick = {this._selectType(0)}
-              href="javascript:void(0)"
-            >
-              one
-            </a>
+      <div className="Variables-Content-actions__create">
+        <i className="small material-icons dropdown-button" data-activates='dropme' data-beloworigin='true' data-constrainwidth='false'>add_box</i>
+        <ul id='dropme' className='dropdown-content'>
+          <li onClick={this.props.actionAddVariable.bind(null, Uniform)}>
+              <a>Uniforme</a>
           </li>
-          <li><a href="javascript:void(0)">two</a></li>
-          <li><a href="javascript:void(0)">three</a></li>
+          <li onClick={this.props.actionAddVariable.bind(null, Categorical)}>
+              <a>Categorica</a>
+          </li>
+          <li onClick={this.props.actionAddVariable.bind(null, Specific)}>
+            <a>Especifica</a>
+          </li>
         </ul>
       </div>
-
-    );
+    )
   }
 });
 
-Variables.Modal = React.createClass({
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.showModal) {
-      this._openModal();
-    }
+Variables.Content.SaveAndCheck =  React.createClass({
+
+  getInitialState: function() {
+    return {
+      validating: false
+    };
   },
 
-  _openModal() {
-    this.refs.modal.openModal();
+  _validate() {
+    this.setState({validating: true});
+    this.props.validateCode();
   },
 
-  _selectType() {
-    let type = this.props.type;
-    switch(type) {
-      case 0:
-        console.log("0");
-        break;
-
-      case 1:
-        console.log("0");
-        break;
+  _handleChange(validationOutput){
+    this.setState({ validating: false });
+    if(validationOutput != null && validationOutput.error){
+      alert(validationOutput.errors.map(error => error.message).join("\n"));
     }
   },
 
   render() {
+    var classCSS = !this.state.validating ? { css: "small material-icons", icon: "done"} : {css: "small material-icons spin", icon: "loop"}
     return (
-      <Modal
-        headerText="Nueva pregunta"
-        ref="modal"
-        positiveCallback={console.log("holi")}
-      >
-        <div className="input-field col s12">
-          <input
-            type="text"
-          />
-          <label htmlFor="question-name">Nombre</label>
-        </div>
-      </Modal>
-    )
+      <div className="Variables-Content-actions__check_save">
+        <i className={classCSS.css} onClick={this._validate}>{classCSS.icon}</i>
+      </div>
+    );
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.validationOutput && this.state.validating){
+      this._handleChange(nextProps.validationOutput)
+    }
   }
 });
 
