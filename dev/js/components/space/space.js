@@ -16,27 +16,59 @@ const Space = React.createClass({
 
   mixins: [ThemeMixin],
 
+  getInitialState() {
+    return {
+      expresions: false,
+      dialogTeX: ""
+    }
+  },
+
+  showExpresions(flag=true) {
+    this.setState({expresions: flag});
+  },
+
+  changeDialogTex(TeX) {
+    //console.log("TeX", TeX);
+    //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
+    this.setState({dialogTeX: TeX});
+  },
+
   render() {
+    const styleTab = {
+      background: '#009688',
+      opacity: '1'
+    };
     return (
       <div className="Space row">
         <div className="col s8">
           <div className="Space-content z-depth-1 ">
             <Tabs>
-              <Tab label="Formulacion" >
-                <Formulation />
-              </Tab>
-              <Tab label="Respuestas" >
-                <Answers/>
+              <Tab label="Formulacion" style={styleTab}>
+                <Formulation
+                  expresions={this.state.expresions}
+                  showExpresions={this.showExpresions}
+                  closeExpresions={this.closeExpresions}
+                  changeDialogTex={this.changeDialogTex}
+                  dialogTeX={this.state.dialogTeX}
+                />
               </Tab>
 
-              <Tab label="Metadatos" >
+              <Tab label="Respuestas" style={styleTab}>
+                <Answers />
+              </Tab>
+
+              <Tab label="Metadatos" style={styleTab}>
                 <Metadata />
               </Tab>
 
             </Tabs>
           </div>
         </div>
-        <RightPanel/>
+        <RightPanel
+          expresions={this.state.expresions}
+          changeDialogTex={this.changeDialogTex}
+          dialogTeX={this.state.dialogTeX}
+        />
       </div>
     )
   }

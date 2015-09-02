@@ -1,6 +1,8 @@
-const Nigma 	= require('./components/app');
-const React 	= require('react');
-const router 	= require('./router/router');
+const Nigma 	 = require('./components/app');
+const React  	 = require('react');
+const router 	 = require('./router/router');
+//const ckeditor = require('./utils/ckeditor');
+
 
 $(document).ready(()=>{
 	$(".dropdown-button").dropdown();
@@ -17,3 +19,4 @@ router.run( function ( Handler, state ) {
 		document.body
 	);
 });
+
