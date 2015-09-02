@@ -54,6 +54,7 @@ const Formulation = React.createClass({
 
   onAddQuestion(){
    let question =Ckeditor.getValue();
+   console.log(document.getElementById('cke_1_contents'));
    console.log(question);
    console.log('acá va el parseo con lo del sotillo');
   },
