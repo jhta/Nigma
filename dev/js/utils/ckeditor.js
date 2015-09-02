@@ -55,12 +55,12 @@ const CKEditor = {
   openTeXDialog(openCb, closeCb) {
     let that = this;
     setTimeout(() => {
-      window.TeXButton = document.getElementsByClassName("cke_button__mathjax");
-      window.TeXButton = window.TeXButton[0];
+      window.TeXButton = document.getElementsByClassName("cke_button__mathjax");      
+      window.TeXButton = window.TeXButton[0];      
       window.TeXButton.addEventListener("click", () => {
-        window.DialogTEXOpen = true;
-        that.closeTeXDialog(closeCb);
-        openCb();
+      window.DialogTEXOpen = true;
+      openCb();
+      that.closeTeXDialog(closeCb);      
       });
       //captureText();
     }, 400)
@@ -69,8 +69,16 @@ const CKEditor = {
   closeTeXDialog(cb) {
     if(window.DialogTEXOpen) {
       setTimeout(() => {
-        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_75");
+        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_75");        
         window.TeXCloseButton.addEventListener("click", () => {
+          cb();
+        });
+        window.TeXOkButton = document.getElementsByClassName("cke_dialog_ui_hbox_first");        
+        window.TeXOkButton[0].addEventListener("click", () => {
+          cb();
+        });
+        window.TeXCancelButton = document.getElementsByClassName("cke_dialog_ui_hbox_last");        
+        window.TeXCancelButton[0].addEventListener("click", () => {
           cb();
         });
       }, 400)
@@ -80,8 +88,7 @@ const CKEditor = {
   addTeX(TeX) {
       setTimeout(() => {
       window.TeXNode = document.getElementById("cke_80_textarea");
-      if(window.TeXNode) {
-        console.log(window.TeXNode, TeX);
+      if(window.TeXNode) {        
         let lastVal = window.TeXNode.value;
         window.TeXNode.value = lastVal + TeX;
         window.TeXNode.focus();
