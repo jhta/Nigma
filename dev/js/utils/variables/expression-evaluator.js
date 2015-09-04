@@ -5,6 +5,7 @@ const Variable = require('./variable');
 module.exports = {
 	evaluate(expression, variables) {
     // Shunting Yard Algorithm by Edgar Dijkstra
+    console.log(variables);
     var output = {
       error: false,
       possibleValue: null,

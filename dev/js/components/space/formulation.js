@@ -4,6 +4,8 @@ const ContentEditable       = require("../utils/content-editable");
 const MaterializeComponents = require("../utils/material-components");
 const {Button} = MaterializeComponents;
 const Ckeditor = require('../../utils/ckeditor');
+const ExpressionEvaluator = require('../../utils/variables/expression-evaluator');
+const VariableStore = require('../../stores/space/variable-store');
 
 //Custom components
 const ExpresionGenerator  = require("./expresion-generator");
@@ -52,11 +54,47 @@ const Formulation = React.createClass({
     Ckeditor.addTeX(TeX);
   },
 
-  onAddQuestion(){
-   let question =Ckeditor.getValue();
-   console.log(document.getElementById('cke_1_contents'));
+
+
+  _validateQuestion(){
+    var question = Ckeditor.getValue();     
+    
+    let expresionsInQuestion = [];   // @($q + $b) 
+    for (var i = 0; i < question.length; i++) {
+      const token = question[i];
+         
+      if(token == '@'){        
+        var initialIndex = {'index':i};        
+      } else if(token == '}' && initialIndex){
+        console.log(i);
+        var finalIndex = {'index':i};        
+        expresionsInQuestion.push({
+          'expresion':String(question).substring(initialIndex.index+2,finalIndex.index),
+          'completeExpresion': String(question).substring(initialIndex.index,finalIndex.index+1),
+          'initial':initialIndex.index,
+          'final':finalIndex.index
+        });            
+      }
+    }
+
+    //let lifeVariables= VariableStore.getVariables();  //Variales que están definidas, le puedo mandar toda esa mondá?
+    
+    //_onAddQuestion(question);
+    var newQuestion = question;
+    expresionsInQuestion.map((expresion,index)=>{                 
+      var newValor = (ExpressionEvaluator.isEvaluable(expresion.expresion,VariableStore.getVariables().variables).possibleValue);
+      newQuestion = newQuestion.replace(expresion.completeExpresion,newValor);      
+      console.log(newQuestion);
+    });
+
+  },
+
+
+
+
+
+  _onAddQuestion(question){  
    console.log(question);
-   console.log('acá va el parseo con lo del sotillo');
   },
 
   render() {
@@ -67,7 +105,7 @@ const Formulation = React.createClass({
             <p>{this.state.html}</p>
           </div>
         </div>
-        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this.onAddQuestion} >
+        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this._validateQuestion} >
           +
         </div>
       </div>
