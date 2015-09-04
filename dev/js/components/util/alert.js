@@ -28,7 +28,7 @@ const AlertMessage = React.createClass({
 
   render(){
     let status = this.state.isShowing? "active":"";
-    let type = (this.props.data == null || this.props.data.error) ? "negative":"positive";
+    let type = (this.props.data == null) ? "": (this.props.data.error ? "negative":"positive");
     let classMessage = `${type} alert-message ${status}`;
     let messages = (this.props.data == null) ? []:this.props.data.messages;
     return(
