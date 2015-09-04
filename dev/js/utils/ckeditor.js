@@ -63,7 +63,7 @@ const CKEditor = {
       that.closeTeXDialog(closeCb);      
       });
       //captureText();
-    }, 400)
+    }, 2000)
   },
 
   closeTeXDialog(cb) {
