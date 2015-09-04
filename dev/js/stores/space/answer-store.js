@@ -65,6 +65,9 @@ function _validateAnswers(answers, variables) {
     _validationOutput.error = _validationOutput.error || validation.error;
     _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
   }
+  if (!_validationOutput.error){
+    _validationOutput.messages = ["Validation successfull"];
+  }
 }
 
 
@@ -86,7 +89,9 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
   },
 
   getValidationOutPut() {
-    return _validationOutput;
+    var aux = _validationOutput;
+    _validationOutput = null;
+    return aux;
   }
 });
 

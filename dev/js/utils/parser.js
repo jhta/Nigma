@@ -42,19 +42,13 @@ var VariableParser = {
       var codeFragment = nigmaCode[j];
       var variableType = this._detectType(codeFragment);
       if(variableType.error){
-        errors.push({
-          message: `Error at line ${j + 1}: ${variableType.message}`,
-          line: j + 1
-        });
+        errors.push(`Error at line ${j + 1}: ${variableType.message}`);
         break;
       } else {
         var variable = new variableType.type(codeFragment);
         var variableOuput = variable.generateCode(variables.map(variable => variable.name));
         if (variableOuput.error) {
-          errors.push({
-            message: `Error at line ${ j + 1}: ${variableOuput.message}`,
-            line: j + 1
-          });
+          errors.push(`Error at line ${ j + 1}: ${variableOuput.message}`);
           break;
         } else {
           variables.push(variableOuput.variable);
@@ -81,7 +75,7 @@ var VariableParser = {
         var jCode = replaceVariables(javascriptCode[i]);
         eval(jCode);
       } catch(exception) {
-        output.errors.push({message: `Error at line ${i + 1}: ${exception.message}`, line: i + 1 });
+        output.errors.push(`Error at line ${i + 1}: ${exception.message}`);
         break;
       }
     }

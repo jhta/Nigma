@@ -1,5 +1,7 @@
 const React = require("react");
 const AnswerActions = require('../../actions/space/answer-actions');
+const AlertMessage = require('../util/alert');
+
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
@@ -49,7 +51,7 @@ var AnswerContainer = React.createClass({
       answers: AnswerStore.getAnswers(),
       validating: false
     });
-    console.log(AnswerStore.getValidationOutPut());
+
   },
 
   _addNewAnswer() {
@@ -59,13 +61,13 @@ var AnswerContainer = React.createClass({
 
 
   render() {
+
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
+        <AlertMessage data={AnswerStore.getValidationOutPut()}/>
         <ul className="collapsible" data-collapsible="expandable">
           {
-
-
             this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
           }
         </ul>
@@ -90,6 +92,7 @@ var AnswerContainer = React.createClass({
 AnswerContainer.Answer = React.createClass({
 
   _convertToNativeType(value) {
+    console.log(value);
     if(value == "" || value == null || value == undefined){
       return "";
     } else if(value === "false"){
@@ -201,6 +204,7 @@ AnswerContainer.Answer.CommonError = React.createClass({
     );
   }
 });
+
 AnswerContainer.Validation = React.createClass({
 
   render() {
