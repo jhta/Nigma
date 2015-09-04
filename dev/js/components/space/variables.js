@@ -9,6 +9,9 @@ const Uniform = require('../../utils/variables/uniform');
 const Specific = require('../../utils/variables/specific');
 const Categorical = require('../../utils/variables/categorical');
 
+//UTIl
+const AlertMessage = require('../util/alert');
+
 //Stores
 /*VariableStore is global*/
 
@@ -59,7 +62,9 @@ Variables.Content = React.createClass({
   getInitialState: function() {
     return {
       text: "",
-      variables: []
+      variables: [],
+      validating: false,
+      validationOutput: null
     };
   },
 
@@ -68,11 +73,20 @@ Variables.Content = React.createClass({
   },
 
   _handleChange(){
-    console.log(VariableStore.getVariables());
-    this.setState(VariableStore.getVariables());
+    var variables = VariableStore.getVariables();
+    this.setState({
+      validating: false,
+      text: variables.text,
+      variables: variables.variables
+    });
   },
 
   _validateCode() {
+    this.setState({
+      validating: true,
+      validationOutput: null
+    });
+
     setTimeout( () => {
       VariableActions.validateCode(this.state.text);
     }, 500);
@@ -86,14 +100,17 @@ Variables.Content = React.createClass({
   render() {
     return (
       <div className="Variables-Content">
+        <AlertMessage data={VariableStore.getValidationOutPut()}/>
         <Variables.Content.Create  actionAddVariable={this._addVariable}/>
         <div className="Variables-Content__actions">
           <textarea valueLink={this.linkState('text')} ref="codeArea"/>
         </div>
-        <Variables.Content.SaveAndCheck validationOutput={VariableStore.getValidationOutPut()} validateCode={this._validateCode}/>
+        <Variables.Content.SaveAndCheck validateCode={this._validateCode} validating={this.state.validating}/>
       </div>
     )
   },
+
+
   componentWillUnmount() {
     VariableStore.removeChangeListener()
   }
@@ -119,42 +136,15 @@ Variables.Content.Create = React.createClass({
     )
   }
 });
-
-
-Variables.Content.SaveAndCheck =  React.createClass({
-
-  getInitialState: function() {
-    return {
-      validating: false
-    };
-  },
-
-  _validate() {
-    this.setState({validating: true});
-    this.props.validateCode();
-  },
-
-  _handleChange(validationOutput){
-    this.setState({ validating: false });
-    if(validationOutput != null && validationOutput.error){
-      alert(validationOutput.errors.map(error => error.message).join("\n"));
-    }
-  },
+Variables.Content.SaveAndCheck = React.createClass({
 
   render() {
-    var classCSS = !this.state.validating ? { css: "small material-icons", icon: "done"} : {css: "small material-icons spin", icon: "loop"}
+    var classCSS = !this.props.validating ? { css: "material-icons", icon: "done"} : {css: "material-icons spin", icon: "loop"}
     return (
-      <div className="Variables-Content-actions__check_save">
-        <i className={classCSS.css} onClick={this._validate}>{classCSS.icon}</i>
+      <div className="Formulation-AnswerContainer-Validation">
+        <i className={classCSS.css} onClick={this.props.validateCode} >{classCSS.icon}</i>
       </div>
     );
-  },
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.validationOutput && this.state.validating){
-      this._handleChange(nextProps.validationOutput)
-    }
   }
 });
-
 module.exports = Variables;

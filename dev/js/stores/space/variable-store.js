@@ -27,20 +27,20 @@ function _validateCode (code) {
       _variableObjects = outputCompilation.variables;
       return {
         error: false,
-        errors: [],
+        messages: ["Variables successfuly validated"],
         result: outputExecution.result
       }
     } else {
       return {
         error: true,
-        errors: outputExecution.errors,
+        messages: outputExecution.errors,
         result: null
       }
     }
   } else {
     return {
       error: true,
-      errors: outputCompilation.errors,
+      messages: outputCompilation.errors,
       result: null
     }
   }
@@ -64,7 +64,9 @@ var VariableStore = assign({}, EventEmitter.prototype, {
     return {text: _textVariables, variables: _variableObjects};
   },
   getValidationOutPut() {
-    return _validationOutput;
+    var aux = _validationOutput;
+    _validationOutput = null;
+    return aux;
   }
 });
 
