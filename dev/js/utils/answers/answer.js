@@ -17,14 +17,14 @@ class Answer {
   isValid(variables) {
     var output = {error: false, messages: []}
     var evaluationOutput = ExpressionEvaluator.isEvaluable(this.correctValue, variables);
-    var commonErrorValidation = this._validateCommonErrors();
-    var labelValidation = this._validateConsistence();
-    var precisionValidation =  this._validatePrecision();
+    var commonErrorValidation = this._validateCommonErrors(variables);
+    var labelValidation = this._validateConsistence(variables);
+    var precisionValidation =  this._validatePrecision(variables);
 
-    output = _mergeErrors(output, evaluationOutput)
-    output = _mergeErrors(output, commonErrorValidation)
-    output = _mergeErrors(output, labelValidation)
-    output = _mergeErrors(output, precisionValidation)
+    output = this._mergeErrors(output, evaluationOutput);
+    output = this._mergeErrors(output, commonErrorValidation);
+    output = this._mergeErrors(output, labelValidation);
+    output = this._mergeErrors(output, precisionValidation);
 
 
     return output;
@@ -32,20 +32,21 @@ class Answer {
 
   _mergeErrors(output, validationOutput) {
     output.error = output.error || validationOutput.error;
-    if(validationOutput.error)
-      output.messages.concat([`Answer correct value, ${this.correctValue}: ${validationOutput.messages[0]}`]);
+    if(validationOutput.error){
+      output.messages.push(`Answer correct value, ${this.correctValue}: ${validationOutput.messages[0]}`);
+    }
     return output;
   }
 
-  _validateConsistence() {
-    if(this.showLabel && (this.label == "" || this.label == null)){
+  _validateConsistence(variables) {
+    if(this.showLabel && (this.name == "" || this.name == null)){
        return {error: true, messages: ["Show label is active and label text is empty"]};
     } else {
       return {error: false, messages: []};
     }
   }
 
-  _validatePrecision() {
+  _validatePrecision(variables) {
     if(isNaN(this.precision)){
       return {error: true, messages: ["Precision is invalid"]};
     } else {
@@ -53,7 +54,7 @@ class Answer {
     }
   }
 
-  _validateCommonErrors() {
+  _validateCommonErrors(variables) {
     var output = {error: false, messages: []};
     for(var i = 0; i < this.commonErrors.length; i++){
       var commonError = this.commonErrors[i];

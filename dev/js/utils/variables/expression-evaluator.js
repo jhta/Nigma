@@ -11,14 +11,27 @@ module.exports = {
     }
     try {
       var scope = {};
-      variables.forEach((variable) => scope[variable.name] = variable.getPossibleValue());
+      for(var key  in variables) {
+        if(variables.hasOwnProperty(key)){
+
+          var variable = variables[key];
+          //scope[variable.name] = variable.getPossibleValue(variables);
+          scope[variable.name] = 1;
+        }
+      }
+
       var evalValue = math.eval(expression, scope)
       if(isNaN(evalValue)){
-        throw "Expression is not evaluable";
+        throw new Error("Expression is not evaluable");
+      } else {
+        output.possibleValue = evalValue;
       }
     } catch(exception) {
-      output.error = true
-      output.messages.push(exception);
+      output.error = true;
+      if(exception.message != "Expression is not evaluable")
+        output.messages.push("Expression is not well formated");
+      else
+        output.messages.push(exception.message);
     }
     return output;
 
@@ -26,7 +39,7 @@ module.exports = {
 
   isEvaluable(expression, variables) {
     var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
-    var match = expression.match(/\$[A-Za-z]/g) || [];
+    var match = expression.match(/\_[A-Za-z]/g) || [];
     var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);
     if (compoundOfEvaluable) {
       var output = this.evaluate(expression, evaluableVariables);

@@ -22,7 +22,7 @@ class Uniform extends Variable {
     } else if (!match){
       return {
         error: true,
-        message: 'Incorrect syntax for uniform variable. The syntax used to create an Uniform variable is $x = U[min; max; step]',
+        message: 'Incorrect syntax for uniform variable. The syntax used to create an Uniform variable is _x = U[min; max; step]',
       };
     } else {
       return {
@@ -48,7 +48,7 @@ class Uniform extends Variable {
       return syntaxValidation
     } else {
       this.parseCode();
-      this.code = `${this.name} = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step}`
+      this.code = `window.outputValues['${this.name}'] = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step}`
       return {
         error: false,
         variable: this
@@ -65,19 +65,22 @@ class Uniform extends Variable {
   }
 
   getPossibleValue(variables) {
+    if(this.possibleValue != null) {
+      return this.possibleValue;
+    }
     var min = ExpressionEvaluator.evaluate(this.parameters.min, variables).possibleValue;
     var max = ExpressionEvaluator.evaluate(this.parameters.max, variables).possibleValue;
     var step = ExpressionEvaluator.evaluate(this.parameters.step, variables).possibleValue;
     var output = min + Math.floor(((max - min) * Math.random() / step)) * step;
-    return output;
+    return this.possibleValue = output;
   }
 
   syntax() {
-    return /(\$[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/;
+    return /(\_[a-zA-Z])\s*=\s*(u|U)\[([^\,]+)\,([^\,]+)\,([^\]]+)\]/;
   }
 
   static createSkeleton() {
-    return "$U = U[min, max, paso]";
+    return "_U = U[min, max, paso]";
   }
 
 }
