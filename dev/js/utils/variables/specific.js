@@ -29,6 +29,7 @@ class Specific extends Variable {
         message: 'Incorrect syntax for specific variable. The syntax used to create a Specific variable is $x = E{exp1, exp2,..., expn}'
       };
     } else {
+
       return {
         error: false,
         message: null
@@ -53,8 +54,8 @@ class Specific extends Variable {
     } else {
       this.parseCode();
       let vector = this.parameters.elements;
-      let vectorName = "_vector_";
-      let randomName = "_random_";
+      let vectorName = `_vector_${this.name}`;
+      let randomName = `_random_${this.name}`;
 
       let code = [
         `var ${vectorName} = [${vector}]`,

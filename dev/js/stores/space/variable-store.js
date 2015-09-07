@@ -31,6 +31,7 @@ function _validateCode (code) {
         result: outputExecution.result
       }
     } else {
+      _variableObjects = []
       return {
         error: true,
         messages: outputExecution.errors,
@@ -38,6 +39,7 @@ function _validateCode (code) {
       }
     }
   } else {
+    _variableObjects = []
     return {
       error: true,
       messages: outputCompilation.errors,
