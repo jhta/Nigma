@@ -23,7 +23,7 @@ class Categorical extends Specific {
     } else if (!match){
       return {
         error: true,
-        message: "Incorrect syntax for categorical variable. The syntax used to create a Categorical variable is: $x = C{'text 1', 'text 2', ... , 'text 3'}"
+        message: "Incorrect syntax for categorical variable. The syntax used to create a Categorical variable is: _x = C{'text 1', 'text 2', ... , 'text 3'}"
       };
     } else {
       return {
@@ -41,7 +41,7 @@ class Categorical extends Specific {
     return 'C';
   }
   syntax() {
-    return /(\$[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/;
+    return /(\_[a-zA-Z])\s*=\s*(c|C)\{([^\}]+)\}/;
   }
 
   getPossibleValue(variables) {
@@ -50,7 +50,7 @@ class Categorical extends Specific {
   }
 
   static createSkeleton() {
-    return "$C = C{'texto 1', 'texto 2'}";
+    return "_C = C{'texto 1', 'texto 2'}";
   }
 
 }

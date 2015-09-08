@@ -11,16 +11,16 @@ const static_values = [
   {
     _id: 1,
     name: "Área",
-    correctValue: "$a * $b",
+    correctValue: "_a * _b",
     showLabel: true,
     precision: 2,
     commonErrors: [
       {
-        value: "$b - $a",
+        value: "_b - _a",
         message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
       },
       {
-        value: "$a * $a",
+        value: "_a * _a",
         message: "Recordar tal formula"
       }
     ]
@@ -28,16 +28,16 @@ const static_values = [
   {
     _id: 2,
     name: "Perimetro",
-    correctValue: "$a * 2 + 2 * $b",
+    correctValue: "_a * 2 + 2 * _b",
     precision: 3,
     showLabel: false,
     commonErrors: [
       {
-        value: "$b - $a",
+        value: "_b - _a",
         message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
       },
       {
-        value: "$b / $a",
+        value: "_b / _a",
         message: "Recordar tal formula"
       }
     ]
@@ -67,6 +67,7 @@ function _validateAnswers(answers, variables) {
   }
   if (!_validationOutput.error){
     _validationOutput.messages = ["Validation successfull"];
+    console.log(_answers.forEach((answer) => answer.generateCode()));
   }
 }
 

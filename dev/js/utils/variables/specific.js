@@ -26,9 +26,10 @@ class Specific extends Variable {
     } else if (!match){
       return {
         error: true,
-        message: 'Incorrect syntax for specific variable. The syntax used to create a Specific variable is $x = E{exp1, exp2,..., expn}'
+        message: 'Incorrect syntax for specific variable. The syntax used to create a Specific variable is _x = E{exp1, exp2,..., expn}'
       };
     } else {
+
       return {
         error: false,
         message: null
@@ -53,14 +54,15 @@ class Specific extends Variable {
     } else {
       this.parseCode();
       let vector = this.parameters.elements;
-      let vectorName = "_vector_";
-      let randomName = "_random_";
+      let vectorName = `_vector_${this.name}`;
+      let randomName = `_random_${this.name}`;
 
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `${this.name} = ${vectorName}[${randomName}]`
+        `Variables['${this.name}'] = ${vectorName}[${randomName}]`
       ]
+      console.log(code);
       this.code = `${code.join(";")};`;
       return {
         error: false,
@@ -78,17 +80,20 @@ class Specific extends Variable {
   }
 
   syntax() {
-    return /(\$[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/;
+    return /(\_[a-zA-Z])\s*=\s*(e|E)\{([^\}]+)\}/;
   }
 
   getPossibleValue(variables) {
+    if(this.possibleValue != null) {
+      return this.possibleValue;
+    }
     var random = Math.floor(Math.random() * this.parameters.elements.length)
     var output = ExpressionEvaluator.evaluate(this.parameters.elements[random], variables);
-    return output.possibleValue;
+    return this.possibleValue = output.possibleValue;
   }
 
   static createSkeleton() {
-    return "$E = E{numero 1, numero 2}";
+    return "_E = E{numero 1, numero 2}";
   }
 
 }

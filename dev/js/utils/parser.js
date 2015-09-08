@@ -6,7 +6,7 @@ const Variable = require('./variables/variable');
 
 var VariableParser = {
   _detectType(nigmaCode) {
-    var regex = /(\$[a-zA-Z])\s*=\s*(u|e|c|U|E|C)(\[|\{)/
+    var regex = /(\_[a-zA-Z])\s*=\s*(u|e|c|U|E|C)(\[|\{)/
     var match = nigmaCode.match(regex)
     if(match){
       var type;
@@ -63,7 +63,7 @@ var VariableParser = {
   },
 
   executeCode(variables) {
-    window.outputValues = {}
+    var Variables = {}
     var output = {
       errors: [],
       result: null
@@ -72,7 +72,8 @@ var VariableParser = {
     var javascriptCode = variables.map(variable => variable.code);
     for(var i=0; i < javascriptCode.length; i++){
       try{
-        var jCode = replaceVariables(javascriptCode[i]);
+        var jCode = javascriptCode[i];
+        console.log(jCode);
         eval(jCode);
       } catch(exception) {
         output.errors.push(`Error at line ${i + 1}: ${exception.message}`);
@@ -81,7 +82,6 @@ var VariableParser = {
     }
     if(output.errors.length == 0){
       output.result = {}
-      variables.forEach(variable => output.result[variable.name] = eval(replaceVariables(variable.name)))
     } else {
       window.outputValues = {}
     }
