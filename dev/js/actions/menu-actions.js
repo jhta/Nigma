@@ -4,13 +4,14 @@ const QuestionAPI = require('../api/utils/question');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
+
   createFolder(folderName) {
     FolderAPI.createFolder({
       folder: {
         name: folderName
       }
     }, (err, folder) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
           folder: folder
@@ -19,14 +20,17 @@ var MenuActions = {
     });
 
   },
+
   createQuestion(folderIndex, folder, questionName) {
+    console.log("Estamos en el action");
+    console.log(folder);
     QuestionAPI.createQuestion({
-        folderid: folder._id,
-        question: {
-          name: questionName
-        }
-      }, (err, question) => {
-      if(!err){
+      folderid: folder._id,
+      question: {
+        name: questionName
+      }
+    }, (err, question) => {
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
           folderIndex: folderIndex,
@@ -34,21 +38,23 @@ var MenuActions = {
         });
       }
     });
-
   },
+
   listFolders() {
-    FolderAPI.listFolders({}, (err, folders) => {
-      if(!err){
+    FolderAPI.listFolders({}, (err, folders, default_folder) => {
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          folders: folders
+          folders: folders,
+          default_folder: default_folder
         });
       }
     });
   },
+
   deleteFolder(folderIndex, folder){
     FolderAPI.deleteFolder({folderid: folder._id}, (err, res) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.DELETE_FOLDER,
           folderIndex: folderIndex,
@@ -57,16 +63,17 @@ var MenuActions = {
       }
     });
   },
+
   updateFolder(folderIndex, folder, folderName){
-    folderName = "LALAL ESTO ESTA QUEMADO EN ACTIONS"
     var data = {
       folderid: folder._id,
       folder: {
         name: folderName
       }
-    }
+    };
+
     FolderAPI.updateFolder(data, (err, res) => {
-      if(!err){
+      if (!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.EDIT_FOLDER,
           folderIndex: folderIndex,
@@ -75,8 +82,21 @@ var MenuActions = {
         });
       }
     });
+  },
+
+  deleteQuestion(questionId, folder, folderIndex){
+    QuestionAPI.deleteQuestion({questionid: questionId}, (err, res) => {
+      if (!err) {
+        Dispatcher.dispatch({
+          type: MenuActionConstants.DELETE_QUESTION,
+          questionId: questionId,
+          folder: folder,
+          folderIndex: folderIndex
+        });
+      }
+    });
   }
 
-}
+};
 
 module.exports = MenuActions;

@@ -1,15 +1,15 @@
-const Dispatcher 	= require('../dispatchers/dispatcher.js');
+const Dispatcher = require('../dispatchers/dispatcher.js');
 const UserApi = require('../api/utils/user');
 const UserActionConstants = require('../constants/user-constants');
 const Auth = require("../utils/auth");
 
 const LoginActions = {
 
-  loginComplete( data ) {
+  loginComplete(data) {
     Auth.loginComplete(data.token);
 
-    UserApi.getData((err, user)=>{
-      if(!err){
+    UserApi.getData((err, user)=> {
+      if (!err) {
 
         Auth.saveUserData(user);
         Dispatcher.dispatch({
@@ -21,7 +21,6 @@ const LoginActions = {
   },
 
   setUserStore (){
-    console.log("Si se ejecuta");
     Dispatcher.dispatch({
       type: UserActionConstants.SET_USER
     })
