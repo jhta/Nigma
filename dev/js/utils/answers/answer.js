@@ -9,6 +9,7 @@ class Answer {
     this.precision = 0;
     this.commonErrors = [];
     this._id = null;
+    this.code = null;
   }
 
   addCommonError() {
@@ -63,10 +64,11 @@ class Answer {
       output.error = output.error || validation.error;
       output.messages = output.messages.concat(validation.messages);
     }
+    this._generateCode();
     return output;
   }
 
-  generateCode() {
+  _generateCode() {
     var missconceptions = this.commonErrors.map((commonError) => ({"value": Variable.replaceVariables(commonError.value), "message": commonError.message}))
     var codeText = [
       `var correctValue = ${Variable.replaceVariables(this.correctValue)};`,
@@ -81,9 +83,8 @@ class Answer {
       codeText.push(`console.log("You fail, ${commonError.message}");`);
       codeText.push(`break;`);
     }
-    codeText.push("}")
-    console.log(codeText);
-    return codeText.join("\n");
+    codeText.push("}");
+    return this.code = codeText;
   }
 
   static createFromResponse(jsonAnswer) {

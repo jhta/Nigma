@@ -6,45 +6,8 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var Parser = require('../../utils/parser');
 
-//Should be empty
-const static_values = [
-  {
-    _id: 1,
-    name: "Área",
-    correctValue: "_a * _b",
-    showLabel: true,
-    precision: 2,
-    commonErrors: [
-      {
-        value: "_b - _a",
-        message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
-      },
-      {
-        value: "_a * _a",
-        message: "Recordar tal formula"
-      }
-    ]
-  },
-  {
-    _id: 2,
-    name: "Perimetro",
-    correctValue: "_a * 2 + 2 * _b",
-    precision: 3,
-    showLabel: false,
-    commonErrors: [
-      {
-        value: "_b - _a",
-        message: "Para calcular el tiempo entre dos primero es el tiempo de fin - tiempo inicio"
-      },
-      {
-        value: "_b / _a",
-        message: "Recordar tal formula"
-      }
-    ]
-  }
-]
 
-var _answers = static_values.map(answer => Answer.createFromResponse(answer));
+var _answers = [];
 var _validationOutput = null;
 
 
@@ -59,7 +22,7 @@ function _addNewAnswer() {
 function _validateAnswers(answers, variables) {
   _setAnswers(answers);
   _validationOutput = {error: false, messages: []};
-  for(var i = 0; i < answers.length; i++) {
+  for(var i = 0; i < _answers.length; i++) {
     var answer = answers[i];
     var validation = answer.isValid(variables);
     _validationOutput.error = _validationOutput.error || validation.error;
@@ -67,10 +30,31 @@ function _validateAnswers(answers, variables) {
   }
   if (!_validationOutput.error){
     _validationOutput.messages = ["Validation successfull"];
-    console.log(_answers.forEach((answer) => answer.generateCode()));
+  }
+  console.log(_validationOutput);
+
+}
+
+function _removeAnswer(answer, index) {
+  var storeAnswer = _answers[index];
+  if(storeAnswer._id == answer._id){
+    _answers.splice(index,1);
   }
 }
 
+function _removeAnswerCommonError(answer, answerIndex, index) {
+  var storeAnswer = _answers[answerIndex];
+  if(storeAnswer._id == answer._id){
+    _answers[answerIndex].commonErrors.splice(index,1);
+  }
+}
+
+function _addCommonError(answer, answerIndex) {
+  var storeAnswer = _answers[answerIndex];
+  if(storeAnswer._id == answer._id){
+    _answers[answerIndex].addCommonError();
+  }
+}
 
 var AnswerStore = assign({}, EventEmitter.prototype, {
   emitChange() {
@@ -108,6 +92,18 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case AnswerConstants.ADD_NEW_ANSWER:
       _addNewAnswer();
+      AnswerStore.emitChange();
+      break;
+    case AnswerConstants.DELETE_ANSWER:
+      _removeAnswer(action.answer, action.index)
+      AnswerStore.emitChange();
+      break;
+    case AnswerConstants.DELETE_COMMON_ERROR:
+      _removeAnswerCommonError(action.answer,  action.answerIndex ,action.index)
+      AnswerStore.emitChange();
+      break;
+    case AnswerConstants.ADD_COMMON_ERROR:
+      _addCommonError(action.answer,  action.answerIndex)
       AnswerStore.emitChange();
       break;
     default:

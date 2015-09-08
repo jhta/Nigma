@@ -21,7 +21,32 @@ var AnswerActions = {
     Dispatcher.dispatch({
       type: AnswerConstants.ADD_NEW_ANSWER,
     });
-  }
+  },
+
+  deleteQuestion(answer, index) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.DELETE_ANSWER,
+      answer: answer,
+      index: index
+    });
+  },
+
+  deleteCommonErrorQuestion(answer, answerIndex,index) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.DELETE_COMMON_ERROR,
+      answer: answer,
+      answerIndex: answerIndex,
+      index: index
+    });
+  },
+
+  addCommonError(answer, answerIndex) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.ADD_COMMON_ERROR,
+      answer: answer,
+      answerIndex: answerIndex
+    });
+  },
 }
 
 module.exports = AnswerActions;
