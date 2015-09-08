@@ -60,7 +60,7 @@ class Specific extends Variable {
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `window.outputValues['${this.name}'] = ${vectorName}[${randomName}]`
+        `Variables['${this.name}'] = ${vectorName}[${randomName}]`
       ]
       console.log(code);
       this.code = `${code.join(";")};`;

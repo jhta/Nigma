@@ -48,7 +48,7 @@ class Uniform extends Variable {
       return syntaxValidation
     } else {
       this.parseCode();
-      this.code = `window.outputValues['${this.name}'] = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step}`
+      this.code = `Variables['${this.name}'] = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step};`
       return {
         error: false,
         variable: this

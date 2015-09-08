@@ -1,5 +1,6 @@
 const CommonError = require('./common-error');
 const ExpressionEvaluator = require('../variables/expression-evaluator');
+const Variable = require('../variables/variable');
 class Answer {
   constructor() {
     this.name = "";
@@ -66,7 +67,23 @@ class Answer {
   }
 
   generateCode() {
-
+    var missconceptions = this.commonErrors.map((commonError) => ({"value": Variable.replaceVariables(commonError.value), "message": commonError.message}))
+    var codeText = [
+      `var correctValue = ${Variable.replaceVariables(this.correctValue)};`,
+      `switch(inputValue){`,
+        `case correctValue:`,
+          `console.log("You did it!");`,
+          `break;`
+    ];
+    for(var i = 0; i < this.commonErrors.length; i++) {
+      var commonError = this.commonErrors[i];
+      codeText.push(`case ${Variable.replaceVariables(commonError.value)}:`);
+      codeText.push(`console.log("You fail, ${commonError.message}");`);
+      codeText.push(`break;`);
+    }
+    codeText.push("}")
+    console.log(codeText);
+    return codeText.join("\n");
   }
 
   static createFromResponse(jsonAnswer) {

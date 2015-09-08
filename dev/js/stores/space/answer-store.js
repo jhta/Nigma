@@ -67,6 +67,7 @@ function _validateAnswers(answers, variables) {
   }
   if (!_validationOutput.error){
     _validationOutput.messages = ["Validation successfull"];
+    console.log(_answers.forEach((answer) => answer.generateCode()));
   }
 }
 

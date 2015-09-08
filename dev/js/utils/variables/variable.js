@@ -15,7 +15,7 @@ class Variable {
 
   static replaceVariables(codeText) {
     if(codeText.match(/(\_[A-Za-z])/g))
-      codeText = codeText.replace(/(\_[A-Za-z])/g, `window.outputValues["$1"]`);
+      codeText = codeText.replace(/(\_[A-Za-z])/g, `Variable["$1"]`);
     return codeText;
   }
 

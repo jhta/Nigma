@@ -63,7 +63,7 @@ var VariableParser = {
   },
 
   executeCode(variables) {
-    window.outputValues = {}
+    var Variables = {}
     var output = {
       errors: [],
       result: null
@@ -73,6 +73,7 @@ var VariableParser = {
     for(var i=0; i < javascriptCode.length; i++){
       try{
         var jCode = javascriptCode[i];
+        console.log(jCode);
         eval(jCode);
       } catch(exception) {
         output.errors.push(`Error at line ${i + 1}: ${exception.message}`);
