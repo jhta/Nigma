@@ -71,7 +71,7 @@ var AnswerContainer = React.createClass({
             (
               <ul className="collapsible" data-collapsible="expandable">
                 {
-                  this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
+                  this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer.index} index={index} answer={answer} handleChange={this._changeAnswer} />)
                 }
               </ul>
             )
@@ -80,7 +80,10 @@ var AnswerContainer = React.createClass({
         }
 
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
-        <a className="btn-floating btn-large waves-effect waves-light red" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
+        <div className="right-align">
+          <a className="btn-floating btn-medium waves-effect waves-light red create-btn" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
+        </div>
+
       </div>
     )
   },
@@ -221,11 +224,11 @@ AnswerContainer.Answer.CommonError = React.createClass({
             <input  id={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`} value={this.props.error.value} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.value`} type="text"/>
             <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`}>Valor del error</label>
           </div>
-          <div className="input-field col s7">
+          <div className="input-field col s8">
             <input  id={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`} value={this.props.error.message} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.message`} type="text"/>
             <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Valor del error</label>
           </div>
-          <div className="col s2">
+          <div className="col s1">
             <span className="actions-container">
               <span className="material-icons" onClick={this._deleteCommonError}>delete</span>
             </span>

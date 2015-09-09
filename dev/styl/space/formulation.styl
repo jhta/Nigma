@@ -1,6 +1,8 @@
 .Formulation
   padding 15px
 
+
+
   &-ContentEditable
     min-height 100px
     border 1px solid $gray
@@ -29,6 +31,16 @@
   &-AnswerContainer
     padding 10px
 
+    .actions-container
+      float right
+      .material-icons
+        cursor pointer
+        color $action-color
+        font-size 1.5rem
+        display inline-block
+        z-index 10
+
+
     &-Validation
       text-align right
       .material-icons
@@ -48,14 +60,6 @@
         .title
           font-size $MediumFontSize
           font-weight bold
-        .actions-container
-          float right
-          .material-icons
-            cursor pointer
-            color $action-color
-            font-size 1.5rem
-            display inline-block
-            z-index 10
 
 
       .collapsible-body
