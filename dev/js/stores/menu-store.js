@@ -6,6 +6,10 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _folders = [];
 
+function getFolders() {
+  return _folders;
+}
+
 function _addFolder(folder) {
   _folders.push(folder);
 }

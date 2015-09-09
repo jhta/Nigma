@@ -38,7 +38,8 @@ var MenuActions = {
   },
   listFolders() {
     FolderAPI.listFolders({}, (err, folders) => {
-      if(!err){
+      if(!err) {
+        const folders = folders || [];
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
           folders: folders

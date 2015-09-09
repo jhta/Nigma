@@ -9,6 +9,8 @@ const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
 
+const MenuActions = require("../../actions/menu-actions");
+const MenuStore = require("../../stores/menu-store");
 const items = [
   {
     father: '/',
@@ -39,6 +41,8 @@ const items = [
     url: 'otrosItems'
   },
 ]
+
+
 
 const folderChilds = [
   {
@@ -81,8 +85,12 @@ const Space = React.createClass({
     return {
       items: items,
       expresions: false,
-      dialogTeX: ""
+      dialogTeX: "",
+      folders: MenuStore.getFolders(), 
     }
+  },
+  componentDidMount() {
+    MenuActions.listFolders();
   },
 
   loadItems(url) {
@@ -109,6 +117,8 @@ const Space = React.createClass({
   },
 
   render() {
+    console.log(this.state.folders);
+    debugger
     const styleTab = {
       background: '#009688',
       opacity: '1'

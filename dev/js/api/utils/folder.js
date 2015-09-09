@@ -14,7 +14,7 @@ const FolderAPI = {
       method: API._REQUEST_METHOD.delete
     },
     list: {
-      route: "/folders",
+      route: "/users/folders",
       method: API._REQUEST_METHOD.get
     }
   },
