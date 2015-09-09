@@ -143,7 +143,7 @@ const Space = React.createClass({
     if(this.state.previewOutput != null && this.state.previewOutput.error){
       modal = <Modal ref="modal" title="Preview"><h1>Ocurrio un error</h1></Modal>;
     } else if (this.state.previewOutput != null && !this.state.previewOutput.error){
-      modal = <Modal ref="modal" title="Preview"><iframe src="http://www.w3schools.com"></iframe></Modal>;
+      modal = <Modal ref="modal" title="Preview"><iframe src="http://localhost:4000/static/launch.html"></iframe></Modal>;
     }
 
     return (
