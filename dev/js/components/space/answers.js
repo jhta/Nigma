@@ -66,13 +66,24 @@ var AnswerContainer = React.createClass({
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
         <AlertMessage data={AnswerStore.getValidationOutPut()}/>
-        <ul className="collapsible" data-collapsible="expandable">
-          {
-            this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer._id} index={index} answer={answer} handleChange={this._changeAnswer} />)
-          }
-        </ul>
+        {
+          this.state.answers.length != 0 ?
+            (
+              <ul className="collapsible" data-collapsible="expandable">
+                {
+                  this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer.index} index={index} answer={answer} handleChange={this._changeAnswer} />)
+                }
+              </ul>
+            )
+            :
+            <div className="empty-text" onClick={this._addNewAnswer}>No answers to show, click here to create one</div>
+        }
+
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
-        <a className="btn-floating btn-large waves-effect waves-light red" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
+        <div className="right-align">
+          <a className="btn-floating btn-medium waves-effect waves-light red create-btn" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
+        </div>
+
       </div>
     )
   },
@@ -112,12 +123,24 @@ AnswerContainer.Answer = React.createClass({
     this.props.handleChange(this.props.index, path, value);
   },
 
+  _deleteQuestion() {
+    AnswerActions.deleteQuestion(this.props.answer, this.props.index);
+  },
+
+  _addCommonError() {
+    AnswerActions.addCommonError(this.props.answer, this.props.index)
+  },
+
   render() {
     return (
       <li className="Formulation-AnswerContainer-Answer">
         <div className="collapsible-header header">
             <i className="material-icons">help</i>
             <span className="title">{this.props.answer.name}</span>
+            <span className="actions-container">
+              <span className="material-icons">edit</span>
+              <span className="material-icons" onClick={this._deleteQuestion}>delete</span>
+            </span>
         </div>
         <div className="collapsible-body">
           <ul className="collection main-answer-content" >
@@ -128,10 +151,13 @@ AnswerContainer.Answer = React.createClass({
               <div className="collapsible-header header">
                 <i className="material-icons">error</i>
                 <span className="title">Errores comunes</span>
+                <span className="actions-container">
+                  <span className="material-icons" onClick={this._addCommonError}>add</span>
+                </span>
               </div>
               <div>
                 <ul className="collection">
-                  {this.props.answer.commonErrors.map((error, index) => <AnswerContainer.Answer.CommonError key={index} index={index} error={error} handleChange={this._handleChange} />)}
+                  {this.props.answer.commonErrors.map((error, index) => <AnswerContainer.Answer.CommonError key={index} index={index} error={error} answer={this.props.answer} answerIndex={this.props.index} handleChange={this._handleChange} />)}
                 </ul>
               </div>
             </li>
@@ -166,7 +192,7 @@ AnswerContainer.Answer.Form = React.createClass({
           <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange}>
             <option value="" disabled>Precisión</option>
             {
-              this._generatePresicion().map((optionValue, index) => <option key={index} answerIndex={this.props.index} value={optionValue}>{optionValue}</option>)
+              this._generatePresicion().map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>)
             }
           </select>
         </div>
@@ -186,6 +212,10 @@ AnswerContainer.Answer.Form = React.createClass({
 });
 
 AnswerContainer.Answer.CommonError = React.createClass({
+  _deleteCommonError() {
+    AnswerActions.deleteCommonErrorQuestion(this.props.answer, this.props.answerIndex, this.props.index);
+  },
+
   render() {
     return (
       <li className="collection-item">
@@ -194,9 +224,14 @@ AnswerContainer.Answer.CommonError = React.createClass({
             <input  id={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`} value={this.props.error.value} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.value`} type="text"/>
             <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`}>Valor del error</label>
           </div>
-          <div className="input-field col s9">
+          <div className="input-field col s8">
             <input  id={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`} value={this.props.error.message} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.message`} type="text"/>
             <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Valor del error</label>
+          </div>
+          <div className="col s1">
+            <span className="actions-container">
+              <span className="material-icons" onClick={this._deleteCommonError}>delete</span>
+            </span>
           </div>
         </div>
 

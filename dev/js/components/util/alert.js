@@ -30,7 +30,7 @@ const AlertMessage = React.createClass({
     let status = this.state.isShowing? "active":"";
     let type = (this.props.data == null) ? "": (this.props.data.error ? "negative":"positive");
     let classMessage = `${type} alert-message ${status}`;
-    let messages = (this.props.data == null) ? []:this.props.data.messages;
+    let messages = (this.props.data == null) ? []: this.props.data.messages;
     return(
       <div className={classMessage}>
         <div className="close" onClick={this._closeAlert}>

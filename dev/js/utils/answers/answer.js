@@ -1,6 +1,7 @@
 const CommonError = require('./common-error');
 const ExpressionEvaluator = require('../variables/expression-evaluator');
 const Variable = require('../variables/variable');
+const uniqid = require('uniqid');
 class Answer {
   constructor() {
     this.name = "";
@@ -8,7 +9,8 @@ class Answer {
     this.showLabel = true;
     this.precision = 0;
     this.commonErrors = [];
-    this._id = null;
+    this._id = uniqid();
+    this.code = null;
   }
 
   addCommonError() {
@@ -63,27 +65,36 @@ class Answer {
       output.error = output.error || validation.error;
       output.messages = output.messages.concat(validation.messages);
     }
+    this._generateCode();
     return output;
   }
 
-  generateCode() {
+  _generateCode() {
     var missconceptions = this.commonErrors.map((commonError) => ({"value": Variable.replaceVariables(commonError.value), "message": commonError.message}))
     var codeText = [
       `var correctValue = ${Variable.replaceVariables(this.correctValue)};`,
       `switch(inputValue){`,
         `case correctValue:`,
           `console.log("You did it!");`,
+          `response = 'You did it!';`,
+          `answerError = false;`,
           `break;`
     ];
     for(var i = 0; i < this.commonErrors.length; i++) {
       var commonError = this.commonErrors[i];
       codeText.push(`case ${Variable.replaceVariables(commonError.value)}:`);
       codeText.push(`console.log("You fail, ${commonError.message}");`);
+      codeText.push(`response = '${commonError.message}';`);
+      codeText.push(`error = true;`);
+      codeText.push(`console.log("You fail, ${commonError.message}");`);
       codeText.push(`break;`);
     }
-    codeText.push("}")
-    console.log(codeText);
-    return codeText.join("\n");
+    codeText.push(`default:`);
+    codeText.push(`response = "Wrong answer!";`);
+    codeText.push(`answerError = true;`);
+    codeText.push(`break;`);
+    codeText.push("}");
+    return this.code = codeText;
   }
 
   static createFromResponse(jsonAnswer) {
