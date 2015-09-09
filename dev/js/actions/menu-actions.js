@@ -6,11 +6,13 @@ var Dispatcher = require('../dispatchers/dispatcher.js');
 var MenuActions = {
   createFolder(folderName) {
     FolderAPI.createFolder({
+      folderid: '55efc434baaa7a1436df69cb',
       folder: {
         name: folderName
       }
     }, (err, folder) => {
       if(!err){
+        debugger
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
           folder: folder
@@ -37,17 +39,16 @@ var MenuActions = {
 
   },
   listFolders() {
-    FolderAPI.listFolders({}, (err, folders) => {
+    FolderAPI.listFolders({}, (err, res) => {
       if(!err) {
-        const folders = folders || [];
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          folders: folders
+          rootFolder: res.root_folder
         });
       }
     });
   },
-  deleteFolder(folderIndex, folder){
+  deleteFolder(folderIndex, folder) {
     FolderAPI.deleteFolder({folderid: folder._id}, (err, res) => {
       if(!err){
         Dispatcher.dispatch({

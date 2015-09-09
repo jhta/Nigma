@@ -2,7 +2,7 @@ const API = require('../API');
 const FolderAPI = {
   _routes: {
     create: {
-      route: "/folders",
+      route: "/folders/:folderid/folders",
       method: API._REQUEST_METHOD.post
     },
     update: {
@@ -24,7 +24,7 @@ const FolderAPI = {
       if(err){
         cb(true, null);
       } else {
-        cb(!res.body.ok, res.body.folders);
+        cb(!res.body.ok, res.body);
       }
     });
   },

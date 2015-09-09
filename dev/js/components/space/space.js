@@ -82,15 +82,34 @@ const Space = React.createClass({
   mixins: [ThemeMixin],
 
   getInitialState() {
+    const rootFolder = MenuStore.getRootFolder();
     return {
       items: items,
       expresions: false,
       dialogTeX: "",
-      folders: MenuStore.getFolders(), 
+      root: rootFolder,
+      currentFolderId: rootFolder.id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
     }
   },
   componentDidMount() {
     MenuActions.listFolders();
+    MenuStore.addChangeListener(this._handleChange);
+  },
+
+  componentWillUnmount() {
+    MenuStore.removeChangeListener()
+  },
+
+  _handleChange() {
+    const rootFolder =  MenuStore.getRootFolder();
+    this.setState({
+      root: rootFolder,
+      currentFolderId: rootFolder.id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
+    });
   },
 
   loadItems(url) {
@@ -111,21 +130,18 @@ const Space = React.createClass({
   },
 
   changeDialogTex(TeX) {
-    //console.log("TeX", TeX);
-    //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
     this.setState({dialogTeX: TeX});
   },
 
   render() {
-    console.log(this.state.folders);
-    debugger
+    console.log(this.state.root);
     const styleTab = {
       background: '#009688',
       opacity: '1'
     };
     return (
       <div className="Wrapper ">
-        <FileSideBar items={this.state.items} onLoadItems={this.loadItems}/>
+        <FileSideBar folders={this.state.folders} items={this.state.items} onLoadItems={this.loadItems}/>
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
