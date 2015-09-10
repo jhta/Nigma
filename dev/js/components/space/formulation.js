@@ -4,7 +4,7 @@ const ContentEditable       = require("../utils/content-editable");
 const MaterializeComponents = require("../utils/material-components");
 const {Button} = MaterializeComponents;
 const Ckeditor = require('../../utils/ckeditor');
-
+var SpaceActions = require('../../actions/space/space-actions')
 //Custom components
 const ExpresionGenerator  = require("./expresion-generator");
 
@@ -52,11 +52,9 @@ const Formulation = React.createClass({
     Ckeditor.addTeX(TeX);
   },
 
-  onAddQuestion(){
+  _onAddQuestion(){
    let question =Ckeditor.getValue();
-   console.log(document.getElementById('cke_1_contents'));
-   console.log(question);
-   console.log('acá va el parseo con lo del sotillo');
+   SpaceActions.addFormulation(question);
   },
 
   render() {
@@ -67,7 +65,7 @@ const Formulation = React.createClass({
             <p>{this.state.html}</p>
           </div>
         </div>
-        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this.onAddQuestion} >
+        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this._onAddQuestion} >
           +
         </div>
       </div>

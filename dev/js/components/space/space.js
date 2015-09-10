@@ -126,10 +126,11 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
+    console.log(SpaceStore.getFormulation());
     var data = {
       variables: VariableStore.getVariables(),
       answers: AnswerStore.getAnswers(),
-      formulation: "No se de donde se coge esto"//PIPE!!
+      formulation: SpaceStore.getFormulation()//PIPE!!
     }
     SpaceActions.previewQuestion(data)
   },
