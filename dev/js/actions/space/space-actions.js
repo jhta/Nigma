@@ -17,6 +17,13 @@ var SpaceActions = {
     });
 
   },
+
+  addFormulation(formulation){
+    Dispatcher.dispatch({
+          type: SpaceConstants.ADD_FORMULATION,
+          data: formulation
+        });
+  }
 }
 
 module.exports = SpaceActions;
