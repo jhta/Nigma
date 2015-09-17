@@ -36,14 +36,14 @@ class Answer {
   _mergeErrors(output, validationOutput) {
     output.error = output.error || validationOutput.error;
     if(validationOutput.error){
-      output.messages.push(`Answer correct value, ${this.correctValue}: ${validationOutput.messages[0]}`);
+      output.messages.push(`Valor correcto de respuesta, ${this.correctValue}: ${validationOutput.messages[0]}`);
     }
     return output;
   }
 
   _validateConsistence(variables) {
     if(this.showLabel && (this.name == "" || this.name == null)){
-       return {error: true, messages: ["Show label is active and label text is empty"]};
+       return {error: true, messages: ["La etiqueta no puede estar vacia"]};
     } else {
       return {error: false, messages: []};
     }
@@ -51,7 +51,7 @@ class Answer {
 
   _validatePrecision(variables) {
     if(isNaN(this.precision)){
-      return {error: true, messages: ["Precision is invalid"]};
+      return {error: true, messages: ["Precisión es invalida"]};
     } else {
       return {error: false, messages: []};
     }
@@ -76,7 +76,7 @@ class Answer {
       `switch(inputValue){`,
         `case correctValue:`,
           `console.log("You did it!");`,
-          `response = 'You did it!';`,
+          `response = 'Correcto';`,
           `answerError = false;`,
           `break;`
     ];
@@ -90,7 +90,7 @@ class Answer {
       codeText.push(`break;`);
     }
     codeText.push(`default:`);
-    codeText.push(`response = "Wrong answer!";`);
+    codeText.push(`response = "Incorrecto!";`);
     codeText.push(`answerError = true;`);
     codeText.push(`break;`);
     codeText.push("}");

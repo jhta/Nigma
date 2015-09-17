@@ -16,17 +16,17 @@ class Specific extends Variable {
     if(match && !elementsFilled){
       return {
         error: true,
-        message: 'Incorrect syntax for specific variable. Some of the parameters of the Specific variable are empty'
+        message: 'Sintáxis incorrecta. Alguno de los parametros están vacios'
       };
     } else if (match && !this.validName(currentVariables, match[1])) {
       return {
         error: true,
-        message: `Repeated variable name ${match[1]}`,
+        message: `La variable ${match[1]} ya está definida`,
       };
     } else if (!match){
       return {
         error: true,
-        message: 'Incorrect syntax for specific variable. The syntax used to create a Specific variable is _x = E{exp1, exp2,..., expn}'
+        message: 'Sintáxis incorrecta para las variables específicas. La sintáxis utilizada es _x = E{exp1, exp2,..., expn}'
       };
     } else {
 
@@ -53,16 +53,15 @@ class Specific extends Variable {
       return syntaxValidation
     } else {
       this.parseCode();
-      let vector = this.parameters.elements;
+      let vector = this.parameters.elements.map((element) => Variable.replaceVariables(element));
       let vectorName = `_vector_${this.name}`;
       let randomName = `_random_${this.name}`;
 
       let code = [
         `var ${vectorName} = [${vector}]`,
         `var ${randomName} = Math.floor((Math.random() * ${vector.length}))`,
-        `Variables['${this.name}'] = ${vectorName}[${randomName}]`
+        `${Variable.replaceVariables(this.name)} = ${vectorName}[${randomName}]`
       ]
-      console.log(code);
       this.code = `${code.join(";")};`;
       return {
         error: false,

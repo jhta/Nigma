@@ -30,7 +30,7 @@ var VariableParser = {
     } else {
       return {
         error: true,
-        message: "Variable is not well formated or type could not be determined. Uniform: $x = U[min; max; step], Specific: $x = E{exp1, exp2,..., expn}, Categorical: $x = C{'text 1', 'text 2', ... , 'text 3'}",
+        message: "El tipo de la variable no puede ser determinado. Uniforme: $x = U[min; max; step], Especifica: $x = E{exp1, exp2,..., expn}, Categorica: $x = C{'text 1', 'text 2', ... , 'text 3'}",
         type: null
       }
     }
@@ -42,13 +42,13 @@ var VariableParser = {
       var codeFragment = nigmaCode[j];
       var variableType = this._detectType(codeFragment);
       if(variableType.error){
-        errors.push(`Error at line ${j + 1}: ${variableType.message}`);
+        errors.push(`Error en la linea ${j + 1}: ${variableType.message}`);
         break;
       } else {
         var variable = new variableType.type(codeFragment);
         var variableOuput = variable.generateCode(variables.map(variable => variable.name));
         if (variableOuput.error) {
-          errors.push(`Error at line ${ j + 1}: ${variableOuput.message}`);
+          errors.push(`Error en la linea ${ j + 1}: ${variableOuput.message}`);
           break;
         } else {
           variables.push(variableOuput.variable);
@@ -73,9 +73,10 @@ var VariableParser = {
     for(var i=0; i < javascriptCode.length; i++){
       try{
         var jCode = javascriptCode[i];
+        console.log(jCode);
         eval(jCode);
       } catch(exception) {
-        output.errors.push(`Error at line ${i + 1}: ${exception.message}`);
+        output.errors.push(`Error en la linea ${i + 1}: ${exception.message}`);
         break;
       }
     }

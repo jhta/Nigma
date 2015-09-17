@@ -8,7 +8,7 @@ class CommonError {
   isValid(variables) {
     var output = ExpressionEvaluator.isEvaluable(this.value, variables);
     if(output.error)
-      output.messages = `Common error, ${this.value}: ${output.messages}`
+      output.messages = `Error común, ${this.value}: ${output.messages}`
     return output;
   }
 

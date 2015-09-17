@@ -12,17 +12,17 @@ class Uniform extends Variable {
     if(match && emptyParameters){
       return {
         error: true,
-        message: 'Incorrect syntax for uniform variable. Some of the parameters of the Uniform variable are empty',
+        message: 'Sintaxis es incorrecta. Alguno de los parametros están vacios',
       };
     } else if (match && !this.validName(currentVariables, match[1])) {
       return {
         error: true,
-        message: `Repeated variable name ${match[1]}`,
+        message: `Variable ${match[1]} ya está definida`,
       };
     } else if (!match){
       return {
         error: true,
-        message: 'Incorrect syntax for uniform variable. The syntax used to create an Uniform variable is _x = U[min; max; step]',
+        message: 'Sintáxis incorrecta de variable uniforme. la sintáxis correcta _x = U[min; max; step]',
       };
     } else {
       return {
@@ -48,7 +48,7 @@ class Uniform extends Variable {
       return syntaxValidation
     } else {
       this.parseCode();
-      this.code = `Variables['${this.name}'] = ${this.parameters.min} + Math.floor(((${this.parameters.max} - ${this.parameters.min}) * Math.random()/${this.parameters.step})) * ${this.parameters.step};`
+      this.code = `${Variable.replaceVariables(this.name)} = ${Variable.replaceVariables(this.parameters.min)} + Math.floor(((${Variable.replaceVariables(this.parameters.max)} - ${Variable.replaceVariables(this.parameters.min)}) * Math.random()/${Variable.replaceVariables(this.parameters.step)})) * ${Variable.replaceVariables(this.parameters.step)};`
       return {
         error: false,
         variable: this

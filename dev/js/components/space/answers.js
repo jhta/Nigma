@@ -76,7 +76,7 @@ var AnswerContainer = React.createClass({
               </ul>
             )
             :
-            <div className="empty-text" onClick={this._addNewAnswer}>No answers to show, click here to create one</div>
+            <div className="empty-text" onClick={this._addNewAnswer}>No hay respuestas para la pregunta, click aquí para agregar una nueva</div>
         }
 
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
@@ -182,6 +182,10 @@ AnswerContainer.Answer.Form = React.createClass({
   render() {
     return (
       <div className="row">
+        <div className="input-field col s4">
+          <input id={`textbox_answer_name${this.props.index}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
+          <label htmlFor={`textbox_answer_name${this.props.index}`}>Etiqueta</label>
+        </div>
 
         <div className="input-field col s4">
           <input  id={`textbox_answer_correct_value${this.props.index}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
@@ -195,11 +199,6 @@ AnswerContainer.Answer.Form = React.createClass({
               this._generatePresicion().map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>)
             }
           </select>
-        </div>
-
-        <div className="input-field col s4">
-          <input id={`textbox_answer_name${this.props.index}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
-          <label htmlFor={`textbox_answer_name${this.props.index}`}>Label</label>
         </div>
 
         <div className="input-field col s2">
@@ -226,7 +225,7 @@ AnswerContainer.Answer.CommonError = React.createClass({
           </div>
           <div className="input-field col s8">
             <input  id={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`} value={this.props.error.message} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.message`} type="text"/>
-            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Valor del error</label>
+            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Mensaje de retroalimentacion</label>
           </div>
           <div className="col s1">
             <span className="actions-container">

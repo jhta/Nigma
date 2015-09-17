@@ -103,7 +103,7 @@ Variables.Content = React.createClass({
         <AlertMessage data={VariableStore.getValidationOutPut()}/>
         <Variables.Content.Create  actionAddVariable={this._addVariable}/>
         <div className="Variables-Content__actions">
-          <textarea valueLink={this.linkState('text')} ref="codeArea"/>
+          <textarea valueLink={this.linkState('text')} ref="codeArea" />
         </div>
         <Variables.Content.SaveAndCheck validateCode={this._validateCode} validating={this.state.validating}/>
       </div>

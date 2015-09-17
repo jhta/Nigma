@@ -22,14 +22,14 @@ module.exports = {
 
       var evalValue = math.eval(expression, scope)
       if(isNaN(evalValue)){
-        throw new Error("Expression is not evaluable");
+        throw new Error("La expresión no es evaluable");
       } else {
         output.possibleValue = evalValue;
       }
     } catch(exception) {
       output.error = true;
-      if(exception.message != "Expression is not evaluable")
-        output.messages.push("Expression is not well formated");
+      if(exception.message != "La expresión no es evaluable")
+        output.messages.push("La expresión no está bien formada");
       else
         output.messages.push(exception.message);
     }
@@ -47,7 +47,7 @@ module.exports = {
     } else {
       return {
         error: true,
-        messages: ["Expression may contain undefined variables or any of the variables used are not evaluable"]
+        messages: ["La expresión puede contener variables no definidas o no evaluables"]
       }
     }
   }

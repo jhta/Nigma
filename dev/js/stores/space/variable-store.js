@@ -27,7 +27,7 @@ function _validateCode (code) {
       _variableObjects = outputCompilation.variables;
       return {
         error: false,
-        messages: ["Variables successfuly validated"],
+        messages: ["Variable validadas correctamente"],
         result: outputExecution.result
       }
     } else {

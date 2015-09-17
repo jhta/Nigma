@@ -13,17 +13,17 @@ class Categorical extends Specific {
     if(match && !elementsFilled){
       return {
         error: true,
-        message: 'Incorrect syntax for categorical variable. Some of the parameters of the Categorical variable are empty'
+        message: 'Sintáxis incorrecta. Alguno de los parametros están vacios'
       };
     } else if (match && !this.validName(currentVariables, match[1])) {
       return {
         error: true,
-        message: `Repeated variable name ${match[1]}`,
+        message: `La variable ${match[1]} ya está definida`,
       };
     } else if (!match){
       return {
         error: true,
-        message: "Incorrect syntax for categorical variable. The syntax used to create a Categorical variable is: _x = C{'text 1', 'text 2', ... , 'text 3'}"
+        message: "Sintaxis incorrecta para las variables categoricas. La sintáxis usada es _x = C{'text 1', 'text 2', ... , 'text 3'}"
       };
     } else {
       return {
