@@ -29,6 +29,22 @@ const FileSideBar = React.createClass({
     });
   },
 
+  renderQuestions() {
+    return this.props.questions.map((question, index) => {
+      return (
+        <FileSideBar.Question question={question}  key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
+      )
+    })
+  },
+
+  renderFolders() {
+    return this.props.folders.map((folder, index) => {
+      return (
+        <FileSideBar.Folder folder={folder}  key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
+      )
+    })
+  },
+
   render() {
     if(!this.props.folders) {
       return null;
@@ -42,13 +58,8 @@ const FileSideBar = React.createClass({
         <div className="FileSideBar-body">
           <FileSideBar.Form rootId={this.props.rootId}/>
           <ul className="FileSideBar-list">
-          {
-            this.props.folders.map((folder, index) => {
-              return (
-                <FileSideBar.Folder folder={folder}  key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
-              )
-            })
-          }
+          {this.renderFolders()}      
+          {this.renderQuestions()}
           </ul>
         </div>
       </div>
@@ -57,16 +68,37 @@ const FileSideBar = React.createClass({
 });
 
 FileSideBar.Form = React.createClass({
-  createFolder(e) {
+  getInitialState() {
+    return {
+      createFolder: true,
+    };
+  },
+  create(e) {
     if(e.keyCode == 13) {
       let nameInput = React.findDOMNode(this.refs.folderName);
-      MenuActions.createFolder(nameInput.value, this.props.rootId);
+      if(this.state.createFolder) {
+        MenuActions.createFolder(nameInput.value, this.props.rootId);
+      } else {
+        MenuActions.createQuestion(nameInput.value, this.props.rootId);
+        console.log("create item");
+      }
       nameInput.value = '';
+    }
+  },
+  changeCreator(e) {
+    console.log(e.target.checked);
+    if(e.target.checked) {
+      this.setState({
+        createFolder: false,
+      });
     }
   },
   render() {
     return (
-      <input type="text" ref="folderName" onKeyDown={this.createFolder}/>
+      <div className="FileSideBar-Form">
+        <input type="text" ref="folderName" className="FileSideBar-Form-input"onKeyDown={this.create}/>
+        <span className="FileSideBar-Form-check"><input type="checkbox" onChange={this.changeCreator}/></span>
+      </div>
     );
   }
 });
@@ -77,7 +109,6 @@ FileSideBar.Item = React.createClass({
     this.props.onChangeRoute(item.name, item.father);
     console.log(item);
     if(item.isFolder) {
-      console.log("jajajajaj");
       this.props.loadItems(item.url);
     }
   },
@@ -101,8 +132,7 @@ FileSideBar.Item = React.createClass({
 });
 
 FileSideBar.Folder = React.createClass({
-  deleteFolder(e) {
-    
+  deleteFolder(e) {  
     e.stopPropagation();
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
   },
@@ -118,6 +148,28 @@ FileSideBar.Folder = React.createClass({
         <div className="FileSideBar-Item-right">
           <i className="material-icons">language</i>
           <i className="fa fa-times" onClick={this.deleteFolder}></i>
+        </div>
+      </li>
+    )
+  }
+});
+
+FileSideBar.Question = React.createClass({
+  deleteFolder(e) {  
+    e.stopPropagation();
+    MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
+  },
+
+  render() {
+    const {question} = this.props;
+    return (
+      <li className="FileSideBar-Item">
+        <div className="FileSideBar-item-left">
+          <i className="material-icons">description</i>
+          {question.name}
+        </div>
+        <div className="FileSideBar-Item-right">
+          <i className="fa fa-times" ></i>
         </div>
       </li>
     )

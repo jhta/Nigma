@@ -5,7 +5,6 @@ var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
   createFolder(folderName, rootId) {
-    debugger
     FolderAPI.createFolder({
       folderid: rootId,
       folder: {
@@ -22,9 +21,9 @@ var MenuActions = {
     });
 
   },
-  createQuestion(folderIndex, folder, questionName) {
+  createQuestion(questionName, folderId, isRoot=true) {
     QuestionAPI.createQuestion({
-        folderid: folder._id,
+        folderid: folderId,
         question: {
           name: questionName
         }
@@ -33,8 +32,8 @@ var MenuActions = {
         debugger
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
-          folderIndex: folderIndex,
-          question: question
+          question: question,
+          isRoot: isRoot
         });
       }
     });

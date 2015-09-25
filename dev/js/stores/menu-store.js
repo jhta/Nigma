@@ -29,8 +29,13 @@ function _setFolders(folders) {
 
 
 
-function _createQuestion(folderIndex, question) {
-  _folders[folderIndex].questions.push(question)
+function _createQuestion(question, isRoot) {
+  if(isRoot) {
+    _rootFolder.questions = (_rootFolder.questions) ? _rootFolder.questions : [];
+    _rootFolder.questions.push(question);
+    debugger
+  }
+  //_folders[folderIndex].questions.push(question)
 }
 function _deleteFolder(folderIndex, folder) {
   if(_rootFolder.folders[folderIndex]._id == folder._id){
@@ -72,7 +77,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
-      _createQuestion(action.folderIndex, action.question);
+      _createQuestion(action.folderIndex, action.question, action.isRoot);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.LIST_FOLDERS:

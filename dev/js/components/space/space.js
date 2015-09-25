@@ -110,7 +110,7 @@ const Space = React.createClass({
       folders: rootFolder.folders,
       questions: rootFolder.questions,
     });
-    console.log("root", rootFolder._id);
+    console.log("root", rootFolder.questions);
   },
 
   loadItems(url) {
@@ -142,7 +142,13 @@ const Space = React.createClass({
     };
     return (
       <div className="Wrapper ">
-        <FileSideBar folders={this.state.folders} rootId={this.state.currentFolderId} items={this.state.items} onLoadItems={this.loadItems}/>
+        <FileSideBar 
+          folders={this.state.folders} 
+          questions={this.state.questions} 
+          rootId={this.state.currentFolderId} 
+          items={this.state.items} 
+          onLoadItems={this.loadItems}
+        />
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
