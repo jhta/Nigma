@@ -41,10 +41,14 @@ var MenuActions = {
   listFolders() {
     FolderAPI.listFolders({}, (err, res) => {
       if(!err) {
+        debugger
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
           rootFolder: res.root_folder
         });
+      } else {
+        debugger
+        alert("whatda fuc?");
       }
     });
   },

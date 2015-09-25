@@ -24,6 +24,7 @@ const FolderAPI = {
       if(err){
         cb(true, null);
       } else {
+        debugger
         cb(!res.body.ok, res.body);
       }
     });
