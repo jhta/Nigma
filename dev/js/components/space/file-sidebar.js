@@ -44,7 +44,7 @@ const FileSideBar = React.createClass({
   renderQuestions() {
     return this.props.questions.map((question, index) => {
       return (
-        <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
+        <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
       )
     })
   },
@@ -177,9 +177,9 @@ FileSideBar.Folder = React.createClass({
 });
 
 FileSideBar.Question = React.createClass({
-  deleteFolder(e) {  
+  deleteQuestion(e) {  
     e.stopPropagation();
-    MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
+    MenuActions.deleteQuestion(this.props.questionIndex, this.props.question);
   },
 
   render() {
@@ -191,7 +191,7 @@ FileSideBar.Question = React.createClass({
           {question.name}
         </div>
         <div className="FileSideBar-Item-right">
-          <i className="fa fa-times" ></i>
+          <i className="fa fa-times" onClick={this.deleteQuestion}></i>
         </div>
       </li>
     )

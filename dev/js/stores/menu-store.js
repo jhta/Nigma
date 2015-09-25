@@ -35,9 +35,16 @@ function _createQuestion(question) {
   _rootFolder.questions.push(question);
   //_folders[folderIndex].questions.push(question)
 }
+
 function _deleteFolder(folderIndex, folder) {
   if(_rootFolder.folders[folderIndex]._id == folder._id){
     _rootFolder.folders.splice(folderIndex, 1)
+  }
+}
+
+function _deleteQuestion(index, question) {
+  if(_rootFolder.questions[index]._id == question._id){
+    _rootFolder.questions.splice(index, 1)
   }
 }
 
@@ -88,6 +95,11 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       _deleteFolder(action.folderIndex, action.folder);
       MenuStore.emitChange();
       break;
+    case MenuActionsConstants.DELETE_QUESTION:
+      _deleteQuestion(action.index, action.question);
+      MenuStore.emitChange();
+      break;
+
     case MenuActionsConstants.EDIT_FOLDER:
       _editFolder(action.folderIndex, action.folder, action.folderName);
       MenuStore.emitChange();
