@@ -8,7 +8,8 @@ let _rootFolder = window.rootFolder || {};
 var _folders = [];
 
 function _setRootFolder(rootFolder) {
-  _rootFolder = rootFolder;
+  if(rootFolder._id != _rootFolder._id)
+    _rootFolder = rootFolder;
 }
 
 function _getRootFolder() {
@@ -29,12 +30,9 @@ function _setFolders(folders) {
 
 
 
-function _createQuestion(question, isRoot) {
-  if(isRoot) {
-    _rootFolder.questions = (_rootFolder.questions) ? _rootFolder.questions : [];
-    _rootFolder.questions.push(question);
-    debugger
-  }
+function _createQuestion(question) {
+  _rootFolder.questions = (_rootFolder.questions) ? _rootFolder.questions : [];
+  _rootFolder.questions.push(question);
   //_folders[folderIndex].questions.push(question)
 }
 function _deleteFolder(folderIndex, folder) {
@@ -73,11 +71,13 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 MenuStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case MenuActionsConstants.ADD_FOLDER:
+      _setRootFolder(action.folderRoot);
       _addFolder(action.folder);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.ADD_QUESTION:
-      _createQuestion(action.folderIndex, action.question, action.isRoot);
+      _setRootFolder(action.folderRoot);
+      _createQuestion(action.question);
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.LIST_FOLDERS:

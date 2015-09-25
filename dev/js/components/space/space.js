@@ -88,9 +88,13 @@ const Space = React.createClass({
       expresions: false,
       dialogTeX: "",
       root: rootFolder,
-      currentFolderId: rootFolder.id,
+      rootId: rootFolder.id,
       folders: rootFolder.folders,
       questions: rootFolder.questions,
+      currentFolderId: rootFolder.id,
+      isRoot: true,
+      history: [],
+      historyString: []
     }
   },
   componentDidMount() {
@@ -104,13 +108,13 @@ const Space = React.createClass({
 
   _handleChange() {
     const rootFolder =  MenuStore.getRootFolder();
+    console.log(rootFolder.questions);
     this.setState({
       root: rootFolder,
-      currentFolderId: rootFolder._id,
+      rootId: rootFolder._id,
       folders: rootFolder.folders,
       questions: rootFolder.questions,
     });
-    console.log("root", rootFolder.questions);
   },
 
   loadItems(url) {
@@ -134,8 +138,38 @@ const Space = React.createClass({
     this.setState({dialogTeX: TeX});
   },
 
+  openFolder(folder) {
+    this.state.history.push(this.state.root);
+    this.state.historyString.push(this.state.root.name);
+    this.setState({
+      root: folder,
+      rootId: folder._id,
+      folders: folder.folders,
+      questions: folder.questions || [],
+      isRoot: false,
+      history: this.state.history,
+      historyString: this.state.historyString
+    });
+
+  },
+
+  goBackFolder() {
+    if(this.state.history.length >= 1) {
+      const folder = this.state.history.pop();
+      this.state.historyString.pop();
+      this.setState({
+        root: folder,
+        rootId: folder._id,
+        folders: folder.folders,
+        questions: folder.questions || [],
+        isRoot: (this.state.history.length === 0),
+        history: this.state.history,
+        historyString: this.state.historyString
+      });
+    }
+  },
+
   render() {
-    console.log(this.state.root);
     const styleTab = {
       background: '#009688',
       opacity: '1'
@@ -145,9 +179,15 @@ const Space = React.createClass({
         <FileSideBar 
           folders={this.state.folders} 
           questions={this.state.questions} 
-          rootId={this.state.currentFolderId} 
+          rootId={this.state.rootId} 
           items={this.state.items} 
           onLoadItems={this.loadItems}
+          root={this.state.root}
+          currentFolderId={this.state.currentFolderId}
+          openFolder={this.openFolder}
+          historyString={this.state.historyString}
+          goBackFolder={this.goBackFolder}
+          isRoot={this.state.isRoot}
         />
         <div className="Space">
           <div className="Space-inner">

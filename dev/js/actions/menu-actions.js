@@ -4,7 +4,7 @@ const QuestionAPI = require('../api/utils/question');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
-  createFolder(folderName, rootId) {
+  createFolder(folderName, rootId, folderRoot) {
     FolderAPI.createFolder({
       folderid: rootId,
       folder: {
@@ -15,13 +15,14 @@ var MenuActions = {
 
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
-          folder: folder
+          folder: folder,
+          folderRoot: folderRoot,
         });
       }
     });
 
   },
-  createQuestion(questionName, folderId, isRoot=true) {
+  createQuestion(questionName, folderId, folderRoot) {
     QuestionAPI.createQuestion({
         folderid: folderId,
         question: {
@@ -29,11 +30,10 @@ var MenuActions = {
         }
       }, (err, question) => {
       if(!err){
-        debugger
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
           question: question,
-          isRoot: isRoot
+          folderRoot: folderRoot,
         });
       }
     });

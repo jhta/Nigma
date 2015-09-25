@@ -4,9 +4,17 @@ const FileSideBar = React.createClass({
 
   getInitialState() {
     return {
-      currentRoute: '/',
+      currentRoute: this.generateCurrentRoute(),
       items: this.props.items,
     }
+  },
+
+  generateCurrentRoute() {
+    console.log("current", this.props.historyString);
+    if (this.props.historyString.length > 0) {
+      return '/' + this.props.historyString.reduce((prev, next) => `${prev}/${next}`);
+    }
+    return '/';
   },
 
   changeRoute(route, father) {
@@ -29,10 +37,14 @@ const FileSideBar = React.createClass({
     });
   },
 
+  goBack() {
+    this.props.goBackFolder();
+  },
+
   renderQuestions() {
     return this.props.questions.map((question, index) => {
       return (
-        <FileSideBar.Question question={question}  key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
+        <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
       )
     })
   },
@@ -40,11 +52,15 @@ const FileSideBar = React.createClass({
   renderFolders() {
     return this.props.folders.map((folder, index) => {
       return (
-        <FileSideBar.Folder folder={folder}  key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
+        <FileSideBar.Folder folder={folder}  openFolder={this.props.openFolder} key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
       )
     })
   },
-
+  renderGoBackButton() {
+    if (!this.props.isRoot) {
+      return (<a href="javascript:void(0)" onClick={this.goBack}>Volver</a>)
+    }
+  },
   render() {
     if(!this.props.folders) {
       return null;
@@ -56,8 +72,9 @@ const FileSideBar = React.createClass({
           <span>{this.state.currentRoute}</span>
         </div>
         <div className="FileSideBar-body">
-          <FileSideBar.Form rootId={this.props.rootId}/>
+          <FileSideBar.Form rootId={this.props.rootId} root={this.props.root}/>
           <ul className="FileSideBar-list">
+          {this.renderGoBackButton()}
           {this.renderFolders()}      
           {this.renderQuestions()}
           </ul>
@@ -77,9 +94,9 @@ FileSideBar.Form = React.createClass({
     if(e.keyCode == 13) {
       let nameInput = React.findDOMNode(this.refs.folderName);
       if(this.state.createFolder) {
-        MenuActions.createFolder(nameInput.value, this.props.rootId);
+        MenuActions.createFolder(nameInput.value, this.props.rootId, this.props.root);
       } else {
-        MenuActions.createQuestion(nameInput.value, this.props.rootId);
+        MenuActions.createQuestion(nameInput.value, this.props.rootId, this.props.root);
         console.log("create item");
       }
       nameInput.value = '';
@@ -137,13 +154,18 @@ FileSideBar.Folder = React.createClass({
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
   },
 
+  openFolder(e) {
+    e.stopPropagation();
+    this.props.openFolder(this.props.folder);
+  },
+
   render() {
     const folder = this.props.folder;
     return (
       <li className="FileSideBar-Item">
         <div className="FileSideBar-item-left">
           <i className="material-icons">folder</i>
-          {folder.name}
+          <span onClick={this.openFolder}>{folder.name}</span>
         </div>
         <div className="FileSideBar-Item-right">
           <i className="material-icons">language</i>
