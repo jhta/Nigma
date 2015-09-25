@@ -4,8 +4,8 @@ const CHANGE_EVENT = 'change';
 var Dispatcher = require('../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var _folders = [];
 let _rootFolder = window.rootFolder || {};
+var _folders = [];
 
 function _setRootFolder(rootFolder) {
   _rootFolder = rootFolder;
@@ -20,7 +20,7 @@ function getFolders() {
 }
 
 function _addFolder(folder) {
-  _folders.push(folder);
+  _rootFolder.folders.push(folder);
 }
 
 function _setFolders(folders) {

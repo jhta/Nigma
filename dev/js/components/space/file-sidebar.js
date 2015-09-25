@@ -40,7 +40,7 @@ const FileSideBar = React.createClass({
           <span>{this.state.currentRoute}</span>
         </div>
         <div className="FileSideBar-body">
-          <FileSideBar.Form/>
+          <FileSideBar.Form rootId={this.props.rootId}/>
           <ul className="FileSideBar-list">
           {
             this.props.folders.map((folder, index) => {
@@ -58,11 +58,10 @@ const FileSideBar = React.createClass({
 
 FileSideBar.Form = React.createClass({
   createFolder(e) {
-    console.log(e.keyCode);
     if(e.keyCode == 13) {
-      let name = React.findDOMNode(this.refs.folderName).value;
-      MenuActions.createFolder(name);
-      name = '';
+      let nameInput = React.findDOMNode(this.refs.folderName);
+      MenuActions.createFolder(nameInput.value, this.props.rootId);
+      nameInput.value = '';
     }
   },
   render() {
@@ -103,7 +102,7 @@ FileSideBar.Item = React.createClass({
 
 FileSideBar.Folder = React.createClass({
   deleteFolder(e) {
-    debugger
+    
     e.stopPropagation();
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
   },

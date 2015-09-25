@@ -4,15 +4,16 @@ const QuestionAPI = require('../api/utils/question');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
-  createFolder(folderName) {
+  createFolder(folderName, rootId) {
+    debugger
     FolderAPI.createFolder({
-      folderid: '55efc434baaa7a1436df69cb',
+      folderid: rootId,
       folder: {
         name: folderName
       }
     }, (err, folder) => {
       if(!err){
-        debugger
+
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
           folder: folder
@@ -29,6 +30,7 @@ var MenuActions = {
         }
       }, (err, question) => {
       if(!err){
+        debugger
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
           folderIndex: folderIndex,
@@ -41,13 +43,13 @@ var MenuActions = {
   listFolders() {
     FolderAPI.listFolders({}, (err, res) => {
       if(!err) {
-        debugger
+        
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
           rootFolder: res.root_folder
         });
       } else {
-        debugger
+        
         alert("whatda fuc?");
       }
     });

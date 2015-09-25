@@ -106,10 +106,11 @@ const Space = React.createClass({
     const rootFolder =  MenuStore.getRootFolder();
     this.setState({
       root: rootFolder,
-      currentFolderId: rootFolder.id,
+      currentFolderId: rootFolder._id,
       folders: rootFolder.folders,
       questions: rootFolder.questions,
     });
+    console.log("root", rootFolder._id);
   },
 
   loadItems(url) {
@@ -141,7 +142,7 @@ const Space = React.createClass({
     };
     return (
       <div className="Wrapper ">
-        <FileSideBar folders={this.state.folders} items={this.state.items} onLoadItems={this.loadItems}/>
+        <FileSideBar folders={this.state.folders} rootId={this.state.currentFolderId} items={this.state.items} onLoadItems={this.loadItems}/>
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
