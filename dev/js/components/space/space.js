@@ -134,6 +134,15 @@ const Space = React.createClass({
     }
     SpaceActions.previewQuestion(data)
   },
+  _saveQuestion() {
+    console.log(SpaceStore.getFormulation());
+    var data = {
+      variables: VariableStore.getVariables().text,
+      answers: AnswerStore.getAnswers(),
+      formulation: SpaceStore.getFormulation()//PIPE!!
+    }
+    SpaceActions.updateQuestionData(data)
+  },
 
   render() {
     const styleTab = {
@@ -176,6 +185,7 @@ const Space = React.createClass({
           />
 
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
+          <button className="btn waves-effect waves-light send-btn" onClick={this._saveQuestion}>Guardar</button>
           {modal}
         </div>
       </div>
