@@ -88,6 +88,19 @@ var MenuActions = {
         });
       }
     });
+  },
+
+  shareFolder(folderIndex, folder) {
+    FolderAPI.shareFolder(data, (err, res) => {
+      if (!err) {
+        const type = MenuActionConstants.SHARE_FOLDER;
+        Dispatcher.dispatch({
+          type,
+          folder,
+          folderIndex
+        });
+      }
+    });
   }
 
 }
