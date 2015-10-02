@@ -42,6 +42,7 @@ const FileSideBar = React.createClass({
   },
 
   renderQuestions() {
+    if(!this.props.questions) return null;
     return this.props.questions.map((question, index) => {
       return (
         <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
@@ -50,6 +51,9 @@ const FileSideBar = React.createClass({
   },
 
   renderFolders() {
+    if(!this.props.folders) {
+      return null;
+    }
     return this.props.folders.map((folder, index) => {
       return (
         <FileSideBar.Folder folder={folder}  openFolder={this.props.openFolder} key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
@@ -62,9 +66,6 @@ const FileSideBar = React.createClass({
     }
   },
   render() {
-    if(!this.props.folders) {
-      return null;
-    }
     return(
       <div className="FileSideBar z-depth-1">
         <div className="FileSideBar-header">
@@ -130,11 +131,15 @@ FileSideBar.Item = React.createClass({
     }
   },
 
+  onSetQuestion() {
+    this.props.onSetQuestion(this.props.item);
+  },
+
   render() {
     const item = this.props.item;
     const icon = item.isFolder? "folder" : "description";
     return (
-      <li className="FileSideBar-Item" onClick={this.changeRoute}>
+      <li className="FileSideBar-Item" onClick={this.onSetQuestion}>
         <div className="FileSideBar-item-left">
           <i className="material-icons">{icon}</i>
           {item.name}
@@ -182,11 +187,16 @@ FileSideBar.Question = React.createClass({
     MenuActions.deleteQuestion(this.props.questionIndex, this.props.question);
   },
 
+  onSetQuestion(e) {
+    e.stopPropagation();
+    this.props.onSetQuestion(this.props.question);
+  },
+
   render() {
     const {question} = this.props;
     return (
       <li className="FileSideBar-Item">
-        <div className="FileSideBar-item-left">
+        <div className="FileSideBar-item-left" onClick={this.onSetQuestion}>
           <i className="material-icons">description</i>
           {question.name}
         </div>

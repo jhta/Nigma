@@ -49,7 +49,6 @@ var MenuActions = {
   listFolders() {
     FolderAPI.listFolders({}, (err, res) => {
       if(!err) {
-        
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
           rootFolder: res.root_folder
@@ -86,6 +85,19 @@ var MenuActions = {
           folderIndex: folderIndex,
           folder: folder,
           folderName: folderName
+        });
+      }
+    });
+  },
+
+  shareFolder(folderIndex, folder) {
+    FolderAPI.shareFolder(data, (err, res) => {
+      if (!err) {
+        const type = MenuActionConstants.SHARE_FOLDER;
+        Dispatcher.dispatch({
+          type,
+          folder,
+          folderIndex
         });
       }
     });

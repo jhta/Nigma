@@ -13,67 +13,6 @@ const FileSideBar = require("./file-sidebar");
 const SpaceActions = require('../../actions/space/space-actions');
 const MenuActions = require("../../actions/menu-actions");
 const MenuStore = require("../../stores/menu-store");
-const items = [
-  {
-    father: '/',
-    isFolder: true,
-    shared: true,
-    name: "folder1",
-    url: 'otrosItems'
-  },
-  {
-    father: '/',
-    isFolder: false,
-    shared: true,
-    name: "item1",
-    url: 'otrosItems'
-  },
-  {
-    father: '/',
-    isFolder: false,
-    shared: false,
-    name: "item2",
-    url: 'otrosItems'
-  },
-  {
-    father: '/',
-    isFolder: false,
-    shared: false,
-    name: "item3",
-    url: 'otrosItems'
-  },
-]
-
-
-
-const folderChilds = [
-  {
-    url: 'otrosItems',
-    items: [
-      {
-        father: '/',
-        isFolder: false,
-        shared: true,
-        name: "item1",
-        url: 'otrosItems'
-      },
-      {
-        father: '/',
-        isFolder: false,
-        shared: false,
-        name: "item2",
-        url: 'otrosItems'
-      },
-      {
-        father: '/',
-        isFolder: false,
-        shared: false,
-        name: "item3",
-        url: 'otrosItems'
-      },
-    ]
-  }
-]
 
 /*Stores*/
 window.VariableStore = require('../../stores/space/variable-store');
@@ -86,10 +25,9 @@ const Space = React.createClass({
   getInitialState() {
     const rootFolder = MenuStore.getRootFolder();
     return {
-      items: items,
       expresions: false,
       dialogTeX: "",
-      previewOutput: null
+      previewOutput: null,
       root: rootFolder,
       rootId: rootFolder.id,
       folders: rootFolder.folders,
@@ -97,7 +35,8 @@ const Space = React.createClass({
       currentFolderId: rootFolder.id,
       isRoot: true,
       history: [],
-      historyString: []
+      historyString: [],
+      currentQuestion: {},
     }
   },
   componentDidMount() {
@@ -111,24 +50,15 @@ const Space = React.createClass({
 
   _handleChange() {
     const rootFolder =  MenuStore.getRootFolder();
-    console.log(rootFolder.questions);
     this.setState({
       root: rootFolder,
       rootId: rootFolder._id,
       folders: rootFolder.folders,
       questions: rootFolder.questions,
-    });
-  },
-
-  componentWillMount() {
-    SpaceStore.addChangeListener(this._handleChange);
-  },
-
-  _handleChange() {
-    this.setState({
       previewOutput: SpaceStore.getPreview()
     });
   },
+
 
   loadItems(url) {
     const folder = folderChilds.filter((folder) => {
@@ -141,6 +71,13 @@ const Space = React.createClass({
         items: folder[0].items
       });
     },200);
+  },
+
+  setQuestion(question) {
+    this.setState({
+      currentQuestion: question,
+    });
+    alert("el id de la nueva pregunta es " + question._id);
   },
 
   showExpresions(flag = true) {
@@ -226,6 +163,7 @@ const Space = React.createClass({
           historyString={this.state.historyString}
           goBackFolder={this.goBackFolder}
           isRoot={this.state.isRoot}
+          onSetQuestion={this.setQuestion}
         />
         <div className="Space">
           <div className="Space-inner">
@@ -247,9 +185,9 @@ const Space = React.createClass({
             </div>
           </div>
           <RightPanel
-          expresions={this.state.expresions}
-          changeDialogTex={this.changeDialogTex}
-          dialogTeX={this.state.dialogTeX}
+            expresions={this.state.expresions}
+            changeDialogTex={this.changeDialogTex}
+            dialogTeX={this.state.dialogTeX}
           />
 
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>

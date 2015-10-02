@@ -54,6 +54,12 @@ function _editFolder(folderIndex, folder, folderName) {
   }
 }
 
+function _shareFolder(folderIndex, folder) {
+  if(_folders[folderIndex]._id == folder._id){
+    _folders[folderIndex].name = folderName
+  }
+}
+
 var MenuStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -102,6 +108,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
 
     case MenuActionsConstants.EDIT_FOLDER:
       _editFolder(action.folderIndex, action.folder, action.folderName);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.SHARE_FOLDER:
+      _shareFolder(action.folderIndex, action.folder);
       MenuStore.emitChange();
       break;
     default:
