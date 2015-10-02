@@ -89,7 +89,7 @@ const Space = React.createClass({
       items: items,
       expresions: false,
       dialogTeX: "",
-      previewOutput: null
+      previewOutput: null,
       root: rootFolder,
       rootId: rootFolder.id,
       folders: rootFolder.folders,
