@@ -110,6 +110,7 @@ const Space = React.createClass({
   },
 
   _handleChange() {
+    debugger
     const rootFolder =  MenuStore.getRootFolder();
     console.log(rootFolder.questions);
     this.setState({
@@ -117,18 +118,10 @@ const Space = React.createClass({
       rootId: rootFolder._id,
       folders: rootFolder.folders,
       questions: rootFolder.questions,
-    });
-  },
-
-  componentWillMount() {
-    SpaceStore.addChangeListener(this._handleChange);
-  },
-
-  _handleChange() {
-    this.setState({
       previewOutput: SpaceStore.getPreview()
     });
   },
+
 
   loadItems(url) {
     const folder = folderChilds.filter((folder) => {

@@ -42,6 +42,7 @@ const FileSideBar = React.createClass({
   },
 
   renderQuestions() {
+    if(!this.props.questions) return null;
     return this.props.questions.map((question, index) => {
       return (
         <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
@@ -50,6 +51,9 @@ const FileSideBar = React.createClass({
   },
 
   renderFolders() {
+    if(!this.props.folders) {
+      return null;
+    }
     return this.props.folders.map((folder, index) => {
       return (
         <FileSideBar.Folder folder={folder}  openFolder={this.props.openFolder} key={index} folderIndex={index} onChangeRoute={this.changeRoute}/>
@@ -62,9 +66,6 @@ const FileSideBar = React.createClass({
     }
   },
   render() {
-    if(!this.props.folders) {
-      return null;
-    }
     return(
       <div className="FileSideBar z-depth-1">
         <div className="FileSideBar-header">
