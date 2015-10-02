@@ -116,7 +116,7 @@ gulp.task('server', function() {
       directoryListing: false,
       open: false,
       fallback : 'index.html',
-      port: 8001
+      port: 8000
   }));
 });
 

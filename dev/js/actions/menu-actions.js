@@ -4,24 +4,27 @@ const QuestionAPI = require('../api/utils/question');
 var Dispatcher = require('../dispatchers/dispatcher.js');
 
 var MenuActions = {
-  createFolder(folderName) {
+  createFolder(folderName, rootId, folderRoot) {
     FolderAPI.createFolder({
+      folderid: rootId,
       folder: {
         name: folderName
       }
     }, (err, folder) => {
       if(!err){
+
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_FOLDER,
-          folder: folder
+          folder: folder,
+          folderRoot: folderRoot,
         });
       }
     });
 
   },
-  createQuestion(folderIndex, folder, questionName) {
+  createQuestion(questionName, folderId, folderRoot) {
     QuestionAPI.createQuestion({
-        folderid: folder._id,
+        folderid: folderId,
         question: {
           name: questionName
         }
@@ -29,24 +32,35 @@ var MenuActions = {
       if(!err){
         Dispatcher.dispatch({
           type: MenuActionConstants.ADD_QUESTION,
-          folderIndex: folderIndex,
-          question: question
+          question: question,
+          folderRoot: folderRoot,
         });
       }
     });
-
   },
+  deleteQuestion(index, question) {
+    Dispatcher.dispatch({
+        type: MenuActionConstants.DELETE_QUESTION,
+        question: question,
+        index: index,
+      });
+  },
+
   listFolders() {
-    FolderAPI.listFolders({}, (err, folders) => {
-      if(!err){
+    FolderAPI.listFolders({}, (err, res) => {
+      if(!err) {
+        
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          folders: folders
+          rootFolder: res.root_folder
         });
+      } else {
+        
+        alert("whatda fuc?");
       }
     });
   },
-  deleteFolder(folderIndex, folder){
+  deleteFolder(folderIndex, folder) {
     FolderAPI.deleteFolder({folderid: folder._id}, (err, res) => {
       if(!err){
         Dispatcher.dispatch({

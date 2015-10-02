@@ -11,10 +11,8 @@ const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
 
 const SpaceActions = require('../../actions/space/space-actions');
-
-//Window
-
-
+const MenuActions = require("../../actions/menu-actions");
+const MenuStore = require("../../stores/menu-store");
 const items = [
   {
     father: '/',
@@ -45,6 +43,8 @@ const items = [
     url: 'otrosItems'
   },
 ]
+
+
 
 const folderChilds = [
   {
@@ -84,12 +84,40 @@ const Space = React.createClass({
   mixins: [ThemeMixin],
 
   getInitialState() {
+    const rootFolder = MenuStore.getRootFolder();
     return {
       items: items,
       expresions: false,
       dialogTeX: "",
       previewOutput: null
+      root: rootFolder,
+      rootId: rootFolder.id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
+      currentFolderId: rootFolder.id,
+      isRoot: true,
+      history: [],
+      historyString: []
     }
+  },
+  componentDidMount() {
+    MenuActions.listFolders();
+    MenuStore.addChangeListener(this._handleChange);
+  },
+
+  componentWillUnmount() {
+    MenuStore.removeChangeListener()
+  },
+
+  _handleChange() {
+    const rootFolder =  MenuStore.getRootFolder();
+    console.log(rootFolder.questions);
+    this.setState({
+      root: rootFolder,
+      rootId: rootFolder._id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
+    });
   },
 
   componentWillMount() {
@@ -120,8 +148,6 @@ const Space = React.createClass({
   },
 
   changeDialogTex(TeX) {
-    //console.log("TeX", TeX);
-    //this.setState({dialogTeX: `${this.state.dialogTeX}${TeX}`});
     this.setState({dialogTeX: TeX});
   },
 
@@ -132,7 +158,37 @@ const Space = React.createClass({
       answers: AnswerStore.getAnswers(),
       formulation: SpaceStore.getFormulation()//PIPE!!
     }
-    SpaceActions.previewQuestion(data)
+    SpaceActions.previewQuestion(data);
+  },
+  openFolder(folder) {
+    this.state.history.push(this.state.root);
+    this.state.historyString.push(this.state.root.name);
+    this.setState({
+      root: folder,
+      rootId: folder._id,
+      folders: folder.folders,
+      questions: folder.questions || [],
+      isRoot: false,
+      history: this.state.history,
+      historyString: this.state.historyString
+    });
+
+  },
+
+  goBackFolder() {
+    if(this.state.history.length >= 1) {
+      const folder = this.state.history.pop();
+      this.state.historyString.pop();
+      this.setState({
+        root: folder,
+        rootId: folder._id,
+        folders: folder.folders,
+        questions: folder.questions || [],
+        isRoot: (this.state.history.length === 0),
+        history: this.state.history,
+        historyString: this.state.historyString
+      });
+    }
   },
 
   render() {
@@ -149,7 +205,19 @@ const Space = React.createClass({
 
     return (
       <div className="Wrapper ">
-        <FileSideBar items={this.state.items} onLoadItems={this.loadItems}/>
+        <FileSideBar 
+          folders={this.state.folders} 
+          questions={this.state.questions} 
+          rootId={this.state.rootId} 
+          items={this.state.items} 
+          onLoadItems={this.loadItems}
+          root={this.state.root}
+          currentFolderId={this.state.currentFolderId}
+          openFolder={this.openFolder}
+          historyString={this.state.historyString}
+          goBackFolder={this.goBackFolder}
+          isRoot={this.state.isRoot}
+        />
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
