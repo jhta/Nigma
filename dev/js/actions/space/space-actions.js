@@ -19,13 +19,14 @@ var SpaceActions = {
 
   },
   updateQuestionData(data, questionId) {
-    payload = {
+    var payload = {
       question: {
-        data: data
+        data: JSON.stringify(data)
       },
-      questionid: questionid
+      questionid: questionId
     }
-    QuestionAPI.updateQuestionData(data, (err, data) => {
+    console.log(payload);
+    QuestionAPI.updateQuestionData(payload, (err, data) => {
       console.log(data);
       if(data.ok){
         Dispatcher.dispatch({

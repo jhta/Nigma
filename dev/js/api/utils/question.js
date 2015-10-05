@@ -23,6 +23,7 @@ const QuestionAPI = {
   updateQuestionData(data, cb){
     const route = this._routes.updateQuestionData;
     API.callAjaxRequest(route, data, (err, res) => {
+      console.log("Respuesta", res);
       if(err){
         cb(true, null);
       } else {

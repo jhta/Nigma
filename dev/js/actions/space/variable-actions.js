@@ -16,6 +16,13 @@ var VariableActions = {
       type: VariableConstants.VALIDATE_CODE,
       code: code
     });
+  },
+  loadVariables(variables) {
+    variables = variables.split("\n").filter(variable => variable != '')
+    Dispatcher.dispatch({
+      type: VariableConstants.LOAD_VARIABLES,
+      variables: variables
+    });
   }
 }
 

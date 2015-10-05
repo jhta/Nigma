@@ -39,7 +39,7 @@ SpaceStore.dispatchToken = Dispatcher.register(function(action) {
       break;
 
     case SpaceConstants.ADD_FORMULATION:
-      _formulation = action.data;            
+      _formulation = action.data;
       SpaceStore.emitChange();
       break;
 

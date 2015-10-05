@@ -19,7 +19,7 @@ const FolderAPI = {
     },
     share: {
       route: "/users/folders/:folderid",
-      method: AP._REQUEST_METHOD.post,
+      method: API._REQUEST_METHOD.post,
     }
   },
   listFolders(data, cb){
