@@ -109,9 +109,10 @@ const Space = React.createClass({
       history: this.state.history,
       historyString: this.state.historyString
     });
-
   },
-
+  shareFolder() {
+    console.log("test");
+  },
   goBackFolder() {
     if(this.state.history.length >= 1) {
       const folder = this.state.history.pop();
