@@ -5,7 +5,7 @@ const AlertMessage = require('../util/alert');
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
-      answers: AnswerStore.getAnswers(),
+      answer: AnswerStore.getAnswers(),
       validating: false
     };
   },
@@ -18,8 +18,8 @@ var AnswerContainer = React.createClass({
     if(objectPath.length == 0)
       return;
 
-    var answers = this.state.answers;
-    var item = answers[index];
+    var answer = this.state.answer;
+    var item = answer[index];
 
     for(var i = 0; i < objectPath.length -1; i++) {
       var pathValue = objectPath[i];
@@ -31,7 +31,7 @@ var AnswerContainer = React.createClass({
 
     item[objectPath[objectPath.length -1]] = value;
     this.setState({
-      answers: answers
+      answer: answer
     });
   },
 
@@ -67,14 +67,8 @@ var AnswerContainer = React.createClass({
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
         <AlertMessage data={AnswerStore.getValidationOutPut()}/>
         {
-          this.state.answers.length != 0 ?
-            (
-              <ul className="collapsible" data-collapsible="expandable">
-                {
-                  this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer.index} index={index} answer={answer} handleChange={this._changeAnswer} />)
-                }
-              </ul>
-            )
+          this.state.answer != null ?
+            <AnswerContainer.Answer answer={this.state.answer}  />
             :
             <div className="empty-text" onClick={this._addNewAnswer}>No hay respuestas para la pregunta, click aquí para agregar una nueva</div>
         }
@@ -133,40 +127,23 @@ AnswerContainer.Answer = React.createClass({
 
   render() {
     return (
-      <li className="Formulation-AnswerContainer-Answer">
-        <div className="collapsible-header header">
-            <i className="material-icons">help</i>
-            <span className="title">{this.props.answer.name}</span>
-            <span className="actions-container">
-              <span className="material-icons">edit</span>
-              <span className="material-icons" onClick={this._deleteQuestion}>delete</span>
-            </span>
-        </div>
-        <div className="collapsible-body">
-          <ul className="collection main-answer-content" >
-            <li className="collection-item main-answer-form">
-              <AnswerContainer.Answer.Form answer={this.props.answer} handleChange={this._handleChange} index={this.props.index}/>
-            </li>
-            <li className="collection-item">
-              <div className="collapsible-header header">
-                <i className="material-icons">error</i>
-                <span className="title">Errores comunes</span>
-                <span className="actions-container">
-                  <span className="material-icons" onClick={this._addCommonError}>add</span>
-                </span>
-              </div>
-              <div>
-                <ul className="collection">
-                  {this.props.answer.commonErrors.map((error, index) => <AnswerContainer.Answer.CommonError key={index} index={index} error={error} answer={this.props.answer} answerIndex={this.props.index} handleChange={this._handleChange} />)}
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
+      <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange}/>
     );
   }
 
+});
+
+AnswerContainer.Answer.GeneralInformation = React.createClass({
+  render() {
+    return (
+      <div className="row">
+        <div className="input-field col s4">
+          <input type="checkbox" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
+          <label htmlFor={`showLabelCheckBox`} >Mostrar etiquetas</label>
+        </div>
+      </div>
+    );
+  }
 });
 
 AnswerContainer.Answer.Form = React.createClass({

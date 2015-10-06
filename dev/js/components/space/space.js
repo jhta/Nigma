@@ -20,6 +20,11 @@ const MenuStore = require("../../stores/menu-store");
 window.VariableStore = require('../../stores/space/variable-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+
+/* Models */
+const Answer = require('../../utils/answers/answer');
+
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -84,7 +89,7 @@ const Space = React.createClass({
         question["data"] = {
           formulation: "",
           variables: "",
-          answers: []
+          answers: null
         }
     } else {
       question.data = JSON.parse(question.data);
@@ -92,6 +97,7 @@ const Space = React.createClass({
     SpaceActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
     AnswerActions.loadAnswers(question.data.answers);
+    console.log("Setting question ", question);
   },
 
   showExpresions(flag = true) {

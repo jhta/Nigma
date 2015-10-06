@@ -4,8 +4,8 @@ const Variable = require('../variables/variable');
 const uniqid = require('uniqid');
 class Answer {
   constructor() {
-    this.name = "";
-    this.correctValue = "";
+    this.names = [];
+    this.correctValue = [];
     this.showLabel = true;
     this.precision = 0;
     this.commonErrors = [];
@@ -99,8 +99,8 @@ class Answer {
 
   static createFromResponse(jsonAnswer) {
     var answer = new Answer();
-    answer.name = jsonAnswer.name;
-    answer.correctValue = jsonAnswer.correctValue;
+    answer.names = jsonAnswer.names;
+    answer.correctValues = jsonAnswer.correctValues;
     answer.showLabel = jsonAnswer.showLabel;
     answer.precision = jsonAnswer.precision;
     answer._id = jsonAnswer._id;

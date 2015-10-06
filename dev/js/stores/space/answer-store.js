@@ -7,16 +7,16 @@ var assign = require('object-assign');
 var Parser = require('../../utils/parser');
 
 
-var _answers = [];
+var _answer = null;
 var _validationOutput = null;
 
 
-function _setAnswers(answers) {
-  _answers = answers;
+function _setAnswer(answer) {
+  _answer = answer;
 }
 
 function _addNewAnswer() {
-  _answers.push(new Answer());
+  _answer = new Answer();
 }
 
 function _validateAnswers(answers, variables) {
@@ -56,8 +56,9 @@ function _addCommonError(answer, answerIndex) {
   }
 }
 
-function _loadAnswers(answers) {
-  _answers = answers.map((jsonAnswer) => Answer.createFromResponse(jsonAnswer))
+function _loadAnswers(jsonAnswer) {
+  if(jsonAnswer != null)
+    _answer = Answer.createFromResponse(jsonAnswer)
 }
 
 var AnswerStore = assign({}, EventEmitter.prototype, {
@@ -74,7 +75,7 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
   },
 
   getAnswers() {
-    return _answers;
+    return _answer;
   },
 
   getValidationOutPut() {
