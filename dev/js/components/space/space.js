@@ -12,6 +12,7 @@ const FileSideBar = require("./file-sidebar");
 
 const SpaceActions = require('../../actions/space/space-actions');
 const VariableActions = require('../../actions/space/variable-actions');
+const FormulationActions = require('../../actions/space/formulation-actions');
 const AnswerActions = require('../../actions/space/answer-actions');
 const MenuActions = require("../../actions/menu-actions");
 const MenuStore = require("../../stores/menu-store");
@@ -20,6 +21,7 @@ const MenuStore = require("../../stores/menu-store");
 window.VariableStore = require('../../stores/space/variable-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+window.FormulationStore = require('../../stores/space/formulation-store');
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -89,7 +91,8 @@ const Space = React.createClass({
     } else {
       question.data = JSON.parse(question.data);
     }
-    SpaceActions.addFormulation(question.data.formulation);
+    console.log("Setting question ", question);
+    FormulationActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
     AnswerActions.loadAnswers(question.data.answers);
   },
@@ -147,7 +150,7 @@ const Space = React.createClass({
     var data = {
       variables: VariableStore.getVariables().text,
       answers: answers,
-      formulation: SpaceStore.getFormulation()//PIPE!!
+      formulation: FormulationStore.getFormulation()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
