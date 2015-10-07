@@ -165,6 +165,9 @@ const Space = React.createClass({
                 <Tab label="Respuestas" style={styleTab}>
                   <Answers />
                 </Tab>
+                <Tab label="Metadatos" style={styleTab}>
+                  <Metadata />
+                </Tab>
               </Tabs>
             </div>
           </div>
