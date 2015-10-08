@@ -90,16 +90,14 @@ const Space = React.createClass({
         question["data"] = {
           formulation: "",
           variables: "",
-          answers: null
+          answer: null
         }
     } else {
       question.data = JSON.parse(question.data);
     }
-    console.log("Setting question ", question);
     FormulationActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
     AnswerActions.loadAnswers(question.data.answers);
-    console.log("Setting question ", question);
   },
 
   showExpresions(flag = true) {

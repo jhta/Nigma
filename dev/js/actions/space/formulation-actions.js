@@ -4,7 +4,6 @@ var SpaceApi = require('../../api/utils/space');
 var QuestionAPI = require('../../api/utils/question');
 var FormulationActions = {
   addFormulation(formulation){
-  	console.log("Setting Formulation");
     Dispatcher.dispatch({
       type: FormulationConstants.ADD_FORMULATION,
       formulation: formulation

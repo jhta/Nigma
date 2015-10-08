@@ -17,6 +17,7 @@ function _setAnswer(answer) {
 
 function _addNewAnswer() {
   _answer = new Answer();
+  console.log("Tryigin to set _answer", _answer);
 }
 
 function _validateAnswers(answers, variables) {
@@ -74,7 +75,7 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAnswers() {
+  getAnswer() {
     return _answer;
   },
 

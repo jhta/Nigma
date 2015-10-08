@@ -11,6 +11,7 @@ class Answer {
     this.commonErrors = [];
     this._id = uniqid();
     this.code = null;
+    console.log(this);
   }
 
   addCommonError() {

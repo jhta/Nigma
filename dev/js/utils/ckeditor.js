@@ -113,7 +113,8 @@ const CKEditor = {
     //return (window.TeX)? window.TeX:"";
   },
   setValue(text) {
-    CKEDITOR.instances.editor.setData(text)
+    if(CKEDITOR.instances.editor != null)
+      CKEDITOR.instances.editor.setData(text)
   }
 }
 

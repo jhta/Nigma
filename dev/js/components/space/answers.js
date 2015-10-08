@@ -5,7 +5,7 @@ const AlertMessage = require('../util/alert');
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
-      answer: AnswerStore.getAnswers(),
+      answer: AnswerStore.getAnswer(),
       validating: false
     };
   },
@@ -48,7 +48,7 @@ var AnswerContainer = React.createClass({
 
   _handleChange() {
     this.setState({
-      answers: AnswerStore.getAnswers(),
+      answer: AnswerStore.getAnswer(),
       validating: false
     });
 
@@ -61,7 +61,6 @@ var AnswerContainer = React.createClass({
 
 
   render() {
-
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
@@ -134,12 +133,21 @@ AnswerContainer.Answer = React.createClass({
 });
 
 AnswerContainer.Answer.GeneralInformation = React.createClass({
+
+  precision: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+
   render() {
     return (
       <div className="row">
         <div className="input-field col s4">
           <input type="checkbox" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
           <label htmlFor={`showLabelCheckBox`} >Mostrar etiquetas</label>
+        </div>
+        <div className="input-field col s3">
+          <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange}>
+            <option value="" disabled>Precisión</option>
+            { this.precision.map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>) }
+          </select>
         </div>
       </div>
     );
@@ -148,13 +156,7 @@ AnswerContainer.Answer.GeneralInformation = React.createClass({
 
 AnswerContainer.Answer.Form = React.createClass({
 
-  _generatePresicion() {
-    var precision = [];
-    for (var i = 0; i < 16; i++) {
-      precision.push(i);
-    }
-    return precision;
-  },
+
 
   render() {
     return (
@@ -169,14 +171,7 @@ AnswerContainer.Answer.Form = React.createClass({
           <label htmlFor={`textbox_answer_correct_value${this.props.index}`}>Valor correcto</label>
         </div>
 
-        <div className="input-field col s2">
-          <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange}>
-            <option value="" disabled>Precisión</option>
-            {
-              this._generatePresicion().map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>)
-            }
-          </select>
-        </div>
+
 
         <div className="input-field col s2">
           <input type="checkbox" id={`checkbox_answer${this.props.index}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />

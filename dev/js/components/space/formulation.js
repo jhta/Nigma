@@ -30,7 +30,6 @@ const Formulation = React.createClass({
     this.setState({
       html: FormulationStore.getFormulation()
     });
-    console.log("Executed!!!");
   },
 
   componentDidMount() {
@@ -74,7 +73,6 @@ const Formulation = React.createClass({
   },
 
   render() {
-    console.log("Setting => ", this.state.html);
     return (
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">
