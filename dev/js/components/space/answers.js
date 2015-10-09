@@ -94,6 +94,20 @@ var AnswerContainer = React.createClass({
         });
       }
     }
+    var addCommonError = (answerNames) => {
+      var answer = this.state.answer;
+      if(answerNames != null && answerNames.length > 0) {
+        var value = {
+          values: {},
+          message: ""
+        };
+        answerNames.forEach((answerName) => (value.values[answerName] = ""));
+        answer.commonErrors.push(value);
+        this.setState({
+          answer: answer
+        });
+      }
+    }
     switch(data.action) {
       case "addAnswer":
         addAnswer(data.answerName);
@@ -107,6 +121,9 @@ var AnswerContainer = React.createClass({
       case "addCorrectValue":
         addCorrectValue(data.answerNames)
         break;
+      case "addCommonError":
+        addCommonError(data.answerNames)
+        break;
     }
 
   },
@@ -114,6 +131,7 @@ var AnswerContainer = React.createClass({
 
 
   render() {
+    console.log("State => ", this.state.answer);
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
@@ -166,6 +184,7 @@ AnswerContainer.Answer = React.createClass({
     const target = evt.target;
     const path = target.getAttribute('data-path');
     var value = this._convertToNativeType(target.value);
+    console.log("Chagin ", path);
     this.props.handleChange(path, value);
   },
 
@@ -182,6 +201,7 @@ AnswerContainer.Answer = React.createClass({
       <div className="Formulation-AnswerContainer-Answer">
         <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
         <AnswerContainer.Answer.CorrectValues answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+        <AnswerContainer.Answer.CommonErrors answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
       </div>
     );
   }
@@ -277,7 +297,6 @@ AnswerContainer.Answer.CorrectValues = React.createClass({
 
   render() {
     var answer = this.props.answer;
-    console.log(answer);
     return (
       <div className="correct-values-container" >
         <h3 className="title">Valores correctos</h3>
@@ -318,58 +337,62 @@ AnswerContainer.Answer.CorrectValues.Value = React.createClass({
   }
 });
 
-AnswerContainer.Answer.Form = React.createClass({
 
+AnswerContainer.Answer.CommonErrors = React.createClass({
 
-
-  render() {
-    return (
-      <div className="row">
-        <div className="input-field col s4">
-          <input id={`textbox_answer_name${this.props.index}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
-          <label htmlFor={`textbox_answer_name${this.props.index}`}>Etiqueta</label>
-        </div>
-
-        <div className="input-field col s4">
-          <input  id={`textbox_answer_correct_value${this.props.index}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
-          <label htmlFor={`textbox_answer_correct_value${this.props.index}`}>Valor correcto</label>
-        </div>
-        <div className="input-field col s2">
-          <input type="checkbox" id={`checkbox_answer${this.props.index}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
-          <label htmlFor={`checkbox_answer${this.props.index}`} >Mostrar</label>
-        </div>
-      </div>
-    )
-  }
-});
-
-AnswerContainer.Answer.CommonError = React.createClass({
-  _deleteCommonError() {
-    AnswerActions.deleteCommonErrorQuestion(this.props.answer, this.props.answerIndex, this.props.index);
+  _addCommonError() {
+    this.props.answerActions({
+      action: "addCommonError",
+      answerNames: this.props.answer.names
+    })
   },
 
   render() {
+    var answer = this.props.answer;
     return (
-      <li className="collection-item">
-        <div className="row">
-          <div className="input-field col s3">
-            <input  id={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`} value={this.props.error.value} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.value`} type="text"/>
-            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`}>Valor del error</label>
-          </div>
-          <div className="input-field col s8">
-            <input  id={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`} value={this.props.error.message} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.message`} type="text"/>
-            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Mensaje de retroalimentacion</label>
-          </div>
-          <div className="col s1">
-            <span className="actions-container">
-              <span className="material-icons" onClick={this._deleteCommonError}>delete</span>
-            </span>
-          </div>
+      <div className="common-errors-container" >
+        <h3 className="title">Errores comunes</h3>
+        {
+          answer.commonErrors.map((commonError, index) =>  <AnswerContainer.Answer.CommonErrors.Value  index={index} commonError={commonError} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+        }
+        <div className="actions">
+          <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCommonError}><i className="material-icons">add</i></a>
         </div>
-
-      </li>
+        <hr />
+      </div>
     );
   }
+});
+
+AnswerContainer.Answer.CommonErrors.Value = React.createClass({
+  render() {
+    console.log("Common", this.props.commonError);
+    var value = this.props.commonError.values;
+    var answerNames = this.props.answerNames;
+    return (
+      <div>
+        {
+          answerNames.map(
+            (answerName, index) =>
+              (
+                <div className="common-error" key={index}>
+                  <div className="input-field">
+                    <input id={`textbox_common_error_${answerName}_${this.props.index}`} value={value[answerName]} onChange={this.props.handleChange} type="text" data-path={`commonErrors.${this.props.index}.values.${answerName}`}/>
+                    <label htmlFor={`textbox_common_error_${answerName}_${this.props.index}`}>{answerName}</label>
+                  </div>
+                </div>
+              )
+
+          )
+        }
+        <div className="input-field">
+          <input id={`textbox_common_error_message_${this.props.index}`} value={this.props.commonError.message} onChange={this.props.handleChange} type="text" data-path={`commonErrors.${this.props.index}.message`}/>
+          <label htmlFor={`textbox_common_error_message_${this.props.index}`}>Mensaje de retroalimentacion</label>
+        </div>
+      </div>
+    );
+  }
+
 });
 
 AnswerContainer.Validation = React.createClass({
