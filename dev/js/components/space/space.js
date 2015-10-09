@@ -18,6 +18,7 @@ const MenuStore = require("../../stores/menu-store");
 window.VariableStore = require('../../stores/space/variable-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
