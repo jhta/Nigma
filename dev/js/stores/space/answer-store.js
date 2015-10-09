@@ -17,7 +17,10 @@ function _setAnswer(answer) {
 
 function _addNewAnswer() {
   _answer = new Answer();
-  console.log("Tryigin to set _answer", _answer);
+}
+
+function _addAnswer(answerName) {
+  _answer.names.push(answerName)
 }
 
 function _validateAnswers(answers, variables) {
@@ -116,7 +119,10 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       _loadAnswers(action.answers)
       AnswerStore.emitChange();
       break;
-
+    case AnswerConstants.ADD_ANSWER:
+      _addAnswer(action.answerName)
+      AnswerStore.emitChange();
+      break;
     default:
   }
 });

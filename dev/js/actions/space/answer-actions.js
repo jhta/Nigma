@@ -53,6 +53,12 @@ var AnswerActions = {
       type: AnswerConstants.LOAD_ANSWERS,
       answers: answersJson
     });
+  },
+  addAnswer(answerName) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.ADD_ANSWER,
+      answerName: answerName
+    });
   }
 }
 

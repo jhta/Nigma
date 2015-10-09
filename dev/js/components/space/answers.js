@@ -11,7 +11,7 @@ var AnswerContainer = React.createClass({
   },
 
 
-  _changeAnswer(index, path, value) {
+  _changeAnswer(path, value) {
 
     var objectPath = path.split('.') || [];
 
@@ -19,7 +19,7 @@ var AnswerContainer = React.createClass({
       return;
 
     var answer = this.state.answer;
-    var item = answer[index];
+    var item = answer;
 
     for(var i = 0; i < objectPath.length -1; i++) {
       var pathValue = objectPath[i];
@@ -57,6 +57,45 @@ var AnswerContainer = React.createClass({
   _addNewAnswer() {
     AnswerActions.addNewAnswer();
   },
+  answerBasicActions(data) {
+    console.log(data);
+    var addAnswer = (answername) => {
+      var answer = this.state.answer;
+      if(answername != null && answername != "")
+        answer.names.push(answername);
+      this.setState({
+        answer: answer
+      });
+    }
+    var editAnswer = (index, answername) => {
+      var answer = this.state.answer;
+      if(answername != null && answername != "")
+        answer.names[index] = answername;
+      this.setState({
+        answer: answer
+      });
+    }
+    var deleteAnswer= (index) => {
+      var answer = this.state.answer;
+      if(index != null && !isNaN(index))
+        answer.names.splice(index, 1)
+      this.setState({
+        answer: answer
+      });
+    }
+    switch(data.action) {
+      case "addAnswer":
+        addAnswer(data.answerName);
+        break;
+      case "editAnswer":
+        editAnswer(data.index, data.answerName);
+        break;
+      case "deleteAnswer":
+        deleteAnswer(data.index)
+        break;
+    }
+
+  },
 
 
 
@@ -67,7 +106,7 @@ var AnswerContainer = React.createClass({
         <AlertMessage data={AnswerStore.getValidationOutPut()}/>
         {
           this.state.answer != null ?
-            <AnswerContainer.Answer answer={this.state.answer}  />
+            <AnswerContainer.Answer answer={this.state.answer} handleChange={this._changeAnswer} answerActions={this.answerBasicActions} />
             :
             <div className="empty-text" onClick={this._addNewAnswer}>No hay respuestas para la pregunta, click aquí para agregar una nueva</div>
         }
@@ -113,7 +152,7 @@ AnswerContainer.Answer = React.createClass({
     const target = evt.target;
     const path = target.getAttribute('data-path');
     var value = this._convertToNativeType(target.value);
-    this.props.handleChange(this.props.index, path, value);
+    this.props.handleChange(path, value);
   },
 
   _deleteQuestion() {
@@ -126,32 +165,92 @@ AnswerContainer.Answer = React.createClass({
 
   render() {
     return (
-      <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange}/>
+      <div className="Formulation-AnswerContainer-Answer">
+        <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+      </div>
     );
   }
 
 });
 
 AnswerContainer.Answer.GeneralInformation = React.createClass({
+  getInitialState() {
+    return {newAnswerName: ""};
+  },
 
+  mixins: [React.addons.LinkedStateMixin],
   precision: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+
+  _addAnswer() {
+    this.props.answerActions({
+      answerName: this.state.newAnswerName,
+      action: "addAnswer"
+    })
+    this.setState({
+      newAnswerName: ""
+    });
+  },
+
 
   render() {
     return (
-      <div className="row">
-        <div className="input-field col s4">
-          <input type="checkbox" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
-          <label htmlFor={`showLabelCheckBox`} >Mostrar etiquetas</label>
+      <div className="general-information">
+        <div className="">
+            <input type="checkbox" className="col s3" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
+            <label htmlFor={`showLabelCheckBox`} className="col s4">Incluir etiquetas</label>
         </div>
-        <div className="input-field col s3">
-          <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange}>
-            <option value="" disabled>Precisión</option>
-            { this.precision.map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>) }
-          </select>
+        <div className="">
+          <label htmlFor={`questionPrecision`} className="col s4">Precisión decimal exigida</label>
+          <div className="col s3">
+            <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange} id="questionPrecision">
+              <option value="" disabled>Precisión decimal exigida</option>
+              { this.precision.map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>) }
+            </select>
+          </div>
+        </div>
+        <div className="row">
+          <div className="input-field col s6">
+            <input id={`textbox_answer_name`} valueLink={this.linkState('newAnswerName')} type="text"/>
+            <label htmlFor={`textbox_answer_name`}>Agregar respuesta</label>
+          </div>
+          <div className="col s1">
+            <a className="btn-floating btn-medium waves-effect waves-light green create-btn" onClick={this._addAnswer}><i className="material-icons">add</i></a>
+          </div>
+          <div className="col s5">
+            <div className="answers-names-container">
+              {
+                this.props.answer.names.map((answerName, index) => <AnswerContainer.Answer.GeneralInformation.AnswerName index={index} name={answerName} key={index} handleChange={this.props._handleChange} answerActions={this.props.answerActions}/>)
+              }
+            </div>
+          </div>
+        </div>
+        <hr />
+      </div>
+    );
+  }
+});
+
+AnswerContainer.Answer.GeneralInformation.AnswerName = React.createClass({
+  _deleteQuestion() {
+    this.props.answerActions({
+      action: "deleteAnswer",
+      index: this.props.index
+    });
+  },
+  render() {
+    return (
+      <div className="answer-name">
+        <div className="name">
+          {this.props.name}
+        </div>
+        <div className="actions">
+          <i className="material-icons">edit</i>
+          <i className="material-icons" onClick={this._deleteQuestion}>delete</i>
         </div>
       </div>
     );
   }
+
 });
 
 AnswerContainer.Answer.Form = React.createClass({
@@ -170,9 +269,6 @@ AnswerContainer.Answer.Form = React.createClass({
           <input  id={`textbox_answer_correct_value${this.props.index}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
           <label htmlFor={`textbox_answer_correct_value${this.props.index}`}>Valor correcto</label>
         </div>
-
-
-
         <div className="input-field col s2">
           <input type="checkbox" id={`checkbox_answer${this.props.index}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
           <label htmlFor={`checkbox_answer${this.props.index}`} >Mostrar</label>
