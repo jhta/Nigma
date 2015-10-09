@@ -75,13 +75,24 @@ var AnswerContainer = React.createClass({
         answer: answer
       });
     }
-    var deleteAnswer= (index) => {
+    var deleteAnswer = (index) => {
       var answer = this.state.answer;
       if(index != null && !isNaN(index))
         answer.names.splice(index, 1)
       this.setState({
         answer: answer
       });
+    }
+    var addCorrectValue = (answerNames) => {
+      var answer = this.state.answer;
+      if(answerNames != null && answerNames.length > 0) {
+        var value = {};
+        answerNames.forEach((answerName) => (value[answerName] = ""));
+        answer.correctValues.push(value);
+        this.setState({
+          answer: answer
+        });
+      }
     }
     switch(data.action) {
       case "addAnswer":
@@ -92,6 +103,9 @@ var AnswerContainer = React.createClass({
         break;
       case "deleteAnswer":
         deleteAnswer(data.index)
+        break;
+      case "addCorrectValue":
+        addCorrectValue(data.answerNames)
         break;
     }
 
@@ -167,6 +181,7 @@ AnswerContainer.Answer = React.createClass({
     return (
       <div className="Formulation-AnswerContainer-Answer">
         <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+        <AnswerContainer.Answer.CorrectValues answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
       </div>
     );
   }
@@ -250,7 +265,57 @@ AnswerContainer.Answer.GeneralInformation.AnswerName = React.createClass({
       </div>
     );
   }
+});
 
+AnswerContainer.Answer.CorrectValues = React.createClass({
+  _addCorrectValue() {
+    this.props.answerActions({
+      action: "addCorrectValue",
+      answerNames: this.props.answer.names
+    })
+  },
+
+  render() {
+    var answer = this.props.answer;
+    console.log(answer);
+    return (
+      <div className="correct-values-container" >
+        <h3 className="title">Valores correctos</h3>
+        {
+          answer.correctValues.map((correctValue, index) =>  <AnswerContainer.Answer.CorrectValues.Value  index={index} correctValue={correctValue} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+        }
+        <div className="actions">
+          <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCorrectValue}><i className="material-icons">add</i></a>
+        </div>
+        <hr />
+      </div>
+    );
+  }
+});
+
+AnswerContainer.Answer.CorrectValues.Value = React.createClass({
+  render() {
+    var value = this.props.correctValue;
+    var answerNames = this.props.answerNames;
+    return (
+      <div>
+        {
+          answerNames.map(
+            (answerName, index) =>
+              (
+                <div className="correct-value" key={index}>
+                  <div className="input-field">
+                    <input id={`textbox_correct_value_${answerName}_${this.props.index}`} value={value[answerName]} onChange={this.props.handleChange} type="text" data-path={`correctValues.${this.props.index}.${answerName}`}/>
+                    <label htmlFor={`textbox_correct_value_${answerName}_${this.props.index}`}>{answerName}</label>
+                  </div>
+                </div>
+              )
+
+          )
+        }
+      </div>
+    );
+  }
 });
 
 AnswerContainer.Answer.Form = React.createClass({

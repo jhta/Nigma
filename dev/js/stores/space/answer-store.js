@@ -11,9 +11,6 @@ var _answer = null;
 var _validationOutput = null;
 
 
-function _setAnswer(answer) {
-  _answer = answer;
-}
 
 function _addNewAnswer() {
   _answer = new Answer();
@@ -23,18 +20,18 @@ function _addAnswer(answerName) {
   _answer.names.push(answerName)
 }
 
-function _validateAnswers(answers, variables) {
-  _setAnswers(answers);
+function _validateAnswers(answer, variables) {
+  _loadAnswer(answer);
   _validationOutput = {error: false, messages: []};
-  for(var i = 0; i < _answers.length; i++) {
-    var answer = answers[i];
-    var validation = answer.isValid(variables);
-    _validationOutput.error = _validationOutput.error || validation.error;
-    _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
-  }
-  if (!_validationOutput.error){
-    _validationOutput.messages = ["Respustas validadas correctamente"];
-  }
+  // for(var i = 0; i < _answers.length; i++) {
+  //   var answer = answers[i];
+  //   var validation = answer.isValid(variables);
+  //   _validationOutput.error = _validationOutput.error || validation.error;
+  //   _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
+  // }
+  // if (!_validationOutput.error){
+  //   _validationOutput.messages = ["Respustas validadas correctamente"];
+  // }
   console.log(_validationOutput);
 
 }
@@ -60,9 +57,9 @@ function _addCommonError(answer, answerIndex) {
   }
 }
 
-function _loadAnswers(jsonAnswer) {
-  if(jsonAnswer != null)
-    _answer = Answer.createFromResponse(jsonAnswer)
+function _loadAnswer(answer) {
+  if(answer != null)
+    _answer = Answer.createFromResponse(answer)
 }
 
 var AnswerStore = assign({}, EventEmitter.prototype, {
@@ -107,20 +104,9 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       _removeAnswer(action.answer, action.index)
       AnswerStore.emitChange();
       break;
-    case AnswerConstants.DELETE_COMMON_ERROR:
-      _removeAnswerCommonError(action.answer,  action.answerIndex ,action.index)
-      AnswerStore.emitChange();
-      break;
-    case AnswerConstants.ADD_COMMON_ERROR:
-      _addCommonError(action.answer,  action.answerIndex)
-      AnswerStore.emitChange();
-      break;
-    case AnswerConstants.LOAD_ANSWERS:
-      _loadAnswers(action.answers)
-      AnswerStore.emitChange();
-      break;
-    case AnswerConstants.ADD_ANSWER:
-      _addAnswer(action.answerName)
+
+    case AnswerConstants.SET_ANSWER:
+      _loadAnswer(action.answer)
       AnswerStore.emitChange();
       break;
     default:

@@ -97,7 +97,7 @@ const Space = React.createClass({
     }
     FormulationActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
-    AnswerActions.loadAnswers(question.data.answers);
+    AnswerActions.setAnswer(question.data.answer);
   },
 
   showExpresions(flag = true) {
@@ -148,11 +148,11 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    var answers = AnswerStore.getAnswers();
-    answers.forEach( (answer) => delete answer["code"])
+    var answer = AnswerStore.getAnswer();
+    delete answer["code"]
     var data = {
       variables: VariableStore.getVariables().text,
-      answers: answers,
+      answer: answer,
       formulation: FormulationStore.getFormulation()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)

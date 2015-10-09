@@ -5,7 +5,7 @@ const uniqid = require('uniqid');
 class Answer {
   constructor() {
     this.names = [];
-    this.correctValue = [];
+    this.correctValues = [];
     this.showLabel = true;
     this.precision = 0;
     this.commonErrors = [];
