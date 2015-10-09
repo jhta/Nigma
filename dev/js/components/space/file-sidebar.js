@@ -45,7 +45,7 @@ const FileSideBar = React.createClass({
     if(!this.props.questions) return null;
     return this.props.questions.map((question, index) => {
       return (
-        <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
+        <FileSideBar.Question question={question} onSetQuestion={this.props.onSetQuestion} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
       )
     })
   },
@@ -121,39 +121,14 @@ FileSideBar.Form = React.createClass({
   }
 });
 
-FileSideBar.Item = React.createClass({
-  changeRoute() {
-    const item = this.props.item;
-    this.props.onChangeRoute(item.name, item.father);
-    console.log(item);
-    if(item.isFolder) {
-      this.props.loadItems(item.url);
-    }
-  },
-
-  onSetQuestion() {
-    this.props.onSetQuestion(this.props.item);
-  },
-
-  render() {
-    const item = this.props.item;
-    const icon = item.isFolder? "folder" : "description";
-    return (
-      <li className="FileSideBar-Item" onClick={this.onSetQuestion}>
-        <div className="FileSideBar-item-left">
-          <i className="material-icons">{icon}</i>
-          {item.name}
-        </div>
-        <div className="FileSideBar-Item-right">
-          <i className="material-icons">language</i>
-          <i className="fa fa-times"></i>
-        </div>
-      </li>
-    )
-  }
-});
-
 FileSideBar.Folder = React.createClass({
+
+  getInitialState() {
+    return {
+      showInput: false,
+    };
+  },
+
   deleteFolder(e) {  
     e.stopPropagation();
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
@@ -164,24 +139,57 @@ FileSideBar.Folder = React.createClass({
     this.props.openFolder(this.props.folder);
   },
 
+  shareFolder(e) {
+    e.preventDefault();
+    const email = this.refs.email.getDOMNode().value;
+    MenuActions.shareFolder(this.props.folderIndex, this.props.folder, email);
+    this.refs.email.getDOMNode().value = '';
+  },
+
+  onOpenInput(e) {
+    e.preventDefault();
+    this.setState({
+      showInput: !this.state.showInput,
+    });
+  },
+
+  renderFormShare() {
+    if(this.state.showInput) {
+      return (
+        <form onSubmit={this.shareFolder}>
+          <input ref="email" type="email"/>
+        </form>
+      );
+    }
+    return null;
+  },
+
   render() {
     const folder = this.props.folder;
     return (
-      <li className="FileSideBar-Item">
-        <div className="FileSideBar-item-left">
-          <i className="material-icons">folder</i>
-          <span onClick={this.openFolder}>{folder.name}</span>
+      <li>
+        <div className="FileSideBar-Item">
+          <div className="FileSideBar-item-left">
+            <i className="material-icons">folder</i>
+            <span onClick={this.openFolder}>{folder.name}</span>
+          </div>
+          <div className="FileSideBar-Item-right">
+            <i className="material-icons" onClick={this.onOpenInput}>language</i>
+            <i className="fa fa-times" onClick={this.deleteFolder}></i>
+          </div>
         </div>
-        <div className="FileSideBar-Item-right">
-          <i className="material-icons">language</i>
-          <i className="fa fa-times" onClick={this.deleteFolder}></i>
-        </div>
+        {this.renderFormShare()}
       </li>
     )
   }
 });
 
 FileSideBar.Question = React.createClass({
+  getInitialState() {
+    return {
+      showInput: false,
+    };
+  },
   deleteQuestion(e) {  
     e.stopPropagation();
     MenuActions.deleteQuestion(this.props.questionIndex, this.props.question);
@@ -191,20 +199,48 @@ FileSideBar.Question = React.createClass({
     e.stopPropagation();
     this.props.onSetQuestion(this.props.question);
   },
+  
+  shareQuestion(e) {
+    e.preventDefault();
+    const email = this.refs.email.getDOMNode().value;
+    MenuActions.shareQuestion(this.props.questionIndex, this.props.question, email);
+    this.refs.email.getDOMNode().value = '';
+  },
+
+  onOpenInput(e) {
+    e.preventDefault();
+    this.setState({
+      showInput: !this.state.showInput,
+    });
+  },
+  renderFormShare() {
+    if(this.state.showInput) {
+      return (
+        <form onSubmit={this.shareQuestion}>
+          <input ref="email" type="email"/>
+        </form>
+      );
+    }
+    return null;
+  },
 
   render() {
     const {question} = this.props;
     return (
-      <li className="FileSideBar-Item">
-        <div className="FileSideBar-item-left" onClick={this.onSetQuestion}>
-          <i className="material-icons">description</i>
-          {question.name}
+      <li>
+        <div className="FileSideBar-Item">
+          <div className="FileSideBar-item-left" onClick={this.onSetQuestion}>
+            <i className="material-icons">description</i>
+            {question.name}
+          </div>
+          <div className="FileSideBar-Item-right">
+            <i className="material-icons" onClick={this.onOpenInput}>language</i>
+            <i className="fa fa-times" onClick={this.deleteQuestion}></i>
+          </div>
         </div>
-        <div className="FileSideBar-Item-right">
-          <i className="fa fa-times" onClick={this.deleteQuestion}></i>
-        </div>
+        {this.renderFormShare()}
       </li>
-    )
+    );
   }
 });
 

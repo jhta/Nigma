@@ -90,7 +90,32 @@ var MenuActions = {
     });
   },
 
-  shareFolder(folderIndex, folder) {
+  shareQuestion(questionIndex, question, email) {
+    const data =  {
+      user: {
+        email: email,
+      },
+      questionId: question._id,
+    }
+    QuestionAPI.shareQuestion(data, (err, res) => {
+      if (!err) {
+        const type = MenuActionConstants.SHARE_ITEM;
+        Dispatcher.dispatch({
+          type,
+          question,
+          questionIndex
+        });
+      }
+    });
+  },
+
+  shareFolder(folderIndex, folder, email) {
+    const data =  {
+      user: {
+        email: email,
+      },
+      folderId: folder._id,
+    }
     FolderAPI.shareFolder(data, (err, res) => {
       if (!err) {
         const type = MenuActionConstants.SHARE_FOLDER;

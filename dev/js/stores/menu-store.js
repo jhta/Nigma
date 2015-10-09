@@ -60,6 +60,15 @@ function _shareFolder(folderIndex, folder) {
   }
 }
 
+function _shareQuestion(QuestionIndex, question) {
+  console.log(question);
+  debugger
+  console.log("AGGGGHHHH");
+  // if (_rootFolder.questions[QuestionIndex].id == question.id) {
+  //   _rootFolder.questions[QuestionIndex]
+  // } 
+}
+
 var MenuStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -78,6 +87,9 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 
   getRootFolder(){
     return _rootFolder;
+  },
+  getFolders() {
+    return _folders;
   }
 });
 
@@ -112,6 +124,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case MenuActionsConstants.SHARE_FOLDER:
       _shareFolder(action.folderIndex, action.folder);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.SHARE_QUESTION:
+      _shareQuestion(action.QuestionIndex, action.question);
       MenuStore.emitChange();
       break;
     default:
