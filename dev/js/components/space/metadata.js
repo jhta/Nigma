@@ -4,9 +4,10 @@ const {Tabs, Tab} = mui;
 const ThemeMixin  = require("../../mixins/ui-theme");
 
 
+
 const Answers = React.createClass({
 
-  mixins: [ThemeMixin],
+  mixins: [React.addons.LinkedStateMixin,ThemeMixin],
 
   getInitialState(){
   	return {
@@ -14,28 +15,31 @@ const Answers = React.createClass({
   		description:'',
   		publisher:'',
   		coverage:'',
+      idioma:'espaniol'
   	};
   },
 
   addDublinCore(){
+
+
   
   	var dublinFormat = {
-  		'title': '<dc:title>'+ 'title' +'</dc:title>',  // Pregunta 1
-  		'creator': '<dc:creator>'+  'creator' +'</dc:creator>', // juanito alimaña
-  		'contributor':'<dc:contributor>'+ 'contributor' +'</dc:contributor>',  //shared?
-  		'type': '<dc:type>'+ 'type' +'</dc:type>',  // ??
-		'format': '<dc:format>'+ 'format' +'</dc:format>',  //html js
-		'identifier': '<dc:identifier'>+ 'identifieer' +'</dc:identifier>',  // id database
-		'source': '<dc:source>'+ 'source' +'</dc:source>',   // Libro?
-		'language':'<dc:language>'+ 'language' +'</dc:language>',  // opcional?
-		'relation':'<dc:relation>'+ 'relation' +'</dc:relation>',  // asociado a otra?
+  		'title': '<dc:title>'+ 'title' +'</dc:title>',   
+  		'creator': '<dc:creator>'+  'creator' +'</dc:creator>', 
+  		'contributor':'<dc:contributor>'+ 'contributor' +'</dc:contributor>',  
+  		'type': '<dc:type>'+ 'Exercise' +'</dc:type>',  
+		  'format': '<dc:format>'+ 'HTML' +'</dc:format>',  
+		  'identifier': '<dc:identifier'>+ 'identifieer' +'</dc:identifier>',  
+		  'source': '<dc:source>'+ 'source' +'</dc:source>', 
+	    'language':'<dc:language>'+ React.findDOMNode(this.refs.idioma).value +'</dc:language>',  
+		  'relation':'<dc:relation>'+ 'relation' +'</dc:relation>', 
   		'keywords':'<dc:subject> ' + this.state.keywords + '</dc:subject>',
-  		'description':'<dc:description' + this.state.description + '</dc:description',
+  		'description':'<dc:description>' + this.state.description + '</dc:description>',
   		'publisher': '<dc:publisher>' +this.state.publisher + '</dc:publisher>',
-  		'coverage': '<dc:coverage>' + this.state.coverage + '</dc:coverage>',
+  		'coverage': '<dc:coverage>' + React.findDOMNode(this.refs.cobertura).value + '</dc:coverage>',
   		'date': '<dc:date>' + React.findDOMNode(this.refs.date).value +' <dc:date>',
   		'rights':'<dc:rights>'+ 'rights' +'</dc:rights>'  //cc
-	};
+	  };
   console.log(dublinFormat);
   },
 
@@ -87,66 +91,82 @@ const Answers = React.createClass({
 
   },
 
+  initializate(){
 
+    $('.caret').hide();
 
-  handleChange(event) {
-  	switch (event.target.id) {
-  		case "keywords":
-  		this.setState({keywords: event.target.value});
-  		break;
+    $('.datepicker').pickadate({
+      selectMonths: true,
+      selectYears: 15 
+   });
 
-  		case "description":
-  		this.setState({description: event.target.value});
-  		break;
+    $(document).ready(function() {
+    $('select').material_select();
+    });
 
-  		case "publisher":
-  		this.setState({publisher: event.target.value});
-  		break;
-
-  		case "coverage":
-  		this.setState({coverage: event.target.value});
-  		break;
-
-
-  		default:
-  	}	
   },
 
-  render() {
-  	$('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15 // Creates a dropdown of 15 years to control year
- 	 });
 
-  	var keywords    = this.state.keywords;
-  	var description = this.state.description;
-  	var publisher   = this.state.publisher
-  	var coverage    = this.state.coverage;      
+  setLanguage(language){
+    this.setState({
+      idioma: language
+    });
+  },
+
+  setCoverave(coverage){
+    this.setState({
+      coverage: coverage
+    });
+  },
+
+
+
+  render() {
+
+
  
+    this.initializate();
        
     return (
       <div className="Formulation u-tab-content">
         <div className="input-field col s4">
-          <input id="keywords"  value={keywords}  onChange={this.handleChange} data-path="name" type="text"/>
+          <input id="keywords"    valueLink={this.linkState('keywords')}   data-path="name" type="text"/>
           <label htmlFor="keywords">Palabras Claves</label>
         </div>
         <div className="input-field col s4">
-          <input id="description"  value={description} onChange={this.handleChange}  data-path="name" type="text"/>
+          <input id="description"   valueLink={this.linkState('description')}  data-path="name" type="text"/>
           <label htmlFor="description">Descripción</label>
         </div>
         <div className="input-field col s4">
-          <input id="date" ref='date' type="date" className="datepicker" />
+          <input id="date" ref='date' type="date"  className="datepicker" />
           <label htmlFor="date">Fecha</label>
+        </div>
+
+        <div  className="input-field col s4">
+          <select ref="idioma">
+            <option value="Español" >Español</option>
+            <option value="Inglés" >Inglés</option>
+            <option value="Portugués" >Portugués</option>
+          </select>
+          <label>Idioma</label>
+        </div>
+
+         <div className="input-field col s4">
+          <select ref="cobertura">
+            <option value="ninguna">ninguna</option>
+            <option value="Ed. Preescolar">Ed. Preescolar</option>
+            <option value="Ed. Primaria">Ed. Primaria</option>
+            <option value="Ed. Secundaria" >Ed. Secundaria</option>
+            <option value="Ed. Superior" >Ed. Superior</option>
+          </select>
+          <label>Cobertura</label>
         </div>
           
         <div className="input-field col s4">
-          <input id="publiser"  onChange={this.handleChange}  data-path="name" type="text"/>
+          <input id="publiser"  onChange={this.handleChange}  valueLink={this.linkState('publisher')}  data-path="name" type="text"/>
           <label htmlFor="publisher">Editor</label>
         </div>
-        <div className="input-field col s4">
-          <input id="coverage"  value={coverage} onChange={this.handleChange} data-path="name" type="text"/>
-          <label htmlFor="coverage">Cobertura</label>
-        </div>
+
 	     <div className='dropdown-button btn' data-activates='dropdown2'>Añadir metadatos</div>
 
 		  <ul id='dropdown2' className='dropdown-content'>

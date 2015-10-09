@@ -32,7 +32,9 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.extraPlugins = 'filebrowser';
 
-	config.filebrowserUploadUrl = '/uploader/upload.php';
+
+    config.filebrowserUploadUrl =  '../../js/utils/upload.js';
+
 
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';

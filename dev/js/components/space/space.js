@@ -9,6 +9,8 @@ const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+
 
 const SpaceActions = require('../../actions/space/space-actions');
 
