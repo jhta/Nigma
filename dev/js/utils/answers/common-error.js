@@ -5,10 +5,14 @@ class CommonError {
     this.message = "";
   }
 
-  isValid(variables) {
-    var output = ExpressionEvaluator.isEvaluable(this.values, variables);
-    if(output.error)
-      output.messages = `Error común, ${this.value}: ${output.messages}`
+  isValid(variables, answerNames) {
+    var output = {error: false, messages: []};
+    for(var j = 0; j < answerNames.length; j++) {
+      var answerName = answerNames[j];
+      var validation = ExpressionEvaluator.isEvaluable(this.values[answerName], variables);
+      output.error = output.error || validation.error;
+      output.messages = output.messages.concat(validation.messages);
+    }
     return output;
   }
 

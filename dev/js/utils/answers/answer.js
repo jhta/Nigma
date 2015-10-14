@@ -11,7 +11,6 @@ class Answer {
     this.commonErrors = [];
     this._id = uniqid();
     this.code = null;
-    console.log(this);
   }
 
   addCommonError() {
@@ -19,15 +18,15 @@ class Answer {
   }
 
   isValid(variables) {
+    console.log("Variables que llegan", variables);
     var output = {error: false, messages: []}
-    var evaluationOutput = ExpressionEvaluator.isEvaluable(this.correctValue, variables);
+
+    var evaluationOutput = this._validateCorrectValues(variables);
     var commonErrorValidation = this._validateCommonErrors(variables);
-    var labelValidation = this._validateConsistence(variables);
     var precisionValidation =  this._validatePrecision(variables);
 
     output = this._mergeErrors(output, evaluationOutput);
     output = this._mergeErrors(output, commonErrorValidation);
-    output = this._mergeErrors(output, labelValidation);
     output = this._mergeErrors(output, precisionValidation);
 
 
@@ -37,18 +36,12 @@ class Answer {
   _mergeErrors(output, validationOutput) {
     output.error = output.error || validationOutput.error;
     if(validationOutput.error){
-      output.messages.push(`Valor correcto de respuesta, ${this.correctValue}: ${validationOutput.messages[0]}`);
+      output.messages.push(`Valor correcto de respuesta, ${validationOutput.messages[0]}`);
     }
     return output;
   }
 
-  _validateConsistence(variables) {
-    if(this.showLabel && (this.name == "" || this.name == null)){
-       return {error: true, messages: ["La etiqueta no puede estar vacia"]};
-    } else {
-      return {error: false, messages: []};
-    }
-  }
+
 
   _validatePrecision(variables) {
     if(isNaN(this.precision)){
@@ -62,38 +55,56 @@ class Answer {
     var output = {error: false, messages: []};
     for(var i = 0; i < this.commonErrors.length; i++){
       var commonError = this.commonErrors[i];
-      var validation = commonError.isValid(variables);
+      var validation = commonError.isValid(variables, this.names);
       output.error = output.error || validation.error;
       output.messages = output.messages.concat(validation.messages);
     }
-    this._generateCode();
+    return output;
+  }
+
+  _validateCorrectValues(variables) {
+    var output = {error: false, messages: []};
+    for(var i = 0; i < this.correctValues.length; i++){
+      var correctValue = this.correctValues[i];
+      for(var j = 0; j < this.names.length; j++) {
+        var answerName = this.names[j];
+        var validation = ExpressionEvaluator.isEvaluable(correctValue[answerName], variables);
+        output.error = output.error || validation.error;
+        output.messages = output.messages.concat(validation.messages);
+      }
+    }
     return output;
   }
 
   _generateCode() {
-    var missconceptions = this.commonErrors.map((commonError) => ({"value": Variable.replaceVariables(commonError.value), "message": commonError.message}))
-    var codeText = [
-      `var correctValue = ${Variable.replaceVariables(this.correctValue)};`,
-      `switch(inputValue){`,
-        `case correctValue:`,
-          `console.log("You did it!");`,
-          `response = 'Correcto';`,
-          `answerError = false;`,
-          `break;`
-    ];
+    var codeText = [];
+    for(var i = 0; i < this.correctValues.length; i++) {
+      var assertCode = this.names.map((name) => Variable.replaceVariables(this.correctValues[i][name]) );
+      if(i == 0) {
+        codeText.push(`if(${assertCode.join(' && ')}) {`);
+      } else {
+        codeText.push(`else if(${assertCode.join(' && ')}) {`);
+      }
+      codeText.push(`console.log("You did it!");`);
+      codeText.push(`response = 'Correcto';`);
+      codeText.push(`answerError = false;`);
+
+      codeText.push(`}`);
+    }
     for(var i = 0; i < this.commonErrors.length; i++) {
       var commonError = this.commonErrors[i];
-      codeText.push(`case ${Variable.replaceVariables(commonError.value)}:`);
+      var failCode = this.names.map((name) => Variable.replaceVariables(commonError.values[name]) );
+      codeText.push(`else if (${failCode.join(" && ")}) {`);
       codeText.push(`console.log("You fail, ${commonError.message}");`);
       codeText.push(`response = '${commonError.message}';`);
       codeText.push(`error = true;`);
       codeText.push(`console.log("You fail, ${commonError.message}");`);
-      codeText.push(`break;`);
+      codeText.push("}");
+
     }
-    codeText.push(`default:`);
+    codeText.push(`else {`);
     codeText.push(`response = "Incorrecto!";`);
     codeText.push(`answerError = true;`);
-    codeText.push(`break;`);
     codeText.push("}");
     return this.code = codeText;
   }

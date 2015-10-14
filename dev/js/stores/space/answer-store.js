@@ -23,38 +23,15 @@ function _addAnswer(answerName) {
 function _validateAnswers(answer, variables) {
   _loadAnswer(answer);
   _validationOutput = {error: false, messages: []};
-  // for(var i = 0; i < _answers.length; i++) {
-  //   var answer = answers[i];
-  //   var validation = answer.isValid(variables);
-  //   _validationOutput.error = _validationOutput.error || validation.error;
-  //   _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
-  // }
-  // if (!_validationOutput.error){
-  //   _validationOutput.messages = ["Respustas validadas correctamente"];
-  // }
+  var validation = _answer.isValid(variables);
+  _validationOutput.error = _validationOutput.error || validation.error;
+  _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
+
+  if (!_validationOutput.error){
+    _validationOutput.messages = ["Respustas validadas correctamente"];
+  }
   console.log(_validationOutput);
 
-}
-
-function _removeAnswer(answer, index) {
-  var storeAnswer = _answers[index];
-  if(storeAnswer._id == answer._id){
-    _answers.splice(index,1);
-  }
-}
-
-function _removeAnswerCommonError(answer, answerIndex, index) {
-  var storeAnswer = _answers[answerIndex];
-  if(storeAnswer._id == answer._id){
-    _answers[answerIndex].commonErrors.splice(index,1);
-  }
-}
-
-function _addCommonError(answer, answerIndex) {
-  var storeAnswer = _answers[answerIndex];
-  if(storeAnswer._id == answer._id){
-    _answers[answerIndex].addCommonError();
-  }
 }
 
 function _loadAnswer(answer) {
