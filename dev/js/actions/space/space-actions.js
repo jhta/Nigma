@@ -2,11 +2,13 @@ const SpaceConstants = require('../../constants/space/space-constants');
 var Dispatcher = require('../../dispatchers/dispatcher');
 var SpaceApi = require('../../api/utils/space');
 var QuestionAPI = require('../../api/utils/question');
-var SpaceActions = {
-  previewQuestion(data) {
 
+var SpaceActions = {
+
+  previewQuestion(questionid, data) {
     SpaceApi.preview({
-      question: JSON.stringify(data)
+      question: JSON.stringify(data),
+      questionid
     }, (err, data) => {
       console.log(data);
       if(data.ok){
