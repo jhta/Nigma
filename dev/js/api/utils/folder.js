@@ -18,8 +18,8 @@ const FolderAPI = {
       method: API._REQUEST_METHOD.get
     },
     share: {
-      route: "/users/folders/:folderid",
-      method: AP._REQUEST_METHOD.post,
+      route: "/users/folders/:folderId",
+      method: API._REQUEST_METHOD.post,
     }
   },
   listFolders(data, cb){
@@ -62,7 +62,7 @@ const FolderAPI = {
       }
     });
   },
-  shareFolders(data, cb) {
+  shareFolder(data, cb) {
     const route = this._routes.share;
     API.callAjaxRequest(route, data, (err, res) => {
       if (err) {

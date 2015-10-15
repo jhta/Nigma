@@ -20,6 +20,7 @@ const MenuStore = require("../../stores/menu-store");
 window.VariableStore = require('../../stores/space/variable-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -39,6 +40,7 @@ const Space = React.createClass({
       history: [],
       historyString: [],
       currentQuestion: {},
+      sharedMode: false,
     }
   },
   componentDidMount() {
@@ -90,6 +92,26 @@ const Space = React.createClass({
     this.setState({dialogTeX: TeX});
   },
 
+  shareMode() {
+    let rootFolder;
+    if (!this.state.sharedMode) {
+      rootFolder = MenuStore.getRootSharedFolders();
+      console.log("nanananana");
+    } else {
+      rootFolder = MenuStore.getRootFolder();
+    }
+    console.log("fuuckk!! :/");
+    console.log(rootFolder);
+    this.setState({
+      sharedMode: !this.state.sharedMode,
+      root: rootFolder,
+      rootId: rootFolder.id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
+      currentFolderId: rootFolder.id,
+    })
+  },
+
   _previewQuestion() {
     console.log(SpaceStore.getFormulation());
     var data = {
@@ -111,9 +133,7 @@ const Space = React.createClass({
       history: this.state.history,
       historyString: this.state.historyString
     });
-
   },
-
   goBackFolder() {
     if(this.state.history.length >= 1) {
       const folder = this.state.history.pop();
@@ -157,6 +177,8 @@ const Space = React.createClass({
           goBackFolder={this.goBackFolder}
           isRoot={this.state.isRoot}
           onSetQuestion={this.setQuestion}
+          sharedMode={this.state.sharedMode}
+          onShareMode={this.shareMode}
         />
         <div className="Space">
           <div className="Space-inner">
