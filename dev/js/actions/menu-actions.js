@@ -51,7 +51,8 @@ var MenuActions = {
       if(!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          rootFolder: res.root_folder
+          rootFolder: res.root_folder,
+          shareFolder: res.root_shared_folders,
         });
       } else {
         

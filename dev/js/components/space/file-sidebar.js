@@ -65,16 +65,26 @@ const FileSideBar = React.createClass({
       return (<a href="javascript:void(0)" onClick={this.goBack}>Volver</a>)
     }
   },
+  renderForm() {
+    if (!this.props.sharedMode) {
+      return (<FileSideBar.Form rootId={this.props.rootId} root={this.props.root}/>);
+    }
+    return false;
+  },
+
   render() {
     return(
       <div className="FileSideBar z-depth-1">
+        <div className="FileSideBar-header">
+          <span onClick={() => {this.props.onShareMode()}}>Compartdos conmigo</span>
+        </div>
         <div className="FileSideBar-header">
           <i className="FileSideBar-icon material-icons left">view_headline</i>
           <span>{this.state.currentRoute}</span>
         </div>
         <div className="FileSideBar-body">
-          <FileSideBar.Form rootId={this.props.rootId} root={this.props.root}/>
           <ul className="FileSideBar-list">
+          {this.renderForm()}
           {this.renderGoBackButton()}
           {this.renderFolders()}      
           {this.renderQuestions()}
