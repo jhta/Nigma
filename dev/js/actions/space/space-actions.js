@@ -12,6 +12,7 @@ var SpaceActions = {
     }, (err, data) => {
       console.log(data);
       if(data.ok){
+        window.open(data.url);
         Dispatcher.dispatch({
           type: SpaceConstants.PREVIEW_QUESTION,
           response: data.ok
