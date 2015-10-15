@@ -56,6 +56,10 @@ function _addCommonError(answer, answerIndex) {
   }
 }
 
+function _loadAnswers(answers) {
+  _answers = answers.map((jsonAnswer) => Answer.createFromResponse(jsonAnswer))
+}
+
 var AnswerStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -106,6 +110,11 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       _addCommonError(action.answer,  action.answerIndex)
       AnswerStore.emitChange();
       break;
+    case AnswerConstants.LOAD_ANSWERS:
+      _loadAnswers(action.answers)
+      AnswerStore.emitChange();
+      break;
+
     default:
   }
 });

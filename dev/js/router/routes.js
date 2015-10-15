@@ -10,10 +10,13 @@ const Space = require('../components/space/space.js');
 const Routes = (
   <Route name="nigma" path="/" handler={Nigma}>
     <Route name="signin" path="login/:token" handler={SignIn} />
-    <Route name="space" path="space" handler={Space} />
+    <Route name="space" path="space" handler={Space} >
+    	<Route name="space-question" path=":questionId" handler={Space} />
+    </Route>
     <Route name="folders" path="folders" handler={FolderContainer} />
     <DefaultRoute 	handler={FolderContainer}/>
   </Route>
 )
+
 
 module.exports = Routes;

@@ -45,7 +45,7 @@ const FileSideBar = React.createClass({
     if(!this.props.questions) return null;
     return this.props.questions.map((question, index) => {
       return (
-        <FileSideBar.Question question={question} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute}/>
+        <FileSideBar.Question question={question} onSetQuestion={this.props.onSetQuestion} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute} />
       )
     })
   },
@@ -76,7 +76,7 @@ const FileSideBar = React.createClass({
           <FileSideBar.Form rootId={this.props.rootId} root={this.props.root}/>
           <ul className="FileSideBar-list">
           {this.renderGoBackButton()}
-          {this.renderFolders()}      
+          {this.renderFolders()}
           {this.renderQuestions()}
           </ul>
         </div>
@@ -154,7 +154,7 @@ FileSideBar.Item = React.createClass({
 });
 
 FileSideBar.Folder = React.createClass({
-  deleteFolder(e) {  
+  deleteFolder(e) {
     e.stopPropagation();
     MenuActions.deleteFolder(this.props.folderIndex, this.props.folder);
   },
@@ -182,7 +182,7 @@ FileSideBar.Folder = React.createClass({
 });
 
 FileSideBar.Question = React.createClass({
-  deleteQuestion(e) {  
+  deleteQuestion(e) {
     e.stopPropagation();
     MenuActions.deleteQuestion(this.props.questionIndex, this.props.question);
   },

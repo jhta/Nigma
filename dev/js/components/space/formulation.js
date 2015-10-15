@@ -4,7 +4,8 @@ const ContentEditable       = require("../utils/content-editable");
 const MaterializeComponents = require("../utils/material-components");
 const {Button} = MaterializeComponents;
 const Ckeditor = require('../../utils/ckeditor');
-var SpaceActions = require('../../actions/space/space-actions')
+const FormulationActions = require('../../actions/space/formulation-actions')
+
 //Custom components
 const ExpresionGenerator  = require("./expresion-generator");
 
@@ -17,8 +18,19 @@ const Formulation = React.createClass({
 
   getInitialState() {
     return {
-      html: "escribe algo...",
+      html: FormulationStore.getFormulation(),
     }
+  },
+
+  componentWillMount() {
+    FormulationStore.addChangeListener(this._onChange);
+  },
+
+  _onChange() {
+    this.setState({
+      html: FormulationStore.getFormulation()
+    });
+    console.log("Executed!!!");
   },
 
   componentDidMount() {
@@ -26,7 +38,7 @@ const Formulation = React.createClass({
     this.props.changeDialogTex(Ckeditor.getTeX);
   },
 
-  componentWillReceiveProps(nextProps) {   
+  componentWillReceiveProps(nextProps) {
     if(this.props.dialogTeX != nextProps.dialogTeX) {
       Ckeditor.addTeX(nextProps.dialogTeX);
     }
@@ -45,7 +57,7 @@ const Formulation = React.createClass({
    * @param  {event} e [event target of input]
    */
   _onChangeContentEditable(e) {
-    this.setState({html: e.target.value})    
+    this.setState({html: e.target.value})
   },
 
   _addExpresion(TeX) {
@@ -53,11 +65,16 @@ const Formulation = React.createClass({
   },
 
   _onAddQuestion(){
-   let question =Ckeditor.getValue();
-   SpaceActions.addFormulation(question);
+   let question = Ckeditor.getValue();
+   FormulationActions.addFormulation(question);
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    Ckeditor.setValue(this.state.html);
   },
 
   render() {
+    console.log("Setting => ", this.state.html);
     return (
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">

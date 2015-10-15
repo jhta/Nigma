@@ -80,9 +80,15 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       _addVariable(action.variableCode);
       VariableStore.emitChange();
       break;
+
     case VariableConstants.VALIDATE_CODE:
       _setVariables(action.code);
       _validationOutput = _validateCode(action.code);
+      VariableStore.emitChange();
+      break;
+
+    case VariableConstants.LOAD_VARIABLES:
+      _setVariables(action.variables);
       VariableStore.emitChange();
       break;
     default:

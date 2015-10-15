@@ -13,6 +13,9 @@ var LinkedStateMixin = require('react-addons-linked-state-mixin');
 
 
 const SpaceActions = require('../../actions/space/space-actions');
+const VariableActions = require('../../actions/space/variable-actions');
+const FormulationActions = require('../../actions/space/formulation-actions');
+const AnswerActions = require('../../actions/space/answer-actions');
 const MenuActions = require("../../actions/menu-actions");
 const MenuStore = require("../../stores/menu-store");
 
@@ -20,12 +23,14 @@ const MenuStore = require("../../stores/menu-store");
 window.VariableStore = require('../../stores/space/variable-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+window.FormulationStore = require('../../stores/space/formulation-store');
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
 
   getInitialState() {
     const rootFolder = MenuStore.getRootFolder();
+    const questionId = this.props.params.questionId || null;
     return {
       expresions: false,
       dialogTeX: "",
@@ -38,7 +43,7 @@ const Space = React.createClass({
       isRoot: true,
       history: [],
       historyString: [],
-      currentQuestion: {},
+      currentQuestion: null,
     }
   },
   componentDidMount() {
@@ -79,7 +84,19 @@ const Space = React.createClass({
     this.setState({
       currentQuestion: question,
     });
-    alert("el id de la nueva pregunta es " + question._id);
+    if(question["data"] == null) {
+        question["data"] = {
+          formulation: "",
+          variables: "",
+          answers: []
+        }
+    } else {
+      question.data = JSON.parse(question.data);
+    }
+    console.log("Setting question ", question);
+    FormulationActions.addFormulation(question.data.formulation);
+    VariableActions.loadVariables(question.data.variables);
+    AnswerActions.loadAnswers(question.data.answers);
   },
 
   showExpresions(flag = true) {
@@ -129,6 +146,16 @@ const Space = React.createClass({
       });
     }
   },
+  _saveQuestion() {
+    var answers = AnswerStore.getAnswers();
+    answers.forEach( (answer) => delete answer["code"])
+    var data = {
+      variables: VariableStore.getVariables().text,
+      answers: answers,
+      formulation: FormulationStore.getFormulation()
+    }
+    SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
+  },
 
   render() {
     const styleTab = {
@@ -144,11 +171,11 @@ const Space = React.createClass({
 
     return (
       <div className="Wrapper ">
-        <FileSideBar 
-          folders={this.state.folders} 
-          questions={this.state.questions} 
-          rootId={this.state.rootId} 
-          items={this.state.items} 
+        <FileSideBar
+          folders={this.state.folders}
+          questions={this.state.questions}
+          rootId={this.state.rootId}
+          items={this.state.items}
           onLoadItems={this.loadItems}
           root={this.state.root}
           currentFolderId={this.state.currentFolderId}
@@ -187,6 +214,7 @@ const Space = React.createClass({
           />
 
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
+          <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
           {modal}
         </div>
       </div>

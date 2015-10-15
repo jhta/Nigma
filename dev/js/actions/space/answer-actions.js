@@ -47,6 +47,13 @@ var AnswerActions = {
       answerIndex: answerIndex
     });
   },
+
+  loadAnswers(answersJson) {
+    Dispatcher.dispatch({
+      type: AnswerConstants.LOAD_ANSWERS,
+      answers: answersJson
+    });
+  }
 }
 
 module.exports = AnswerActions;

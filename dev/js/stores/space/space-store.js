@@ -5,7 +5,6 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
 var _preview = null;
-var _formulation = '';
 var SpaceStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -19,9 +18,6 @@ var SpaceStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getFormulation(){
-    return _formulation
-  },
 
   getPreview(){
     return _preview
@@ -35,11 +31,6 @@ SpaceStore.dispatchToken = Dispatcher.register(function(action) {
       _preview = {}
       _preview['error'] = !action.response;
       _preview['message'] = action.response ? "":'Se presentó un error intenta de nuevo más tarde'
-      SpaceStore.emitChange();
-      break;
-
-    case SpaceConstants.ADD_FORMULATION:
-      _formulation = action.data;            
       SpaceStore.emitChange();
       break;
 
