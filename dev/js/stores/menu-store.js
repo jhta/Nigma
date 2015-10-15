@@ -6,6 +6,7 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 let _rootFolder = window.rootFolder || {};
 var _folders = [];
+var _sharedRootFolder = [];
 
 function _setRootFolder(rootFolder) {
   if(rootFolder._id != _rootFolder._id)
@@ -28,7 +29,9 @@ function _setFolders(folders) {
   _folders = folders;
 }
 
-
+function _setSharedRootFolder(folder) {
+  _sharedRootFolder = folder;
+}
 
 function _createQuestion(question) {
   _rootFolder.questions = (_rootFolder.questions) ? _rootFolder.questions : [];
@@ -60,6 +63,15 @@ function _shareFolder(folderIndex, folder) {
   }
 }
 
+function _shareQuestion(QuestionIndex, question) {
+  console.log(question);
+  debugger
+  console.log("AGGGGHHHH");
+  // if (_rootFolder.questions[QuestionIndex].id == question.id) {
+  //   _rootFolder.questions[QuestionIndex]
+  // } 
+}
+
 var MenuStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -78,6 +90,12 @@ var MenuStore = assign({}, EventEmitter.prototype, {
 
   getRootFolder(){
     return _rootFolder;
+  },
+  getFolders() {
+    return _folders;
+  },
+  getRootSharedFolders() {
+    return _sharedRootFolder;
   }
 });
 
@@ -95,6 +113,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case MenuActionsConstants.LIST_FOLDERS:
       _setRootFolder(action.rootFolder);
+      _setSharedRootFolder(action.shareFolder)
       MenuStore.emitChange();
       break;
     case MenuActionsConstants.DELETE_FOLDER:
@@ -112,6 +131,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case MenuActionsConstants.SHARE_FOLDER:
       _shareFolder(action.folderIndex, action.folder);
+      MenuStore.emitChange();
+      break;
+    case MenuActionsConstants.SHARE_QUESTION:
+      _shareQuestion(action.QuestionIndex, action.question);
       MenuStore.emitChange();
       break;
     default:

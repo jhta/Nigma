@@ -8,6 +8,10 @@ const QuestionAPI = {
     updateQuestionData: {
       route: "/questions/:questionid/data",
       method: API._REQUEST_METHOD.put
+    },
+    share: {
+      route: "/users/questions/:questionId",
+      method: API._REQUEST_METHOD.post,
     }
   },
   createQuestion(data, cb){
@@ -28,6 +32,16 @@ const QuestionAPI = {
         cb(true, null);
       } else {
         cb(!res.body.ok, res.body.question);
+      }
+    });
+  },
+  shareQuestion(data, cb) {
+    const route = this._routes.share;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if (err) {
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body.question)
       }
     });
   }

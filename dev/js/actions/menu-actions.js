@@ -51,7 +51,8 @@ var MenuActions = {
       if(!err) {
         Dispatcher.dispatch({
           type: MenuActionConstants.LIST_FOLDERS,
-          rootFolder: res.root_folder
+          rootFolder: res.root_folder,
+          shareFolder: res.root_shared_folders,
         });
       } else {
         
@@ -90,7 +91,32 @@ var MenuActions = {
     });
   },
 
-  shareFolder(folderIndex, folder) {
+  shareQuestion(questionIndex, question, email) {
+    const data =  {
+      user: {
+        email: email,
+      },
+      questionId: question._id,
+    }
+    QuestionAPI.shareQuestion(data, (err, res) => {
+      if (!err) {
+        const type = MenuActionConstants.SHARE_ITEM;
+        Dispatcher.dispatch({
+          type,
+          question,
+          questionIndex
+        });
+      }
+    });
+  },
+
+  shareFolder(folderIndex, folder, email) {
+    const data =  {
+      user: {
+        email: email,
+      },
+      folderId: folder._id,
+    }
     FolderAPI.shareFolder(data, (err, res) => {
       if (!err) {
         const type = MenuActionConstants.SHARE_FOLDER;
