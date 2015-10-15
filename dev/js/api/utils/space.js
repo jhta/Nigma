@@ -2,14 +2,13 @@ const API = require('../API');
 const SpaceApi = {
   _routes: {
     preview: {
-      route: "/scorms",
+      route: "/questions/:questionid/scorms",
       method: API._REQUEST_METHOD.put
     }
   },
   preview(data, cb){
-    console.log(data);
     const route = this._routes.preview;
-    API.callAjaxRequest(route, JSON.stringify(data), (err, res) => {
+    API.callAjaxRequest(route, data, (err, res) => {
       if(err){
         cb(true, null);
       } else {
