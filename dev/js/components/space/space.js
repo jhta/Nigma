@@ -109,11 +109,11 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
-    console.log(SpaceStore.getFormulation());
+    console.log(FormulationStore.getFormulation());
     var data = {
       variables: VariableStore.getVariables(),
-      answers: AnswerStore.getAnswers(),
-      formulation: SpaceStore.getFormulation()//PIPE!!
+      answers: AnswerStore.getAnswer(),
+      formulation: FormulationStore.getFormulation()//PIPE!!
     }
     SpaceActions.previewQuestion(data);
   },
@@ -164,12 +164,7 @@ const Space = React.createClass({
       background: '#009688',
       opacity: '1'
     };
-    var modal = null;
-    if(this.state.previewOutput != null && this.state.previewOutput.error){
-      modal = <Modal ref="modal" title="Preview"><h1>Ocurrio un error</h1></Modal>;
-    } else if (this.state.previewOutput != null && !this.state.previewOutput.error){
-      modal = <Modal ref="modal" title="Preview"><iframe src="http://localhost:4000/static/launch.html" style={{width: 300, height: 600}}></iframe></Modal>;
-    }
+
 
     return (
       <div className="Wrapper ">
@@ -214,7 +209,6 @@ const Space = React.createClass({
 
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
-          {modal}
         </div>
       </div>
     )

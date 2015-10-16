@@ -10,10 +10,9 @@ var SpaceActions = {
     }, (err, data) => {
       console.log(data);
       if(data.ok){
-        Dispatcher.dispatch({
-          type: SpaceConstants.PREVIEW_QUESTION,
-          response: data.ok
-        });
+        window.open(data)
+      } else {
+        console.log("Error");
       }
     });
 

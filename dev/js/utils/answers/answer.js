@@ -28,6 +28,9 @@ class Answer {
     output = this._mergeErrors(output, commonErrorValidation);
     output = this._mergeErrors(output, precisionValidation);
 
+    if (!output.error) {
+      this._generateCode;
+    }
 
     return output;
   }
