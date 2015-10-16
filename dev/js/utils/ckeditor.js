@@ -17,29 +17,21 @@ CKEDITOR.on('dialogDefinition', function(ev) {
   var dialogName = ev.data.name;
   var dialogDefinition = ev.data.definition;
   var  files = $("<input id=\"inputFiles\" type=\"file\" class=\"\" />");
-
+ 
   if (dialogName == 'image') {
+    console.log('entro');
     dialogDefinition.onLoad = function() {
+    
       var dialog = CKEDITOR.dialog.getCurrent();
-      dialog.hidePage('Link');  
+     
 
-      var uploadTab = dialogDefinition.getContents('Upload');
+     init();
 
-      //document.getElementById('cke_dialog_contents_77').append(files);
-      console.log(dialog);
-      $('#cke_132_uiElement').hide();
-      $('#cke_135_uiElement').append(files);
+      $('#cke_118_uiElement').append(files);
+      
       $('#inputFiles').on("change", handleFileSelect);
       init();
-      var uploadButton = uploadTab.get('uploadButton');
-      document.getElementById('cke_134_uiElement').onclick = function() {
-        uploadFiles()
-        dialog.selectPage('info');
-      }
-
-      uploadButton['filebrowser']['onSelect'] = function(fileUrl, errorMessage) {
-        
-      }
+   
     };
 
   }
@@ -47,7 +39,7 @@ CKEDITOR.on('dialogDefinition', function(ev) {
 });
 
 function appendLink(link){
-  document.getElementById('cke_82_textInput').value = link;
+  document.getElementById('cke_88_textInput').value = link;
 }
 
 function initFormData(){
@@ -56,10 +48,9 @@ function initFormData(){
 
 
 function init(){
-  console.log(SpaceStore.getActualQuestion());
     var question = SpaceStore.getActualQuestion()._id;
     xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://104.131.58.229:4000/questions/'+question+'/scorms/uploadfiles', true);
+    xhr.open('POST', 'http://104.131.58.229:4000/api/questions/'+question+'/scorms/uploadfiles', true);
     xhr.setRequestHeader("Authorization", "Bearer " + Auth.getToken());
     xhr.responseType = "json";
 
@@ -105,6 +96,7 @@ function handleFileSelect(evt) {
 
         // Read in the image file as a data URL.
         reader.readAsDataURL(f);
+        uploadFiles()
     }
 }
 
