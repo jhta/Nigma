@@ -20,11 +20,12 @@ CKEDITOR.on('dialogDefinition', function(ev) {
   if (dialogName == 'image') {
     dialogDefinition.onLoad = function() {
       var dialog = CKEDITOR.dialog.getCurrent();
+      dialog.hidePage('Link');  
 
       var uploadTab = dialogDefinition.getContents('Upload');
 
       //document.getElementById('cke_dialog_contents_77').append(files);
-      console.log(document.getElementById('cke_135_uiElement'));
+      console.log(dialog);
       $('#cke_132_uiElement').hide();
       $('#cke_135_uiElement').append(files);
       $('#inputFiles').on("change", handleFileSelect);
@@ -33,15 +34,10 @@ CKEDITOR.on('dialogDefinition', function(ev) {
       document.getElementById('cke_134_uiElement').onclick = function() {
         uploadFiles()
         dialog.selectPage('info');
-
       }
 
-
-
-
-
       uploadButton['filebrowser']['onSelect'] = function(fileUrl, errorMessage) {
-        console.log('working');
+        
       }
     };
 
@@ -59,8 +55,9 @@ function initFormData(){
 
 
 function init(){
+    var question = window.location.hash.split( '/' )[2];
     xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://104.131.58.229:4000/api/scorms/uploadfiles', true);
+    xhr.open('POST', 'http://104.131.58.229:4000/questions/'+question+'/scorms/uploadfiles', true);
     xhr.setRequestHeader("Authorization", "Bearer " + Auth.getToken());
     xhr.responseType = "json";
 
@@ -80,8 +77,8 @@ function handleFileSelect(evt) {
         if (!f.type.match('image.*')) {
             alert("Sólo puedes cargar imágenes");
             continue;
-        } else if(f.size >= 1048576){
-            alert("La imágen supera el límite de 1 MB");
+        } else if(f.size >= 10048576){
+            alert("La imágen supera el límite de 10 MB");
             continue;
         }
 
@@ -97,7 +94,7 @@ function handleFileSelect(evt) {
 
                 resolutionImage(reader,function(ok){
                     if(ok) {
-                        console.log('entrpo');
+                        
                     }
                 });
 
@@ -116,8 +113,8 @@ var uniqueId = function () {
 var resolutionImage = function(image, cb){
     var img = new Image;
     img.onload = function() {
-        if(img.width>=640 || img.height>=480){
-            alert("Supera el límite de resolución 640 X 480 permitido");
+        if(img.width>=1024 || img.height>=1024){
+            alert("Supera el límite de resolución 1024 X 1024 permitido");
             cb(false);
         }else{
             cb(true);
