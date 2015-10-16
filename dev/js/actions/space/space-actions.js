@@ -13,13 +13,10 @@ var SpaceActions = {
       console.log(data);
       if(data.ok){
         window.open(data.url);
-        Dispatcher.dispatch({
-          type: SpaceConstants.PREVIEW_QUESTION,
-          response: data.ok
-        });
+      } else {
+
       }
     });
-
   },
   updateQuestionData(data, questionId) {
     var payload = {
@@ -36,6 +33,33 @@ var SpaceActions = {
           type: SpaceConstants.PREVIEW_QUESTION,
           response: data.ok
         });
+      }
+    });
+
+  },
+
+  updateQuestionAndExport(questionId, data) {
+    var payload = {
+      question: {
+        data: JSON.stringify(data)
+      },
+      questionid: questionId
+    };
+
+    QuestionAPI.updateQuestionData(payload, (err, data) => {
+      if(data.ok){
+        QuestionAPI.exportQuestionData(payload, (err, data) => {
+          if(data.ok){
+
+
+
+          } else {
+            //Implemnetar mensaje
+          }
+        });
+
+      } else {
+        //Implementar mensaje
       }
     });
 

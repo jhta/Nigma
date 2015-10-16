@@ -3,7 +3,6 @@ const _ = require('lodash');
 const _URL = "http://104.131.58.229:4000/api";
 const Auth = require('../utils/auth');
 
-
 /**
  * OBJECT FOR AJAX METHODS AND CONNECT WITH THE TRINITY API
  * *******************************************************
@@ -75,10 +74,12 @@ const API = {
   _parseRoute(routeObject, data) {
     var route = routeObject.route;
     var simbols = route.match(/\:[^\/]+/g) || [];
+
     simbols.forEach(function (simbol) {
       var dataSimbol = simbol.substring(1); //Removes the ':' of the simbol
       route = route.replace(simbol, data[dataSimbol]);
     });
+
     return route;
   },
 
