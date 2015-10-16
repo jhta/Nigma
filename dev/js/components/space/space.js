@@ -82,6 +82,8 @@ const Space = React.createClass({
   },
 
   setQuestion(question) {
+    SpaceActions.setActualQuestion(question);
+    console.log(question);
     this.setState({
       currentQuestion: question,
     });

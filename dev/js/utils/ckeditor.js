@@ -1,5 +1,6 @@
 //Import mathjax library
 const Auth = require('./auth');
+const SpaceStore =require('../stores/space/space-store');
 CKEDITOR.config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML';
 if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
   CKEDITOR.tools.enableHtml5Elements( document );
@@ -55,7 +56,8 @@ function initFormData(){
 
 
 function init(){
-    var question = window.location.hash.split( '/' )[2];
+  console.log(SpaceStore.getActualQuestion());
+    var question = SpaceStore.getActualQuestion()._id;
     xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://104.131.58.229:4000/questions/'+question+'/scorms/uploadfiles', true);
     xhr.setRequestHeader("Authorization", "Bearer " + Auth.getToken());
