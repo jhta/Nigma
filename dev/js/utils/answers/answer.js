@@ -29,7 +29,7 @@ class Answer {
     output = this._mergeErrors(output, precisionValidation);
 
     if (!output.error) {
-      this._generateCode;
+      this._generateCode();
     }
 
     return output;

@@ -27,7 +27,6 @@ var SpaceStore = assign({}, EventEmitter.prototype, {
 SpaceStore.dispatchToken = Dispatcher.register(function(action) {
   _preview = null;
   switch (action.type) {
-
     default:
   }
 });

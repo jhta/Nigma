@@ -10,6 +10,7 @@ const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
 
+
 const SpaceActions = require('../../actions/space/space-actions');
 const VariableActions = require('../../actions/space/variable-actions');
 const FormulationActions = require('../../actions/space/formulation-actions');
@@ -26,6 +27,7 @@ const Answer = require('../../utils/answers/answer');
 
 
 window.FormulationStore = require('../../stores/space/formulation-store');
+
 const Space = React.createClass({
 
   mixins: [ThemeMixin],
@@ -45,7 +47,8 @@ const Space = React.createClass({
       isRoot: true,
       history: [],
       historyString: [],
-      currentQuestion: null,
+      currentQuestion: {},
+      sharedMode: false,
     }
   },
   componentDidMount() {
@@ -108,15 +111,46 @@ const Space = React.createClass({
     this.setState({dialogTeX: TeX});
   },
 
+  shareMode() {
+    let rootFolder;
+    if (!this.state.sharedMode) {
+      rootFolder = MenuStore.getRootSharedFolders();
+      console.log("nanananana");
+    } else {
+      rootFolder = MenuStore.getRootFolder();
+    }
+    console.log("fuuckk!! :/");
+    console.log(rootFolder);
+    this.setState({
+      sharedMode: !this.state.sharedMode,
+      root: rootFolder,
+      rootId: rootFolder.id,
+      folders: rootFolder.folders,
+      questions: rootFolder.questions,
+      currentFolderId: rootFolder.id,
+    })
+  },
+
   _previewQuestion() {
-    console.log(FormulationStore.getFormulation());
     var data = {
       variables: VariableStore.getVariables(),
-      answers: AnswerStore.getAnswer(),
-      formulation: FormulationStore.getFormulation()//PIPE!!
-    }
-    SpaceActions.previewQuestion(data);
+      answer: AnswerStore.getAnswer(),
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
+
+  _exportQuestion(){
+    var data = {
+      variables: VariableStore.getVariables(),
+      answer: AnswerStore.getAnswer(),
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
+  },
+
   openFolder(folder) {
     this.state.history.push(this.state.root);
     this.state.historyString.push(this.state.root.name);
@@ -129,9 +163,7 @@ const Space = React.createClass({
       history: this.state.history,
       historyString: this.state.historyString
     });
-
   },
-
   goBackFolder() {
     if(this.state.history.length >= 1) {
       const folder = this.state.history.pop();
@@ -181,6 +213,8 @@ const Space = React.createClass({
           goBackFolder={this.goBackFolder}
           isRoot={this.state.isRoot}
           onSetQuestion={this.setQuestion}
+          sharedMode={this.state.sharedMode}
+          onShareMode={this.shareMode}
         />
         <div className="Space">
           <div className="Space-inner">
@@ -198,6 +232,9 @@ const Space = React.createClass({
                 <Tab label="Respuestas" style={styleTab}>
                   <Answers />
                 </Tab>
+                <Tab label="Metadatos" style={styleTab}>
+                  <Metadata />
+                </Tab>
               </Tabs>
             </div>
           </div>
@@ -207,8 +244,9 @@ const Space = React.createClass({
             dialogTeX={this.state.dialogTeX}
           />
 
-          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
+          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
+          <button className="btn waves-effect waves-light export-btn" onClick={this._exportQuestion}>Exportar a Scorm</button>
         </div>
       </div>
     )

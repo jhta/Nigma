@@ -62,7 +62,7 @@ const FolderAPI = {
       }
     });
   },
-  shareFolders(data, cb) {
+  shareFolder(data, cb) {
     const route = this._routes.share;
     API.callAjaxRequest(route, data, (err, res) => {
       if (err) {
