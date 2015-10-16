@@ -1,18 +1,22 @@
 const API = require('../API');
 const QuestionAPI = {
   _routes: {
+
     create: {
       route: "/folders/:folderid/questions",
       method: API._REQUEST_METHOD.post
     },
+
     updateQuestionData: {
       route: "/questions/:questionid/data",
       method: API._REQUEST_METHOD.put
     },
+
     exportQuestionData: {
-      route: "/questions/:questionid/data",
+      route: "/questions/:questionid/scorms",
       method: API._REQUEST_METHOD.post
     },
+
     share: {
       route: "/users/questions/:questionId",
       method: API._REQUEST_METHOD.post,
@@ -34,21 +38,23 @@ const QuestionAPI = {
     API.callAjaxRequest(route, data, (err, res) => {
       console.log("Respuesta", res);
       if(err){
-        cb(true, null);
+        cb(err, null);
       } else {
-        cb(!res.body.ok, res.body.question);
+        cb(!res.body.ok);
       }
     });
   },
 
   exportQuestionData(data, cb){
+
+    console.log("Data", data);
     const route = this._routes.exportQuestionData;
 
     API.callAjaxRequest(route, data, (err, res) => {
       if(err){
-        cb(true, null);
+        cb(err, null);
       } else {
-        cb(!res.body.ok, res.body.question);
+        cb(!res.body.ok);
       }
     });
   },

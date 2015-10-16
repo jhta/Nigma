@@ -22,6 +22,10 @@ const API = {
     return Auth.getToken();
   },
 
+  getUrl(){
+    return _URL;
+  },
+
   /**
    * AJAX METHODS WITH TOKEN AUTHENTICATION
    * **************************************
