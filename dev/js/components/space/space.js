@@ -67,7 +67,6 @@ const Space = React.createClass({
     });
   },
 
-
   loadItems(url) {
     const folder = folderChilds.filter((folder) => {
       return folder.url == url
@@ -137,6 +136,7 @@ const Space = React.createClass({
     }
     SpaceActions.previewQuestion(data);
   },
+
   openFolder(folder) {
     this.state.history.push(this.state.root);
     this.state.historyString.push(this.state.root.name);
@@ -176,7 +176,10 @@ const Space = React.createClass({
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
 
-  render() {
+  renderContent() {
+    if (Object.keys(this.state.currentQuestion) <= 0) {
+      return (<div className="Space"><h1>No se a seleccionado la pregunta</h1></div>);
+    }
     const styleTab = {
       background: '#009688',
       opacity: '1'
@@ -187,25 +190,9 @@ const Space = React.createClass({
     } else if (this.state.previewOutput != null && !this.state.previewOutput.error){
       modal = <Modal ref="modal" title="Preview"><iframe src="http://localhost:4000/static/launch.html" style={{width: 300, height: 600}}></iframe></Modal>;
     }
-
     return (
-      <div className="Wrapper ">
-        <FileSideBar
-          folders={this.state.folders}
-          questions={this.state.questions}
-          rootId={this.state.rootId}
-          items={this.state.items}
-          onLoadItems={this.loadItems}
-          root={this.state.root}
-          currentFolderId={this.state.currentFolderId}
-          openFolder={this.openFolder}
-          historyString={this.state.historyString}
-          goBackFolder={this.goBackFolder}
-          isRoot={this.state.isRoot}
-          onSetQuestion={this.setQuestion}
-          sharedMode={this.state.sharedMode}
-          onShareMode={this.shareMode}
-        />
+      <div>
+        <h1 style={{margin: '5px 0 0 20px', fontSize: '30px', lineHeight: '30px'}}>{this.state.currentQuestion.name}</h1>
         <div className="Space">
           <div className="Space-inner">
             <div className="Space-content z-depth-1 ">
@@ -238,6 +225,31 @@ const Space = React.createClass({
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
           {modal}
         </div>
+      </div>
+    );
+  },
+
+  render() {
+    
+    return (
+      <div className="Wrapper ">
+        <FileSideBar
+          folders={this.state.folders}
+          questions={this.state.questions}
+          rootId={this.state.rootId}
+          items={this.state.items}
+          onLoadItems={this.loadItems}
+          root={this.state.root}
+          currentFolderId={this.state.currentFolderId}
+          openFolder={this.openFolder}
+          historyString={this.state.historyString}
+          goBackFolder={this.goBackFolder}
+          isRoot={this.state.isRoot}
+          onSetQuestion={this.setQuestion}
+          sharedMode={this.state.sharedMode}
+          onShareMode={this.shareMode}
+        />
+        {this.renderContent()}
       </div>
     )
   },
