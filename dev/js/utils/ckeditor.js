@@ -32,6 +32,8 @@ CKEDITOR.on('dialogDefinition', function(ev) {
       var uploadButton = uploadTab.get('uploadButton');
       document.getElementById('cke_134_uiElement').onclick = function() {
         uploadFiles()
+        dialog.selectPage('info');
+
       }
 
 
