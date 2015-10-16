@@ -149,7 +149,8 @@ const Space = React.createClass({
   },
   _saveQuestion() {
     var answer = AnswerStore.getAnswer();
-    delete answer["code"]
+    if(answer != null)
+      delete answer["code"];
     var data = {
       variables: VariableStore.getVariables().text,
       answer: answer,

@@ -38,9 +38,11 @@ module.exports = {
   },
 
   isEvaluable(expression, variables) {
+
     if(expression == null || expression == ""){
       return {error: false, messages: []};
     }
+    expression = expression.toString();
     var evaluableVariables = Variable.retrieveEvaluableVariables(variables);
     var match = expression.match(/\_[A-Za-z]/g) || [];
     var compoundOfEvaluable = match.every((varName) => evaluableVariables[varName] != null);

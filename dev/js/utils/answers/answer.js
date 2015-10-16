@@ -18,7 +18,6 @@ class Answer {
   }
 
   isValid(variables) {
-    console.log("Variables que llegan", variables);
     var output = {error: false, messages: []}
 
     var evaluationOutput = this._validateCorrectValues(variables);
@@ -79,7 +78,7 @@ class Answer {
   _generateCode() {
     var codeText = [];
     for(var i = 0; i < this.correctValues.length; i++) {
-      var assertCode = this.names.map((name) => `(${Variable.replaceVariables(this.correctValues[i][name])}) == inputValue[${name}]` );
+      var assertCode = this.names.map((name) => Variable.replaceVariables(this.correctValues[i][name]) != "" ? `(${Variable.replaceVariables(this.correctValues[i][name])}) == inputValue['${name}']` : "true" );
       if(i == 0) {
         codeText.push(`if(${assertCode.join(' && ')}) {`);
       } else {
@@ -93,7 +92,7 @@ class Answer {
     }
     for(var i = 0; i < this.commonErrors.length; i++) {
       var commonError = this.commonErrors[i];
-      var failCode = this.names.map((name) => `(${Variable.replaceVariables(commonError.values[name])}) == inputValue[${name}]`);
+      var failCode = this.names.map((name) => Variable.replaceVariables(commonError.values[name]) != "" ? `(${Variable.replaceVariables(commonError.values[name])}) == inputValue['${name}']` : "true");
       codeText.push(`else if (${failCode.join(" && ")}) {`);
       codeText.push(`console.log("You fail, ${commonError.message}");`);
       codeText.push(`response = '${commonError.message}';`);

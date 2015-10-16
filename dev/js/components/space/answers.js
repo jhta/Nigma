@@ -58,7 +58,6 @@ var AnswerContainer = React.createClass({
     AnswerActions.addNewAnswer();
   },
   answerBasicActions(data) {
-    console.log(data);
     var addAnswer = (answername) => {
       var answer = this.state.answer;
       if(answername != null && answername != "")
@@ -131,7 +130,6 @@ var AnswerContainer = React.createClass({
 
 
   render() {
-    console.log("State => ", this.state.answer);
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
@@ -167,7 +165,6 @@ var AnswerContainer = React.createClass({
 AnswerContainer.Answer = React.createClass({
 
   _convertToNativeType(value) {
-    console.log(value);
     if(value == "" || value == null || value == undefined){
       return "";
     } else if(value === "false"){
@@ -184,7 +181,6 @@ AnswerContainer.Answer = React.createClass({
     const target = evt.target;
     const path = target.getAttribute('data-path');
     var value = this._convertToNativeType(target.value);
-    console.log("Chagin ", path);
     this.props.handleChange(path, value);
   },
 
@@ -366,7 +362,6 @@ AnswerContainer.Answer.CommonErrors = React.createClass({
 
 AnswerContainer.Answer.CommonErrors.Value = React.createClass({
   render() {
-    console.log("Common", this.props.commonError);
     var value = this.props.commonError.values;
     var answerNames = this.props.answerNames;
     return (

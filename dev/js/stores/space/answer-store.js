@@ -30,7 +30,6 @@ function _validateAnswers(answer, variables) {
   if (!_validationOutput.error){
     _validationOutput.messages = ["Respustas validadas correctamente"];
   }
-  console.log(_validationOutput);
 
 }
 
