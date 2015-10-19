@@ -20,6 +20,7 @@ const MenuStore = require("../../stores/menu-store");
 
 /*Stores*/
 window.VariableStore = require('../../stores/space/variable-store');
+window.MetadataStore = require('../../stores/space/metadata-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
 window.FormulationStore = require('../../stores/space/formulation-store');
@@ -173,7 +174,8 @@ const Space = React.createClass({
     var data = {
       variables: VariableStore.getVariables().text,
       answers: answers,
-      formulation: FormulationStore.getFormulation()
+      formulation: FormulationStore.getFormulation(),
+      metadata: MetadataStore.getDublinCore()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
