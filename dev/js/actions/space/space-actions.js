@@ -38,6 +38,13 @@ var SpaceActions = {
 
   },
 
+  setActualQuestion(question){
+    Dispatcher.dispatch({
+      type: SpaceConstants.SET_ACTUAL_QUESTION,
+      data: question
+    });
+  },
+
   addFormulation(formulation){
     Dispatcher.dispatch({
           type: SpaceConstants.ADD_FORMULATION,

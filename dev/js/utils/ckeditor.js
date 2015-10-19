@@ -1,5 +1,6 @@
 //Import mathjax library
 const Auth = require('./auth');
+const SpaceStore =require('../stores/space/space-store');
 CKEDITOR.config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML';
 if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
   CKEDITOR.tools.enableHtml5Elements( document );
@@ -16,31 +17,21 @@ CKEDITOR.on('dialogDefinition', function(ev) {
   var dialogName = ev.data.name;
   var dialogDefinition = ev.data.definition;
   var  files = $("<input id=\"inputFiles\" type=\"file\" class=\"\" />");
-
+ 
   if (dialogName == 'image') {
+    console.log('entro');
     dialogDefinition.onLoad = function() {
+    
       var dialog = CKEDITOR.dialog.getCurrent();
+     
 
-      var uploadTab = dialogDefinition.getContents('Upload');
+     init();
 
-      //document.getElementById('cke_dialog_contents_77').append(files);
-      console.log(document.getElementById('cke_135_uiElement'));
-      $('#cke_132_uiElement').hide();
-      $('#cke_135_uiElement').append(files);
+      $('#cke_118_uiElement').append(files);
+      
       $('#inputFiles').on("change", handleFileSelect);
       init();
-      var uploadButton = uploadTab.get('uploadButton');
-      document.getElementById('cke_134_uiElement').onclick = function() {
-        uploadFiles()
-      }
-
-
-
-
-
-      uploadButton['filebrowser']['onSelect'] = function(fileUrl, errorMessage) {
-        console.log('working');
-      }
+   
     };
 
   }
@@ -48,7 +39,7 @@ CKEDITOR.on('dialogDefinition', function(ev) {
 });
 
 function appendLink(link){
-  document.getElementById('cke_82_textInput').value = link;
+  document.getElementById('cke_88_textInput').value = link;
 }
 
 function initFormData(){
@@ -57,8 +48,9 @@ function initFormData(){
 
 
 function init(){
+    var question = SpaceStore.getActualQuestion()._id;
     xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://104.131.58.229:4000/api/scorms/uploadfiles', true);
+    xhr.open('POST', 'http://104.131.58.229:4000/api/questions/'+question+'/scorms/uploadfiles', true);
     xhr.setRequestHeader("Authorization", "Bearer " + Auth.getToken());
     xhr.responseType = "json";
 
@@ -78,8 +70,8 @@ function handleFileSelect(evt) {
         if (!f.type.match('image.*')) {
             alert("Sólo puedes cargar imágenes");
             continue;
-        } else if(f.size >= 1048576){
-            alert("La imágen supera el límite de 1 MB");
+        } else if(f.size >= 10048576){
+            alert("La imágen supera el límite de 10 MB");
             continue;
         }
 
@@ -95,7 +87,7 @@ function handleFileSelect(evt) {
 
                 resolutionImage(reader,function(ok){
                     if(ok) {
-                        console.log('entrpo');
+                        
                     }
                 });
 
@@ -104,6 +96,7 @@ function handleFileSelect(evt) {
 
         // Read in the image file as a data URL.
         reader.readAsDataURL(f);
+        uploadFiles()
     }
 }
 
@@ -114,8 +107,8 @@ var uniqueId = function () {
 var resolutionImage = function(image, cb){
     var img = new Image;
     img.onload = function() {
-        if(img.width>=640 || img.height>=480){
-            alert("Supera el límite de resolución 640 X 480 permitido");
+        if(img.width>=1024 || img.height>=1024){
+            alert("Supera el límite de resolución 1024 X 1024 permitido");
             cb(false);
         }else{
             cb(true);
