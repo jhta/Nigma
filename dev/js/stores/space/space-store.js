@@ -5,6 +5,7 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
 var _preview = null;
+var _actualQuestion = null;
 var SpaceStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -18,6 +19,10 @@ var SpaceStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
+  getActualQuestion(){
+    return _actualQuestion
+  },
+
 
   getPreview(){
     return _preview
@@ -27,12 +32,8 @@ var SpaceStore = assign({}, EventEmitter.prototype, {
 SpaceStore.dispatchToken = Dispatcher.register(function(action) {
   _preview = null;
   switch (action.type) {
-    case SpaceConstants.PREVIEW_QUESTION:
-      _preview = {}
-      _preview['error'] = !action.response;
-      _preview['message'] = action.response ? "":'Se presentó un error intenta de nuevo más tarde'
-      SpaceStore.emitChange();
-      break;
+    case SpaceConstants.SET_ACTUAL_QUESTION:
+      _actualQuestion = action.data
 
     default:
   }

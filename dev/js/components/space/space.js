@@ -20,6 +20,7 @@ const MenuStore = require("../../stores/menu-store");
 
 /*Stores*/
 window.VariableStore = require('../../stores/space/variable-store');
+window.MetadataStore = require('../../stores/space/metadata-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
 window.FormulationStore = require('../../stores/space/formulation-store');
@@ -81,6 +82,8 @@ const Space = React.createClass({
   },
 
   setQuestion(question) {
+    SpaceActions.setActualQuestion(question);
+    console.log(question);
     this.setState({
       currentQuestion: question,
     });
@@ -128,13 +131,23 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
-    console.log(SpaceStore.getFormulation());
     var data = {
       variables: VariableStore.getVariables(),
       answers: AnswerStore.getAnswers(),
-      formulation: SpaceStore.getFormulation()//PIPE!!
-    }
-    SpaceActions.previewQuestion(data);
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
+  },
+
+  _exportQuestion(){
+    var data = {
+      variables: VariableStore.getVariables(),
+      answers: AnswerStore.getAnswers(),
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
   },
 
   openFolder(folder) {
@@ -171,7 +184,8 @@ const Space = React.createClass({
     var data = {
       variables: VariableStore.getVariables().text,
       answers: answers,
-      formulation: FormulationStore.getFormulation()
+      formulation: FormulationStore.getFormulation(),
+      metadata: MetadataStore.getDublinCore()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
@@ -221,8 +235,9 @@ const Space = React.createClass({
             dialogTeX={this.state.dialogTeX}
           />
 
-          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
+          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
+          <button className="btn waves-effect waves-light export-btn" onClick={this._exportQuestion}>Exportar a Scorm</button>
           {modal}
         </div>
       </div>
