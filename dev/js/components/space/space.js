@@ -118,8 +118,6 @@ const Space = React.createClass({
     } else {
       rootFolder = MenuStore.getRootFolder();
     }
-    console.log("fuuckk!! :/");
-    console.log(rootFolder);
     this.setState({
       sharedMode: !this.state.sharedMode,
       root: rootFolder,
