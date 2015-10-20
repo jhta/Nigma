@@ -129,14 +129,25 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
-    console.log(SpaceStore.getFormulation());
     var data = {
       variables: VariableStore.getVariables(),
       answers: AnswerStore.getAnswers(),
-      formulation: SpaceStore.getFormulation()//PIPE!!
-    }
-    SpaceActions.previewQuestion(data);
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
+
+  _exportQuestion(){
+    var data = {
+      variables: VariableStore.getVariables(),
+      answers: AnswerStore.getAnswers(),
+      formulation: FormulationStore.getFormulation()
+    };
+
+    SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
+  },
+
   openFolder(folder) {
     this.state.history.push(this.state.root);
     this.state.historyString.push(this.state.root.name);
@@ -234,8 +245,9 @@ const Space = React.createClass({
             dialogTeX={this.state.dialogTeX}
           />
 
-          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Preview</button>
+          <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
+          <button className="btn waves-effect waves-light export-btn" onClick={this._exportQuestion}>Exportar a Scorm</button>
           {modal}
         </div>
       </div>
