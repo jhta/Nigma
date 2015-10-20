@@ -2,6 +2,7 @@ const React = require("react");
 const mui         = require("material-ui");
 const {Tabs, Tab} = mui;
 const ThemeMixin  = require("../../mixins/ui-theme");
+const MetadataActions = require("../../actions/space/metadata-actions");
 
 
 
@@ -40,7 +41,7 @@ const Answers = React.createClass({
   		'date': '<dc:date>' + React.findDOMNode(this.refs.date).value +' <dc:date>',
   		'rights':'<dc:rights>'+ 'rights' +'</dc:rights>'  //cc
 	  };
-  console.log(dublinFormat);
+    MetadataActions.setDublinCore(dublinFormat);
   },
 
   addIEE(){
