@@ -6,6 +6,8 @@ if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
   CKEDITOR.tools.enableHtml5Elements( document );
 
  var formData = new FormData(), xhr;
+ var urlfield = null;
+
 
 
 //Box dimensions
@@ -23,6 +25,8 @@ CKEDITOR.on('dialogDefinition', function(ev) {
     dialogDefinition.onLoad = function() {
     
       var dialog = CKEDITOR.dialog.getCurrent();
+
+      urlfield = dialog.getContentElement('info', 'txtUrl');
      
 
      init();
@@ -39,7 +43,8 @@ CKEDITOR.on('dialogDefinition', function(ev) {
 });
 
 function appendLink(link){
-  document.getElementById('cke_88_textInput').value = link;
+  urlfield.setValue(link);
+  //document.getElementById('cke_82_textInput').value = link;
 }
 
 function initFormData(){
