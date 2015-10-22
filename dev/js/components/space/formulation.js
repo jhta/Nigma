@@ -40,7 +40,6 @@ const Formulation = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if(this.props.dialogTeX != nextProps.dialogTeX) {
-      debugger
       Ckeditor.addTeX(nextProps.dialogTeX);
     }
   },
