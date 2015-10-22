@@ -216,7 +216,8 @@ const CKEditor = {
 
   addTeX(TeX) {
       setTimeout(() => {
-      window.TeXNode = document.getElementById("cke_80_textarea");
+      window.TeXNode = document.getElementById("cke_85_textarea");
+      debugger
       if(window.TeXNode) {
         let lastVal = window.TeXNode.value;
         window.TeXNode.value = lastVal + TeX;
@@ -227,7 +228,7 @@ const CKEditor = {
 
   changeTeX(cb) {
     setTimeout(() => {
-      window.TeXNode = document.getElementById("cke_80_textarea");
+      window.TeXNode = document.getElementById("cke_85_textarea");
       console.log(TeXNode);
       cb();
       //var lastVal = $("#cke_80_textarea").val();

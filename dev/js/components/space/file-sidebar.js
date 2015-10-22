@@ -6,6 +6,7 @@ const FileSideBar = React.createClass({
     return {
       currentRoute: this.generateCurrentRoute(),
       items: this.props.items,
+      activeItemIndex: null,
     }
   },
 
@@ -15,6 +16,12 @@ const FileSideBar = React.createClass({
       return '/' + this.props.historyString.reduce((prev, next) => `${prev}/${next}`);
     }
     return '/';
+  },
+
+  setActiveItem(index) {
+    this.setState({
+      activeItemIndex: index,
+    });
   },
 
   changeRoute(route, father) {
@@ -44,8 +51,18 @@ const FileSideBar = React.createClass({
   renderQuestions() {
     if(!this.props.questions) return null;
     return this.props.questions.map((question, index) => {
+      const active = (this.state.activeItemIndex === index);
       return (
-        <FileSideBar.Question question={question} onSetQuestion={this.props.onSetQuestion} openFolder={this.props.openFolder} key={index} questionIndex={index} onChangeRoute={this.changeRoute} />
+        <FileSideBar.Question
+          question={question}
+          onSetQuestion={this.props.onSetQuestion}
+          openFolder={this.props.openFolder}
+          key={index}
+          questionIndex={index}
+          onChangeRoute={this.changeRoute}
+          onSetActiveIndex={this.setActiveItem}
+          active={active}
+        />
       )
     })
   },
@@ -207,7 +224,9 @@ FileSideBar.Question = React.createClass({
 
   onSetQuestion(e) {
     e.stopPropagation();
-    this.props.onSetQuestion(this.props.question);
+    const {question, questionIndex} = this.props;
+    this.props.onSetActiveIndex(questionIndex);
+    this.props.onSetQuestion(question);
   },
 
   shareQuestion(e) {
@@ -235,10 +254,11 @@ FileSideBar.Question = React.createClass({
   },
 
   render() {
-    const {question} = this.props;
+    const {question, active} = this.props;
+    const classCss = (active) ? ' is-active ' : null;
     return (
       <li>
-        <div className="FileSideBar-Item">
+        <div className={`${classCss} FileSideBar-Item`}>
           <div className="FileSideBar-item-left" onClick={this.onSetQuestion}>
             <i className="material-icons">description</i>
             {question.name}
