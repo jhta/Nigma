@@ -92,12 +92,13 @@ const Space = React.createClass({
     if(question["data"] == null) {
         question["data"] = {
           formulation: "",
-          variables: "",
+          variables: null,
           answer: null
         }
     } else {
       question.data = JSON.parse(question.data);
     }
+    console.log("Setting  question => ",question);
     FormulationActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
     AnswerActions.setAnswer(question.data.answer);
@@ -180,12 +181,9 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    var answer = AnswerStore.getAnswer();
-    if(answer != null)
-      delete answer["code"];
     var data = {
-      variables: VariableStore.getVariables().text,
-      answer: answer,
+      variables: VariableStore.getVariables(),
+      answer: AnswerStore.getAnswer(),
       formulation: FormulationStore.getFormulation()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)

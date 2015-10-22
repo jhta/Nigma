@@ -8,13 +8,13 @@ var SpaceActions = {
   previewQuestion(questionid, data) {
     SpaceApi.preview({
       question: JSON.stringify(data),
-      questionid
+      questionid: questionid
     }, (err, data) => {
-      console.log(data);
+
       if(data.ok){
         window.open(data.url);
       } else {
-
+        console.error("There was an error trying to preview question ");
       }
     });
   },
@@ -27,7 +27,7 @@ var SpaceActions = {
     }
     console.log(payload);
     QuestionAPI.updateQuestionData(payload, (err, data) => {
-      console.log(data);
+
       if(data.ok){
         Dispatcher.dispatch({
           type: SpaceConstants.PREVIEW_QUESTION,

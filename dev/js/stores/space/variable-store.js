@@ -88,7 +88,9 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       break;
 
     case VariableConstants.LOAD_VARIABLES:
-      _setVariables(action.variables);
+      var code =  action.variables.text.split("\n").filter(variable => variable != '')
+      _setVariables(code);
+      _validationOutput = _validateCode(code);
       VariableStore.emitChange();
       break;
     default:

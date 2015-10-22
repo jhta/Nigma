@@ -52,6 +52,7 @@ var AnswerContainer = React.createClass({
       validating: false
     });
 
+
   },
 
   _addNewAnswer() {
@@ -158,28 +159,35 @@ var AnswerContainer = React.createClass({
 
   },
   componentDidUpdate(prevProps, prevState) {
-    $('.collapsible').collapsible();
+    $('input, textarea').trigger('change');
   },
 });
 
 AnswerContainer.Answer = React.createClass({
 
-  _convertToNativeType(value) {
+  _convertToNativeType(value, type) {
+    type = type || "string";
     if(value == "" || value == null || value == undefined){
       return "";
-    } else if(value === "false"){
-      value = false;
-    } else if (value === "true"){
-      value = true;
-    } else if(!isNaN(value)){
-      value = parseInt(value);
+    } else {
+      if(value === "false" && type === "boolean"){
+        value = false;
+      } else if (value === "true" && type === "boolean"){
+        value = true;
+      } else if(!isNaN(value) && type === "number"){
+        value = Number(value);
+      } else {
+        //Already a string
+      }
+      return value;
     }
-    return value;
+
   },
 
   _handleChange(evt) {
     const target = evt.target;
     const path = target.getAttribute('data-path');
+    console.log(target.value);
     var value = this._convertToNativeType(target.value);
     this.props.handleChange(path, value);
   },
@@ -227,13 +235,13 @@ AnswerContainer.Answer.GeneralInformation = React.createClass({
     return (
       <div className="general-information">
         <div className="">
-            <input type="checkbox" className="col s3" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
+            <input type="checkbox" className="col s3" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" data-type="boolean" />
             <label htmlFor={`showLabelCheckBox`} className="col s4">Incluir etiquetas</label>
         </div>
         <div className="">
           <label htmlFor={`questionPrecision`} className="col s4">Precisión decimal exigida</label>
           <div className="col s3">
-            <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange} id="questionPrecision">
+            <select className="browser-default"  value={this.props.answer.precision} onChange={this.props.handleChange} id="questionPrecision" data-path="precision" data-type="number">
               <option value="" disabled>Precisión decimal exigida</option>
               { this.precision.map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>) }
             </select>

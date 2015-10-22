@@ -36,7 +36,7 @@ const QuestionAPI = {
       if(err){
         cb(true, null);
       } else {
-        cb(!res.body.ok, res.body.question);
+        cb(!res.body.ok, res.body);
       }
     });
   },
