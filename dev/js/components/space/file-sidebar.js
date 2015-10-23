@@ -10,6 +10,19 @@ const FileSideBar = React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+  let route = ''; 
+   if (nextProps.historyString.length > 0) {
+      route = '/' + nextProps.historyString.reduce((prev, next) => `${prev}/${next}`);
+    }
+    route = '/';
+    if (route !== this.state.currentRoute) {
+      this.setState({
+        currentRoute: route,
+      });
+    }
+  },
+
   generateCurrentRoute() {
     console.log("current", this.props.historyString);
     if (this.props.historyString.length > 0) {
@@ -93,7 +106,7 @@ const FileSideBar = React.createClass({
     return(
       <div className="FileSideBar z-depth-1">
         <div className="FileSideBar-header">
-          <span onClick={() => {this.props.onShareMode()}}>Compartdos conmigo</span>
+          <span className="FileSideBar-shared" onClick={() => {this.props.onShareMode()}}>Compartdos conmigo</span>
         </div>
         <div className="FileSideBar-header">
           <i className="FileSideBar-icon material-icons left">view_headline</i>
@@ -121,12 +134,7 @@ FileSideBar.Form = React.createClass({
   create(e) {
     if(e.keyCode == 13) {
       let nameInput = React.findDOMNode(this.refs.folderName);
-      if(this.state.createFolder) {
-        MenuActions.createFolder(nameInput.value, this.props.rootId, this.props.root);
-      } else {
-        MenuActions.createQuestion(nameInput.value, this.props.rootId, this.props.root);
-        console.log("create item");
-      }
+      MenuActions.createFolder(nameInput.value, this.props.rootId, this.props.root);
       nameInput.value = '';
     }
   },
@@ -138,11 +146,24 @@ FileSideBar.Form = React.createClass({
       });
     }
   },
+  createFolder() {
+    let nameInput = React.findDOMNode(this.refs.folderName);
+    MenuActions.createFolder(nameInput.value, this.props.rootId, this.props.root);
+    nameInput.value = '';
+  },
+
+  createItem() {
+    let nameInput = React.findDOMNode(this.refs.folderName);
+    MenuActions.createQuestion(nameInput.value, this.props.rootId, this.props.root);
+    nameInput.value = '';
+  },
+
   render() {
     return (
       <div className="FileSideBar-Form">
         <input type="text" ref="folderName" className="FileSideBar-Form-input"onKeyDown={this.create}/>
-        <span className="FileSideBar-Form-check"><input type="checkbox" onChange={this.changeCreator}/></span>
+        <i className="FileSideBar-iconCreate material-icons" onClick={this.createFolder}>folder</i>
+        <i className="FileSideBar-iconCreate material-icons" onClick={this.createItem}>description</i>
       </div>
     );
   }

@@ -164,16 +164,19 @@ const Space = React.createClass({
   },
 
   openFolder(folder) {
-    this.state.history.push(this.state.root);
-    this.state.historyString.push(this.state.root.name);
+    const history = this.state.history;
+    const historyString = this.state.historyString;
+    history.push(this.state.root);
+    historyString.push(folder.name);
+    debugger
     this.setState({
       root: folder,
       rootId: folder._id,
       folders: folder.folders,
       questions: folder.questions || [],
       isRoot: false,
-      history: this.state.history,
-      historyString: this.state.historyString
+      history: history,
+      historyString: historyString
     });
   },
   goBackFolder() {
