@@ -9,7 +9,7 @@ const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
-
+const Ckeditor = require('../../utils/ckeditor');
 
 const SpaceActions = require('../../actions/space/space-actions');
 const VariableActions = require('../../actions/space/variable-actions');
@@ -133,20 +133,26 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
-      formulation: FormulationStore.getFormulation()
+      formulation: questionFormulation
     };
 
     SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
 
   _exportQuestion(){
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
-      formulation: FormulationStore.getFormulation()
+      formulation: questionFormulation
     };
 
     SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
@@ -181,11 +187,18 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
+    let answers = AnswerStore.getAnswers();
+    let questionFormulation = Ckeditor.getValue();
+
+    FormulationActions.addFormulation(questionFormulation);
+    
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
-      formulation: FormulationStore.getFormulation()
-    }
+      formulation: questionFormulation,
+      metadata: MetadataStore.getMetadata()
+    };
+    
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
 
@@ -219,7 +232,7 @@ const Space = React.createClass({
                   <Answers />
                 </Tab>
                 <Tab label="Metadatos" style={styleTab}>
-                  <Metadata />
+                  <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
                 </Tab>
               </Tabs>
             </div>
