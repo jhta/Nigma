@@ -70,7 +70,8 @@ const Formulation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    Ckeditor.setValue(this.state.html);
+    setTimeout(Ckeditor.setValue(this.state.html),2000);
+    
   },
 
   render() {

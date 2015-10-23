@@ -183,7 +183,7 @@ const Space = React.createClass({
       variables: VariableStore.getVariables().text,
       answers: answers,
       formulation: FormulationStore.getFormulation(),
-      metadata: MetadataStore.getDublinCore()
+      metadata: MetadataStore.getMetadata()
     }
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
@@ -222,7 +222,7 @@ const Space = React.createClass({
                   <Answers />
                 </Tab>
                 <Tab label="Metadatos" style={styleTab}>
-                  <Metadata />
+                  <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
                 </Tab>
               </Tabs>
             </div>

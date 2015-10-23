@@ -4,7 +4,7 @@ var Dispatcher = require('../../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var _dublinCore = null;
+var _metadata= null;
 
 var MetadataStore = assign({}, EventEmitter.prototype, {
   emitChange() {
@@ -19,8 +19,8 @@ var MetadataStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getDublinCore(){
-    return _dublinCore
+  getMetadata(){
+    return _metadata
   },
 
 
@@ -29,8 +29,8 @@ var MetadataStore = assign({}, EventEmitter.prototype, {
 MetadataStore.dispatchToken = Dispatcher.register(function(action) {
 
   switch (action.type) {
-    case MetadataConstants.SET_DUBLIN_CORE:
-      _dublinCore = action.data;
+    case MetadataConstants.SET_METADATA:
+      _metadata = action.data;
       break;
     default:
   }
