@@ -3,6 +3,7 @@ const mui         = require("material-ui");
 const {Tabs, Tab} = mui;
 const ThemeMixin  = require("../../mixins/ui-theme");
 const MetadataActions = require("../../actions/space/metadata-actions");
+const Auth = require("../../utils/auth");
 
 
 
@@ -54,7 +55,9 @@ const Answers = React.createClass({
     }
   },
 
-
+  onChange(){
+    this.addMetadata();
+  },
 
   initializate(){
 

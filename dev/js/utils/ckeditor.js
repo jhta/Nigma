@@ -8,6 +8,8 @@ if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
 //Box dimensions
 CKEDITOR.config.height = 150;
 CKEDITOR.config.width = 'auto';
+var formData = new FormData(), xhr;
+var urlfield = null;
 
 
 CKEDITOR.on('dialogDefinition', function(ev) {
