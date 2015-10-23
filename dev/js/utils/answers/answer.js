@@ -81,7 +81,7 @@ class Answer {
   _generateCode() {
     var codeText = [];
     for(var i = 0; i < this.correctValues.length; i++) {
-      var assertCode = this.names.map((name) => Variable.replaceVariables(this.correctValues[i][name]) != "" ? `Number((${Variable.replaceVariables(this.correctValues[i][name])}).toFixed(${this.precision})) == inputValue['${name}']` : `(inputValue['${name}'] == "" || inputValue['${name}'] == null)` );
+      var assertCode = this.names.map((name) => (this.correctValues[i][name] != "" && this.correctValues[i][name] != null && (typeof this.correctValues[i][name] !== "undefined"))  ? `math.eval("(${this.correctValues[i][name]})", Variables).toFixed(${this.precision}) == inputValue['${name}']` : `(inputValue['${name}'] == "" || inputValue['${name}'] == null)` );
       if(i == 0) {
         codeText.push(`if(${assertCode.join(' && ')}) {`);
       } else {
@@ -95,7 +95,7 @@ class Answer {
     }
     for(var i = 0; i < this.commonErrors.length; i++) {
       var commonError = this.commonErrors[i];
-      var failCode = this.names.map((name) => Variable.replaceVariables(commonError.values[name]) != "" ? `Number((${Variable.replaceVariables(commonError.values[name])}).toFixed(${this.precision})) == inputValue['${name}']` : `(inputValue['${name}'] == "" || inputValue['${name}'] == null)`);
+      var failCode = this.names.map((name) => (commonError.values[name] != "" && commonError.values[name] != null && (typeof commonError.values[name] !== "undefined") ) ? `math.eval("(${commonError.values[name]})", Variables).toFixed(${this.precision}) == inputValue['${name}']` : `(inputValue['${name}'] == "" || inputValue['${name}'] == null)`);
       codeText.push(`else if (${failCode.join(" && ")}) {`);
       codeText.push(`console.log("You fail, ${commonError.message}");`);
       codeText.push(`response = '${commonError.message}';`);

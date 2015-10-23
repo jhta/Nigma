@@ -14,10 +14,14 @@ class Variable {
   }
 
   static replaceVariables(codeText) {
+    console.log("replacing " + codeText);
+    if(typeof codeText  === "undefined")
+      return "";
+    codeText = codeText || "";
     if(codeText != null) {
       codeText = codeText.toString();
     }
-    if(codeText.match(/(\_[A-Za-z])/g))
+    if(codeText != null && codeText != "" && codeText.match(/(\_[A-Za-z])/g))
       codeText = codeText.replace(/(\_[A-Za-z])/g, `Variables['$1']`);
     return codeText;
   }
