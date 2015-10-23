@@ -53,6 +53,7 @@ const Answers = React.createClass({
       'language': React.findDOMNode(this.refs.idioma).value,
       'date': React.findDOMNode(this.refs.date).value
     }
+    MetadataActions.setMetadata(metadata);
   },
 
   onChange(){
@@ -94,7 +95,7 @@ const Answers = React.createClass({
     this.initializate();
        
     return (
-      <div className="Formulation u-tab-content">
+      <div className="Formulation u-tab-content" onChange={this.onChange} >
         <div className="input-field col s4">
           <input id="autor"    valueLink={this.linkState('autor')}   data-path="name" type="text"/>
           <label htmlFor="autor" className="active">Autor</label>
