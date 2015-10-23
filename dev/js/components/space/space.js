@@ -139,7 +139,8 @@ const Space = React.createClass({
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
-      formulation: questionFormulation
+      formulation: questionFormulation,
+      metadata: MetadataStore.getMetadata()
     };
 
     SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
@@ -152,7 +153,8 @@ const Space = React.createClass({
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
-      formulation: questionFormulation
+      formulation: questionFormulation,
+      metadata: MetadataStore.getMetadata()
     };
 
     SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
@@ -187,7 +189,6 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    let answers = AnswerStore.getAnswers();
     let questionFormulation = Ckeditor.getValue();
 
     FormulationActions.addFormulation(questionFormulation);
