@@ -1,20 +1,24 @@
 const ExpressionEvaluator = require('../variables/expression-evaluator');
 class CommonError {
   constructor() {
-    this.value = "";
+    this.values = {};
     this.message = "";
   }
 
-  isValid(variables) {
-    var output = ExpressionEvaluator.isEvaluable(this.value, variables);
-    if(output.error)
-      output.messages = `Error común, ${this.value}: ${output.messages}`
+  isValid(variables, answerNames) {
+    var output = {error: false, messages: []};
+    for(var j = 0; j < answerNames.length; j++) {
+      var answerName = answerNames[j];
+      var validation = ExpressionEvaluator.isEvaluable(this.values[answerName], variables);
+      output.error = output.error || validation.error;
+      output.messages = output.messages.concat(validation.messages);
+    }
     return output;
   }
 
   static createFromResponse(commonErrorJson) {
     var commonError = new CommonError();
-    commonError.value = commonErrorJson.value;
+    commonError.values = commonErrorJson.values;
     commonError.message = commonErrorJson.message;
     return commonError;
   }

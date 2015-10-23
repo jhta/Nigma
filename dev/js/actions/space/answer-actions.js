@@ -31,27 +31,10 @@ var AnswerActions = {
     });
   },
 
-  deleteCommonErrorQuestion(answer, answerIndex,index) {
+  setAnswer(answer) {
     Dispatcher.dispatch({
-      type: AnswerConstants.DELETE_COMMON_ERROR,
-      answer: answer,
-      answerIndex: answerIndex,
-      index: index
-    });
-  },
-
-  addCommonError(answer, answerIndex) {
-    Dispatcher.dispatch({
-      type: AnswerConstants.ADD_COMMON_ERROR,
-      answer: answer,
-      answerIndex: answerIndex
-    });
-  },
-
-  loadAnswers(answersJson) {
-    Dispatcher.dispatch({
-      type: AnswerConstants.LOAD_ANSWERS,
-      answers: answersJson
+      type: AnswerConstants.SET_ANSWER,
+      answer: answer
     });
   }
 }

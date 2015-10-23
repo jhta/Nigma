@@ -5,11 +5,6 @@ CKEDITOR.config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?co
 if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
   CKEDITOR.tools.enableHtml5Elements( document );
 
- var formData = new FormData(), xhr;
- var urlfield = null;
-
-
-
 //Box dimensions
 CKEDITOR.config.height = 150;
 CKEDITOR.config.width = 'auto';
@@ -243,7 +238,8 @@ const CKEditor = {
     //return (window.TeX)? window.TeX:"";
   },
   setValue(text) {
-    CKEDITOR.instances.editor.setData(text)
+    if(CKEDITOR.instances.editor != null)
+      CKEDITOR.instances.editor.setData(text)
   }
 }
 

@@ -11,6 +11,7 @@ var VariableActions = {
     });
   },
   validateCode(code) {
+    console.log(code);
     code = code.split("\n").filter(variable => variable != '')
     Dispatcher.dispatch({
       type: VariableConstants.VALIDATE_CODE,
@@ -18,7 +19,6 @@ var VariableActions = {
     });
   },
   loadVariables(variables) {
-    variables = variables.split("\n").filter(variable => variable != '')
     Dispatcher.dispatch({
       type: VariableConstants.LOAD_VARIABLES,
       variables: variables

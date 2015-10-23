@@ -31,6 +31,12 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'Underline,Subscript,Superscript';
 	config.extraPlugins = 'filebrowser';
 
+	config.extraPlugins = 'filebrowser';
+
+
+    config.filebrowserUploadUrl =  '../../js/utils/upload.js';
+
+
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
 
