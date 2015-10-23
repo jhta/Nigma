@@ -69,11 +69,13 @@ Variables.Content = React.createClass({
   },
 
   componentWillMount() {
+    console.log("Añadiendo el listerner");
     VariableStore.addChangeListener(this._handleChange)
   },
 
   _handleChange(){
     var variables = VariableStore.getVariables();
+    console.log("Estoy aca cambiaaaa");
     this.setState({
       validating: false,
       text: variables.text,
@@ -98,6 +100,7 @@ Variables.Content = React.createClass({
   },
 
   render() {
+    console.log(this.state.text);
     return (
       <div className="Variables-Content">
         <AlertMessage data={VariableStore.getValidationOutPut()}/>

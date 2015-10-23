@@ -67,8 +67,7 @@ const Space = React.createClass({
       root: rootFolder,
       rootId: rootFolder._id,
       folders: rootFolder.folders,
-      questions: rootFolder.questions,
-      previewOutput: SpaceStore.getPreview()
+      questions: rootFolder.questions
     });
   },
 
@@ -87,23 +86,27 @@ const Space = React.createClass({
 
   setQuestion(question) {
     SpaceActions.setActualQuestion(question);
-    console.log(question);
-    this.setState({
-      currentQuestion: question,
-    });
-    if(question["data"] == null) {
-        question["data"] = {
-          formulation: "",
-          variables: null,
-          answer: null
-        }
-    } else {
-      question.data = JSON.parse(question.data);
-    }
-    console.log("Setting  question => ",question);
-    FormulationActions.addFormulation(question.data.formulation);
-    VariableActions.loadVariables(question.data.variables);
-    AnswerActions.setAnswer(question.data.answer);
+    setTimeout(() => {
+      console.log(question);
+      this.setState({
+        currentQuestion: question,
+      });
+      if(question["data"] == null) {
+          question["data"] = {
+            formulation: "",
+            variables: null,
+            answer: null,
+            metadata: null
+          }
+      } else {
+        question.data = JSON.parse(question.data);
+      }
+      console.log("Setting  question => ",question);
+      FormulationActions.addFormulation(question.data.formulation);
+      VariableActions.loadVariables(question.data.variables);
+      AnswerActions.setAnswer(question.data.answer);
+    }, 400);
+
   },
 
   showExpresions(flag = true) {
@@ -187,18 +190,15 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    let answer = AnswerStore.getAnswer();
     let questionFormulation = Ckeditor.getValue();
-
     FormulationActions.addFormulation(questionFormulation);
-    
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
       formulation: questionFormulation,
       metadata: MetadataStore.getMetadata()
     };
-    
+
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
 
@@ -252,7 +252,7 @@ const Space = React.createClass({
   },
 
   render() {
-    
+
     return (
       <div className="Wrapper ">
         <FileSideBar
