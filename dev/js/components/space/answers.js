@@ -5,21 +5,21 @@ const AlertMessage = require('../util/alert');
 var AnswerContainer = React.createClass({
   getInitialState: function() {
     return {
-      answers: AnswerStore.getAnswers(),
+      answer: AnswerStore.getAnswer(),
       validating: false
     };
   },
 
 
-  _changeAnswer(index, path, value) {
+  _changeAnswer(path, value) {
 
     var objectPath = path.split('.') || [];
 
     if(objectPath.length == 0)
       return;
 
-    var answers = this.state.answers;
-    var item = answers[index];
+    var answer = this.state.answer;
+    var item = answer;
 
     for(var i = 0; i < objectPath.length -1; i++) {
       var pathValue = objectPath[i];
@@ -31,7 +31,7 @@ var AnswerContainer = React.createClass({
 
     item[objectPath[objectPath.length -1]] = value;
     this.setState({
-      answers: answers
+      answer: answer
     });
   },
 
@@ -48,33 +48,96 @@ var AnswerContainer = React.createClass({
 
   _handleChange() {
     this.setState({
-      answers: AnswerStore.getAnswers(),
+      answer: AnswerStore.getAnswer(),
       validating: false
     });
+
 
   },
 
   _addNewAnswer() {
     AnswerActions.addNewAnswer();
   },
+  answerBasicActions(data) {
+    var addAnswer = (answername) => {
+      var answer = this.state.answer;
+      if(answername != null && answername != "")
+        answer.names.push(answername);
+      this.setState({
+        answer: answer
+      });
+    }
+    var editAnswer = (index, answername) => {
+      var answer = this.state.answer;
+      if(answername != null && answername != "")
+        answer.names[index] = answername;
+      this.setState({
+        answer: answer
+      });
+    }
+    var deleteAnswer = (index) => {
+      var answer = this.state.answer;
+      if(index != null && !isNaN(index))
+        answer.names.splice(index, 1)
+      this.setState({
+        answer: answer
+      });
+    }
+    var addCorrectValue = (answerNames) => {
+      var answer = this.state.answer;
+      if(answerNames != null && answerNames.length > 0) {
+        var value = {};
+        answerNames.forEach((answerName) => (value[answerName] = ""));
+        answer.correctValues.push(value);
+        this.setState({
+          answer: answer
+        });
+      }
+    }
+    var addCommonError = (answerNames) => {
+      var answer = this.state.answer;
+      if(answerNames != null && answerNames.length > 0) {
+        var value = {
+          values: {},
+          message: ""
+        };
+        answerNames.forEach((answerName) => (value.values[answerName] = ""));
+        answer.commonErrors.push(value);
+        this.setState({
+          answer: answer
+        });
+      }
+    }
+    switch(data.action) {
+      case "addAnswer":
+        addAnswer(data.answerName);
+        break;
+      case "editAnswer":
+        editAnswer(data.index, data.answerName);
+        break;
+      case "deleteAnswer":
+        deleteAnswer(data.index)
+        break;
+      case "addCorrectValue":
+        addCorrectValue(data.answerNames)
+        break;
+      case "addCommonError":
+        addCommonError(data.answerNames)
+        break;
+    }
+
+  },
 
 
 
   render() {
-
     return (
       <div className="Formulation-AnswerContainer u-tab-content">
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
         <AlertMessage data={AnswerStore.getValidationOutPut()}/>
         {
-          this.state.answers.length != 0 ?
-            (
-              <ul className="collapsible" data-collapsible="expandable">
-                {
-                  this.state.answers.map((answer, index) => <AnswerContainer.Answer key={answer.index} index={index} answer={answer} handleChange={this._changeAnswer} />)
-                }
-              </ul>
-            )
+          this.state.answer != null ?
+            <AnswerContainer.Answer answer={this.state.answer} handleChange={this._changeAnswer} answerActions={this.answerBasicActions} />
             :
             <div className="empty-text" onClick={this._addNewAnswer}>No hay respuestas para la pregunta, click aquí para agregar una nueva</div>
         }
@@ -96,31 +159,37 @@ var AnswerContainer = React.createClass({
 
   },
   componentDidUpdate(prevProps, prevState) {
-    $('.collapsible').collapsible();
+    $('input, textarea').trigger('change');
   },
 });
 
 AnswerContainer.Answer = React.createClass({
 
-  _convertToNativeType(value) {
-    console.log(value);
+  _convertToNativeType(value, type) {
+    type = type || "string";
     if(value == "" || value == null || value == undefined){
       return "";
-    } else if(value === "false"){
-      value = false;
-    } else if (value === "true"){
-      value = true;
-    } else if(!isNaN(value)){
-      value = parseInt(value);
+    } else {
+      if(value === "false" && type === "boolean"){
+        value = false;
+      } else if (value === "true" && type === "boolean"){
+        value = true;
+      } else if(!isNaN(value) && type === "number"){
+        value = Number(value);
+      } else {
+        //Already a string
+      }
+      return value;
     }
-    return value;
+
   },
 
   _handleChange(evt) {
     const target = evt.target;
     const path = target.getAttribute('data-path');
+    console.log(target.value);
     var value = this._convertToNativeType(target.value);
-    this.props.handleChange(this.props.index, path, value);
+    this.props.handleChange(path, value);
   },
 
   _deleteQuestion() {
@@ -133,110 +202,200 @@ AnswerContainer.Answer = React.createClass({
 
   render() {
     return (
-      <li className="Formulation-AnswerContainer-Answer">
-        <div className="collapsible-header header">
-            <i className="material-icons">help</i>
-            <span className="title">{this.props.answer.name}</span>
-            <span className="actions-container">
-              <span className="material-icons">edit</span>
-              <span className="material-icons" onClick={this._deleteQuestion}>delete</span>
-            </span>
-        </div>
-        <div className="collapsible-body">
-          <ul className="collection main-answer-content" >
-            <li className="collection-item main-answer-form">
-              <AnswerContainer.Answer.Form answer={this.props.answer} handleChange={this._handleChange} index={this.props.index}/>
-            </li>
-            <li className="collection-item">
-              <div className="collapsible-header header">
-                <i className="material-icons">error</i>
-                <span className="title">Errores comunes</span>
-                <span className="actions-container">
-                  <span className="material-icons" onClick={this._addCommonError}>add</span>
-                </span>
-              </div>
-              <div>
-                <ul className="collection">
-                  {this.props.answer.commonErrors.map((error, index) => <AnswerContainer.Answer.CommonError key={index} index={index} error={error} answer={this.props.answer} answerIndex={this.props.index} handleChange={this._handleChange} />)}
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
+      <div className="Formulation-AnswerContainer-Answer">
+        <AnswerContainer.Answer.GeneralInformation answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+        <AnswerContainer.Answer.CorrectValues answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+        <AnswerContainer.Answer.CommonErrors answer={this.props.answer} handleChange={this._handleChange} answerActions={this.props.answerActions}/>
+      </div>
     );
   }
 
 });
 
-AnswerContainer.Answer.Form = React.createClass({
-
-  _generatePresicion() {
-    var precision = [];
-    for (var i = 0; i < 16; i++) {
-      precision.push(i);
-    }
-    return precision;
+AnswerContainer.Answer.GeneralInformation = React.createClass({
+  getInitialState() {
+    return {newAnswerName: ""};
   },
+
+  mixins: [React.addons.LinkedStateMixin],
+  precision: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+
+  _addAnswer() {
+    this.props.answerActions({
+      answerName: this.state.newAnswerName,
+      action: "addAnswer"
+    })
+    this.setState({
+      newAnswerName: ""
+    });
+  },
+
 
   render() {
     return (
-      <div className="row">
-        <div className="input-field col s4">
-          <input id={`textbox_answer_name${this.props.index}`} value={this.props.answer.name} onChange={this.props.handleChange} data-path="name" type="text"/>
-          <label htmlFor={`textbox_answer_name${this.props.index}`}>Etiqueta</label>
+      <div className="general-information">
+        <div className="">
+            <input type="checkbox" className="col s3" id={`showLabelCheckBox`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" data-type="boolean" />
+            <label htmlFor={`showLabelCheckBox`} className="col s4">Incluir etiquetas</label>
         </div>
-
-        <div className="input-field col s4">
-          <input  id={`textbox_answer_correct_value${this.props.index}`} value={this.props.answer.correctValue} onChange={this.props.handleChange} data-path="correctValue" type="text"/>
-          <label htmlFor={`textbox_answer_correct_value${this.props.index}`}>Valor correcto</label>
-        </div>
-
-        <div className="input-field col s2">
-          <select className="browser-default" data-path="precision" value={this.props.answer.precision} onChange={this.props.handleChange}>
-            <option value="" disabled>Precisión</option>
-            {
-              this._generatePresicion().map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>)
-            }
-          </select>
-        </div>
-
-        <div className="input-field col s2">
-          <input type="checkbox" id={`checkbox_answer${this.props.index}`}  onChange={this.props.handleChange} checked={this.props.answer.showLabel} value={!this.props.answer.showLabel} data-path="showLabel" />
-          <label htmlFor={`checkbox_answer${this.props.index}`} >Mostrar</label>
-        </div>
-      </div>
-    )
-  }
-});
-
-AnswerContainer.Answer.CommonError = React.createClass({
-  _deleteCommonError() {
-    AnswerActions.deleteCommonErrorQuestion(this.props.answer, this.props.answerIndex, this.props.index);
-  },
-
-  render() {
-    return (
-      <li className="collection-item">
-        <div className="row">
-          <div className="input-field col s3">
-            <input  id={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`} value={this.props.error.value} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.value`} type="text"/>
-            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__value${this.props.index}`}>Valor del error</label>
+        <div className="">
+          <label htmlFor={`questionPrecision`} className="col s4">Precisión decimal exigida</label>
+          <div className="col s3">
+            <select className="browser-default"  value={this.props.answer.precision} onChange={this.props.handleChange} id="questionPrecision" data-path="precision" data-type="number">
+              <option value="" disabled>Precisión decimal exigida</option>
+              { this.precision.map((optionValue, index) => <option key={index}  value={optionValue}>{optionValue}</option>) }
+            </select>
           </div>
-          <div className="input-field col s8">
-            <input  id={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`} value={this.props.error.message} onChange={this.props.handleChange} data-path={`commonErrors.${this.props.index}.message`} type="text"/>
-            <label htmlFor={`textbox_answer_${this.props.answerIndex}_error__message${this.props.index}`}>Mensaje de retroalimentacion</label>
+        </div>
+        <div className="row">
+          <div className="input-field col s6">
+            <input id={`textbox_answer_name`} valueLink={this.linkState('newAnswerName')} type="text"/>
+            <label htmlFor={`textbox_answer_name`}>Agregar respuesta</label>
           </div>
           <div className="col s1">
-            <span className="actions-container">
-              <span className="material-icons" onClick={this._deleteCommonError}>delete</span>
-            </span>
+            <a className="btn-floating btn-medium waves-effect waves-light green create-btn" onClick={this._addAnswer}><i className="material-icons">add</i></a>
+          </div>
+          <div className="col s5">
+            <div className="answers-names-container">
+              {
+                this.props.answer.names.map((answerName, index) => <AnswerContainer.Answer.GeneralInformation.AnswerName index={index} name={answerName} key={index} handleChange={this.props._handleChange} answerActions={this.props.answerActions}/>)
+              }
+            </div>
           </div>
         </div>
-
-      </li>
+        <hr />
+      </div>
     );
   }
+});
+
+AnswerContainer.Answer.GeneralInformation.AnswerName = React.createClass({
+  _deleteQuestion() {
+    this.props.answerActions({
+      action: "deleteAnswer",
+      index: this.props.index
+    });
+  },
+  render() {
+    return (
+      <div className="answer-name">
+        <div className="name">
+          {this.props.name}
+        </div>
+        <div className="actions">
+          <i className="material-icons">edit</i>
+          <i className="material-icons" onClick={this._deleteQuestion}>delete</i>
+        </div>
+      </div>
+    );
+  }
+});
+
+AnswerContainer.Answer.CorrectValues = React.createClass({
+  _addCorrectValue() {
+    this.props.answerActions({
+      action: "addCorrectValue",
+      answerNames: this.props.answer.names
+    })
+  },
+
+  render() {
+    var answer = this.props.answer;
+    return (
+      <div className="correct-values-container" >
+        <h3 className="title">Valores correctos</h3>
+        {
+          answer.correctValues.map((correctValue, index) =>  <AnswerContainer.Answer.CorrectValues.Value  index={index} correctValue={correctValue} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+        }
+        <div className="actions">
+          <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCorrectValue}><i className="material-icons">add</i></a>
+        </div>
+        <hr />
+      </div>
+    );
+  }
+});
+
+AnswerContainer.Answer.CorrectValues.Value = React.createClass({
+  render() {
+    var value = this.props.correctValue;
+    var answerNames = this.props.answerNames;
+    return (
+      <div>
+        {
+          answerNames.map(
+            (answerName, index) =>
+              (
+                <div className="correct-value" key={index}>
+                  <div className="input-field">
+                    <input id={`textbox_correct_value_${answerName}_${this.props.index}`} value={value[answerName]} onChange={this.props.handleChange} type="text" data-path={`correctValues.${this.props.index}.${answerName}`}/>
+                    <label htmlFor={`textbox_correct_value_${answerName}_${this.props.index}`}>{answerName}</label>
+                  </div>
+                </div>
+              )
+
+          )
+        }
+      </div>
+    );
+  }
+});
+
+
+AnswerContainer.Answer.CommonErrors = React.createClass({
+
+  _addCommonError() {
+    this.props.answerActions({
+      action: "addCommonError",
+      answerNames: this.props.answer.names
+    })
+  },
+
+  render() {
+    var answer = this.props.answer;
+    return (
+      <div className="common-errors-container" >
+        <h3 className="title">Errores comunes</h3>
+        {
+          answer.commonErrors.map((commonError, index) =>  <AnswerContainer.Answer.CommonErrors.Value  index={index} commonError={commonError} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+        }
+        <div className="actions">
+          <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCommonError}><i className="material-icons">add</i></a>
+        </div>
+        <hr />
+      </div>
+    );
+  }
+});
+
+AnswerContainer.Answer.CommonErrors.Value = React.createClass({
+  render() {
+    var value = this.props.commonError.values;
+    var answerNames = this.props.answerNames;
+    return (
+      <div>
+        {
+          answerNames.map(
+            (answerName, index) =>
+              (
+                <div className="common-error" key={index}>
+                  <div className="input-field">
+                    <input id={`textbox_common_error_${answerName}_${this.props.index}`} value={value[answerName]} onChange={this.props.handleChange} type="text" data-path={`commonErrors.${this.props.index}.values.${answerName}`}/>
+                    <label htmlFor={`textbox_common_error_${answerName}_${this.props.index}`}>{answerName}</label>
+                  </div>
+                </div>
+              )
+
+          )
+        }
+        <div className="input-field">
+          <input id={`textbox_common_error_message_${this.props.index}`} value={this.props.commonError.message} onChange={this.props.handleChange} type="text" data-path={`commonErrors.${this.props.index}.message`}/>
+          <label htmlFor={`textbox_common_error_message_${this.props.index}`}>Mensaje de retroalimentacion</label>
+        </div>
+      </div>
+    );
+  }
+
 });
 
 AnswerContainer.Validation = React.createClass({

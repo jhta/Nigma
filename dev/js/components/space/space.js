@@ -9,7 +9,7 @@ const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
-
+const Ckeditor = require('../../utils/ckeditor');
 
 const SpaceActions = require('../../actions/space/space-actions');
 const VariableActions = require('../../actions/space/variable-actions');
@@ -23,6 +23,10 @@ window.VariableStore = require('../../stores/space/variable-store');
 window.MetadataStore = require('../../stores/space/metadata-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+
+const Answer = require('../../utils/answers/answer');
+
+
 window.FormulationStore = require('../../stores/space/formulation-store');
 
 const Space = React.createClass({
@@ -90,16 +94,16 @@ const Space = React.createClass({
     if(question["data"] == null) {
         question["data"] = {
           formulation: "",
-          variables: "",
-          answers: []
+          variables: null,
+          answer: null
         }
     } else {
       question.data = JSON.parse(question.data);
     }
-    console.log("Setting question ", question);
+    console.log("Setting  question => ",question);
     FormulationActions.addFormulation(question.data.formulation);
     VariableActions.loadVariables(question.data.variables);
-    AnswerActions.loadAnswers(question.data.answers);
+    AnswerActions.setAnswer(question.data.answer);
   },
 
   showExpresions(flag = true) {
@@ -129,20 +133,26 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
-      answers: AnswerStore.getAnswers(),
-      formulation: FormulationStore.getFormulation()
+      answer: AnswerStore.getAnswer(),
+      formulation: questionFormulation
     };
 
     SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
 
   _exportQuestion(){
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
-      answers: AnswerStore.getAnswers(),
-      formulation: FormulationStore.getFormulation()
+      answer: AnswerStore.getAnswer(),
+      formulation: questionFormulation
     };
 
     SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
@@ -177,14 +187,18 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    var answers = AnswerStore.getAnswers();
-    answers.forEach( (answer) => delete answer["code"])
+    let answers = AnswerStore.getAnswers();
+    let questionFormulation = Ckeditor.getValue();
+
+    FormulationActions.addFormulation(questionFormulation);
+    
     var data = {
-      variables: VariableStore.getVariables().text,
-      answers: answers,
-      formulation: FormulationStore.getFormulation(),
-      metadata: MetadataStore.getDublinCore()
-    }
+      variables: VariableStore.getVariables(),
+      answer: AnswerStore.getAnswer(),
+      formulation: questionFormulation,
+      metadata: MetadataStore.getMetadata()
+    };
+    
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
 
@@ -196,12 +210,8 @@ const Space = React.createClass({
       background: '#009688',
       opacity: '1'
     };
-    var modal = null;
-    if(this.state.previewOutput != null && this.state.previewOutput.error){
-      modal = <Modal ref="modal" title="Preview"><h1>Ocurrio un error</h1></Modal>;
-    } else if (this.state.previewOutput != null && !this.state.previewOutput.error){
-      modal = <Modal ref="modal" title="Preview"><iframe src="http://localhost:4000/static/launch.html" style={{width: 300, height: 600}}></iframe></Modal>;
-    }
+
+
     return (
       <div>
         <h1 style={{margin: '5px 0 0 20px', fontSize: '30px', lineHeight: '30px'}}>{this.state.currentQuestion.name}</h1>
@@ -222,7 +232,7 @@ const Space = React.createClass({
                   <Answers />
                 </Tab>
                 <Tab label="Metadatos" style={styleTab}>
-                  <Metadata />
+                  <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
                 </Tab>
               </Tabs>
             </div>
@@ -236,7 +246,6 @@ const Space = React.createClass({
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
           <button className="btn waves-effect waves-light export-btn" onClick={this._exportQuestion}>Exportar a Scorm</button>
-          {modal}
         </div>
       </div>
     );

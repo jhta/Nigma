@@ -4,18 +4,19 @@ var SpaceApi = require('../../api/utils/space');
 var QuestionAPI = require('../../api/utils/question');
 const API = require('../../api/API');
 
+
 var SpaceActions = {
 
   previewQuestion(questionid, data) {
     SpaceApi.preview({
       question: JSON.stringify(data),
-      questionid
+      questionid: questionid
     }, (err, data) => {
-      console.log(data);
-      if (data.ok) {
+
+      if(data.ok){
         window.open(data.url);
       } else {
-
+        console.error("There was an error trying to preview question ");
       }
     });
   },

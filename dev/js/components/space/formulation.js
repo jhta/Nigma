@@ -30,7 +30,6 @@ const Formulation = React.createClass({
     this.setState({
       html: FormulationStore.getFormulation()
     });
-    console.log("Executed!!!");
   },
 
   componentDidMount() {
@@ -40,7 +39,6 @@ const Formulation = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if(this.props.dialogTeX != nextProps.dialogTeX) {
-      debugger
       Ckeditor.addTeX(nextProps.dialogTeX);
     }
   },
@@ -65,26 +63,18 @@ const Formulation = React.createClass({
     Ckeditor.addTeX(TeX);
   },
 
-  _onAddQuestion(){
-   let question = Ckeditor.getValue();
-   FormulationActions.addFormulation(question);
-  },
-
   componentDidUpdate(prevProps, prevState) {
-    Ckeditor.setValue(this.state.html);
+    setTimeout(Ckeditor.setValue(this.state.html),2000);
+    
   },
 
   render() {
-    console.log("Setting => ", this.state.html);
     return (
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">
           <div id="editor">
             <p>{this.state.html}</p>
           </div>
-        </div>
-        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this._onAddQuestion} >
-          +
         </div>
       </div>
     )

@@ -5,12 +5,11 @@ CKEDITOR.config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?co
 if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
   CKEDITOR.tools.enableHtml5Elements( document );
 
- var formData = new FormData(), xhr;
-
-
 //Box dimensions
 CKEDITOR.config.height = 150;
 CKEDITOR.config.width = 'auto';
+var formData = new FormData(), xhr;
+var urlfield = null;
 
 
 CKEDITOR.on('dialogDefinition', function(ev) {
@@ -23,6 +22,8 @@ CKEDITOR.on('dialogDefinition', function(ev) {
     dialogDefinition.onLoad = function() {
     
       var dialog = CKEDITOR.dialog.getCurrent();
+
+      urlfield = dialog.getContentElement('info', 'txtUrl');
      
 
      init();
@@ -39,7 +40,8 @@ CKEDITOR.on('dialogDefinition', function(ev) {
 });
 
 function appendLink(link){
-  document.getElementById('cke_88_textInput').value = link;
+  urlfield.setValue(link);
+  //document.getElementById('cke_82_textInput').value = link;
 }
 
 function initFormData(){
@@ -212,7 +214,6 @@ const CKEditor = {
   addTeX(TeX) {
       setTimeout(() => {
       window.TeXNode = document.getElementById("cke_85_textarea");
-      debugger
       if(window.TeXNode) {
         let lastVal = window.TeXNode.value;
         window.TeXNode.value = lastVal + TeX;
@@ -239,7 +240,8 @@ const CKEditor = {
     //return (window.TeX)? window.TeX:"";
   },
   setValue(text) {
-    CKEDITOR.instances.editor.setData(text)
+    if(CKEDITOR.instances.editor != null)
+      CKEDITOR.instances.editor.setData(text)
   }
 }
 

@@ -30,7 +30,6 @@ var FormulationStore = assign({}, EventEmitter.prototype, {
 FormulationStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case FormulationConstants.ADD_FORMULATION:
-      console.log(action);
       FormulationStore.setFormulation(action.formulation);
       FormulationStore.emitChange();
       break;

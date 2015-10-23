@@ -2,10 +2,10 @@ const MetadataConstants = require('../../constants/space/metadata-constants');
 var Dispatcher = require('../../dispatchers/dispatcher');
 
 var MetadataActions = {
-  setDublinCore(dublinCore) {
+  setMetadata(metadata) {
     Dispatcher.dispatch({
-      type: MetadataConstants.SET_DUBLIN_CORE,
-      data: dublinCore,
+      type: MetadataConstants.SET_METADATA,
+      data: metadata,
     });
   }
 }

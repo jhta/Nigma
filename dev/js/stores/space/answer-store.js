@@ -7,57 +7,35 @@ var assign = require('object-assign');
 var Parser = require('../../utils/parser');
 
 
-var _answers = [];
+var _answer = null;
 var _validationOutput = null;
 
 
-function _setAnswers(answers) {
-  _answers = answers;
-}
 
 function _addNewAnswer() {
-  _answers.push(new Answer());
+  _answer = new Answer();
 }
 
-function _validateAnswers(answers, variables) {
-  _setAnswers(answers);
+function _addAnswer(answerName) {
+  _answer.names.push(answerName)
+}
+
+function _validateAnswers(answer, variables) {
+  _loadAnswer(answer);
   _validationOutput = {error: false, messages: []};
-  for(var i = 0; i < _answers.length; i++) {
-    var answer = answers[i];
-    var validation = answer.isValid(variables);
-    _validationOutput.error = _validationOutput.error || validation.error;
-    _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
-  }
+  var validation = _answer.isValid(variables);
+  _validationOutput.error = _validationOutput.error || validation.error;
+  _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
+
   if (!_validationOutput.error){
     _validationOutput.messages = ["Respustas validadas correctamente"];
   }
-  console.log(_validationOutput);
 
 }
 
-function _removeAnswer(answer, index) {
-  var storeAnswer = _answers[index];
-  if(storeAnswer._id == answer._id){
-    _answers.splice(index,1);
-  }
-}
-
-function _removeAnswerCommonError(answer, answerIndex, index) {
-  var storeAnswer = _answers[answerIndex];
-  if(storeAnswer._id == answer._id){
-    _answers[answerIndex].commonErrors.splice(index,1);
-  }
-}
-
-function _addCommonError(answer, answerIndex) {
-  var storeAnswer = _answers[answerIndex];
-  if(storeAnswer._id == answer._id){
-    _answers[answerIndex].addCommonError();
-  }
-}
-
-function _loadAnswers(answers) {
-  _answers = answers.map((jsonAnswer) => Answer.createFromResponse(jsonAnswer))
+function _loadAnswer(answer) {
+  if(answer != null)
+    _answer = Answer.createFromResponse(answer)
 }
 
 var AnswerStore = assign({}, EventEmitter.prototype, {
@@ -73,8 +51,8 @@ var AnswerStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAnswers() {
-    return _answers;
+  getAnswer() {
+    return _answer;
   },
 
   getValidationOutPut() {
@@ -102,19 +80,11 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       _removeAnswer(action.answer, action.index)
       AnswerStore.emitChange();
       break;
-    case AnswerConstants.DELETE_COMMON_ERROR:
-      _removeAnswerCommonError(action.answer,  action.answerIndex ,action.index)
-      AnswerStore.emitChange();
-      break;
-    case AnswerConstants.ADD_COMMON_ERROR:
-      _addCommonError(action.answer,  action.answerIndex)
-      AnswerStore.emitChange();
-      break;
-    case AnswerConstants.LOAD_ANSWERS:
-      _loadAnswers(action.answers)
-      AnswerStore.emitChange();
-      break;
 
+    case AnswerConstants.SET_ANSWER:
+      _loadAnswer(action.answer)
+      AnswerStore.emitChange();
+      break;
     default:
   }
 });
