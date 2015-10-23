@@ -55,7 +55,9 @@ const Answers = React.createClass({
     }
   },
 
-
+  onChange(){
+    this.addMetadata();
+  },
 
   initializate(){
 
