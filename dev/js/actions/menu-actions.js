@@ -39,11 +39,17 @@ var MenuActions = {
     });
   },
   deleteQuestion(index, question) {
-    Dispatcher.dispatch({
-        type: MenuActionConstants.DELETE_QUESTION,
-        question: question,
-        index: index,
-      });
+    QuestionAPI.deleteQuestion({
+      questionId: question._id,
+    }, (err, res) => {
+      if (!err) {
+        Dispatcher.dispatch({
+          type: MenuActionConstants.DELETE_QUESTION,
+          question: question,
+          index: index,
+        });
+      }
+    });
   },
 
   listFolders() {
