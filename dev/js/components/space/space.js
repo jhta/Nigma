@@ -9,7 +9,7 @@ const Answers     = require("./answers");
 const Metadata    = require("./metadata");
 const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
-
+const Ckeditor = require('../../utils/ckeditor');
 
 const SpaceActions = require('../../actions/space/space-actions');
 const VariableActions = require('../../actions/space/variable-actions');
@@ -129,20 +129,26 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
       answers: AnswerStore.getAnswers(),
-      formulation: FormulationStore.getFormulation()
+      formulation: questionFormulation
     };
 
     SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
 
   _exportQuestion(){
+    let questionFormulation = Ckeditor.getValue();
+    FormulationActions.addFormulation(questionFormulation);
+
     var data = {
       variables: VariableStore.getVariables(),
       answers: AnswerStore.getAnswers(),
-      formulation: FormulationStore.getFormulation()
+      formulation: questionFormulation
     };
 
     SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
@@ -177,14 +183,20 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    var answers = AnswerStore.getAnswers();
-    answers.forEach( (answer) => delete answer["code"])
+    let answers = AnswerStore.getAnswers();
+    let questionFormulation = Ckeditor.getValue();
+
+    FormulationActions.addFormulation(questionFormulation);
+
+    answers.forEach( (answer) => delete answer["code"]);
+
     var data = {
       variables: VariableStore.getVariables().text,
       answers: answers,
-      formulation: FormulationStore.getFormulation(),
+      formulation: questionFormulation,
       metadata: MetadataStore.getDublinCore()
-    }
+    };
+
     SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
   },
 

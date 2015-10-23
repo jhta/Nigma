@@ -21,9 +21,6 @@ const Answers = React.createClass({
   },
 
   addDublinCore(){
-
-
-  
   	var dublinFormat = {
   		'title': '<dc:title>'+ 'title' +'</dc:title>',   
   		'creator': '<dc:creator>'+  'creator' +'</dc:creator>', 
@@ -41,6 +38,7 @@ const Answers = React.createClass({
   		'date': '<dc:date>' + React.findDOMNode(this.refs.date).value +' <dc:date>',
   		'rights':'<dc:rights>'+ 'rights' +'</dc:rights>'  //cc
 	  };
+
     MetadataActions.setDublinCore(dublinFormat);
   },
 
@@ -167,14 +165,6 @@ const Answers = React.createClass({
           <input id="publiser"  onChange={this.handleChange}  valueLink={this.linkState('publisher')}  data-path="name" type="text"/>
           <label htmlFor="publisher">Editor</label>
         </div>
-
-	     <div className='dropdown-button btn' data-activates='dropdown2'>Añadir metadatos</div>
-
-		  <ul id='dropdown2' className='dropdown-content'>
-		    <li><a href="javascript:void(0)" onClick={this.addDublinCore}>Dublin Core</a></li>
-		     <li className="divider"></li>
-		    <li><a href="javascript:void(0)" onClick={this.addIEE}>IEE LOM</a></li>
-		  </ul>
         
       </div>
     )

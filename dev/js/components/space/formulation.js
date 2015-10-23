@@ -64,11 +64,6 @@ const Formulation = React.createClass({
     Ckeditor.addTeX(TeX);
   },
 
-  _onAddQuestion(){
-   let question = Ckeditor.getValue();
-   FormulationActions.addFormulation(question);
-  },
-
   componentDidUpdate(prevProps, prevState) {
     Ckeditor.setValue(this.state.html);
   },
@@ -81,9 +76,6 @@ const Formulation = React.createClass({
           <div id="editor">
             <p>{this.state.html}</p>
           </div>
-        </div>
-        <div className="btn-floating btn waves-effect waves-light pink accent-3" onClick={this._onAddQuestion} >
-          +
         </div>
       </div>
     )
