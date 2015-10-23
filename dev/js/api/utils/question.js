@@ -20,6 +20,11 @@ const QuestionAPI = {
     share: {
       route: "/users/questions/:questionId",
       method: API._REQUEST_METHOD.post,
+    },
+
+    delete: {
+      route: "/questions/:questionId",
+      method: API._REQUEST_METHOD.delete,
     }
   },
   createQuestion(data, cb){
@@ -60,6 +65,17 @@ const QuestionAPI = {
 
   shareQuestion(data, cb) {
     const route = this._routes.share;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if (err) {
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body.question)
+      }
+    });
+  },
+
+  deleteQuestion(data, cb) {
+    const route = this._routes.delete;
     API.callAjaxRequest(route, data, (err, res) => {
       if (err) {
         cb(true, null);

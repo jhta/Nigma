@@ -65,7 +65,6 @@ function _shareFolder(folderIndex, folder) {
 
 function _shareQuestion(QuestionIndex, question) {
   console.log(question);
-  debugger
   console.log("AGGGGHHHH");
   // if (_rootFolder.questions[QuestionIndex].id == question.id) {
   //   _rootFolder.questions[QuestionIndex]
