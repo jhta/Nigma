@@ -137,14 +137,7 @@ const Answers = React.createClass({
           </select>
           <label>Cobertura</label>
         </div>
-	     <div className='dropdown-button btn' data-activates='dropdown2'>Añadir metadatos</div>
 
-		  <ul id='dropdown2' className='dropdown-content'>
-		    <li><a href="javascript:void(0)" onClick={this.addDublinCore}>Dublin Core</a></li>
-		     <li className="divider"></li>
-		    <li><a href="javascript:void(0)" onClick={this.addIEE}>IEE LOM</a></li>
-		  </ul>
-        
       </div>
     )
   }
