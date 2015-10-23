@@ -13,9 +13,11 @@ const FileSideBar = React.createClass({
   componentWillReceiveProps(nextProps) {
   let route = ''; 
    if (nextProps.historyString.length > 0) {
+      debugger
       route = '/' + nextProps.historyString.reduce((prev, next) => `${prev}/${next}`);
+    } else {
+      route = '/';
     }
-    route = '/';
     if (route !== this.state.currentRoute) {
       this.setState({
         currentRoute: route,
