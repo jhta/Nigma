@@ -65,7 +65,10 @@ const Formulation = React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     setTimeout(Ckeditor.setValue(this.state.html),2000);
-    
+  },
+
+  createMarkup() {
+    return {__html: this.state.html};
   },
 
   render() {
@@ -73,7 +76,7 @@ const Formulation = React.createClass({
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">
           <div id="editor">
-            <p>{this.state.html}</p>
+            <div dangerouslySetInnerHTML={this.createMarkup()} />
           </div>
         </div>
       </div>

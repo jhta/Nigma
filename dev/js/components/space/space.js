@@ -187,7 +187,7 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
-    let answers = AnswerStore.getAnswers();
+    let answer = AnswerStore.getAnswer();
     let questionFormulation = Ckeditor.getValue();
 
     FormulationActions.addFormulation(questionFormulation);
