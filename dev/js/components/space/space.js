@@ -207,7 +207,11 @@ const Space = React.createClass({
 
   renderContent() {
     if (Object.keys(this.state.currentQuestion) <= 0) {
-      return (<div className="Space"><h1>No se ha seleccionado la pregunta</h1></div>);
+      return (
+        <div className="Space">
+          <h1>No se ha seleccionado la pregunta</h1>
+        </div>
+        );
     }
     const styleTab = {
       background: '#009688',
