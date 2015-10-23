@@ -108,6 +108,26 @@ var AnswerContainer = React.createClass({
         });
       }
     }
+    var deleteCommonError = (index) => {
+      var answer = this.state.answer;
+      if(answer.commonErrors.length > index) {
+        answer.commonErrors.splice(index);
+        this.setState({
+          answer: answer
+        });
+      }
+    }
+
+    var deleteCorrectValue = (index) => {
+      var answer = this.state.answer;
+      if(answer.correctValues.length > index) {
+        answer.correctValues.splice(index);
+        this.setState({
+          answer: answer
+        });
+      }
+    }
+
     switch(data.action) {
       case "addAnswer":
         addAnswer(data.answerName);
@@ -123,6 +143,12 @@ var AnswerContainer = React.createClass({
         break;
       case "addCommonError":
         addCommonError(data.answerNames)
+        break;
+      case "deleteCorrectValue":
+        deleteCorrectValue(data.index)
+        break;
+      case "deleteCommonError":
+        deleteCommonError(data.index)
         break;
     }
 
@@ -143,10 +169,6 @@ var AnswerContainer = React.createClass({
         }
 
         <AnswerContainer.Validation validateForm={this._validateForm} validating={this.state.validating} />
-        <div className="right-align">
-          <a className="btn-floating btn-medium waves-effect waves-light red create-btn" onClick={this._addNewAnswer}><i className="material-icons">add</i></a>
-        </div>
-
       </div>
     )
   },
@@ -187,6 +209,7 @@ AnswerContainer.Answer = React.createClass({
   _handleChange(evt) {
     const target = evt.target;
     const path = target.getAttribute('data-path');
+    const type = target.getAttribute('data-type');
     console.log(target.value);
     var value = this._convertToNativeType(target.value);
     this.props.handleChange(path, value);
@@ -305,7 +328,7 @@ AnswerContainer.Answer.CorrectValues = React.createClass({
       <div className="correct-values-container" >
         <h3 className="title">Valores correctos</h3>
         {
-          answer.correctValues.map((correctValue, index) =>  <AnswerContainer.Answer.CorrectValues.Value  index={index} correctValue={correctValue} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+          answer.correctValues.map((correctValue, index) =>  <AnswerContainer.Answer.CorrectValues.Value  index={index} correctValue={correctValue} key={index} answerNames={answer.names} handleChange={this.props.handleChange} answerActions={this.props.answerActions}/>)
         }
         <div className="actions">
           <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCorrectValue}><i className="material-icons">add</i></a>
@@ -317,11 +340,20 @@ AnswerContainer.Answer.CorrectValues = React.createClass({
 });
 
 AnswerContainer.Answer.CorrectValues.Value = React.createClass({
+  _deleteCorrectValue() {
+    this.props.answerActions({
+      action: "deleteCorrectValue",
+      index: this.props.index
+    })
+  },
   render() {
     var value = this.props.correctValue;
     var answerNames = this.props.answerNames;
     return (
       <div>
+        <div className="button-actions">
+          <i className="material-icons small btn-actions" onClick={this._deleteCorrectValue}>delete</i>
+        </div>
         {
           answerNames.map(
             (answerName, index) =>
@@ -357,7 +389,7 @@ AnswerContainer.Answer.CommonErrors = React.createClass({
       <div className="common-errors-container" >
         <h3 className="title">Errores comunes</h3>
         {
-          answer.commonErrors.map((commonError, index) =>  <AnswerContainer.Answer.CommonErrors.Value  index={index} commonError={commonError} key={index} answerNames={answer.names} handleChange={this.props.handleChange}/>)
+          answer.commonErrors.map((commonError, index) =>  <AnswerContainer.Answer.CommonErrors.Value  index={index} commonError={commonError} key={index} answerNames={answer.names} handleChange={this.props.handleChange} answerActions={this.props.answerActions}/>)
         }
         <div className="actions">
           <a className="btn-floating btn-small waves-effect waves-light green create-btn" onClick={this._addCommonError}><i className="material-icons">add</i></a>
@@ -369,16 +401,26 @@ AnswerContainer.Answer.CommonErrors = React.createClass({
 });
 
 AnswerContainer.Answer.CommonErrors.Value = React.createClass({
+  _deleteCommonError() {
+    this.props.answerActions({
+      action: "deleteCommonError",
+      index: this.props.index
+    })
+  },
+
   render() {
     var value = this.props.commonError.values;
     var answerNames = this.props.answerNames;
     return (
-      <div>
+      <div className="common-error">
+        <div className="right-align">
+          <i className="material-icons small actions" onClick={this._deleteCommonError}>delete</i>
+        </div>
         {
           answerNames.map(
             (answerName, index) =>
               (
-                <div className="common-error" key={index}>
+                <div className="common-error-value" key={index}>
                   <div className="input-field">
                     <input id={`textbox_common_error_${answerName}_${this.props.index}`} value={value[answerName]} onChange={this.props.handleChange} type="text" data-path={`commonErrors.${this.props.index}.values.${answerName}`}/>
                     <label htmlFor={`textbox_common_error_${answerName}_${this.props.index}`}>{answerName}</label>

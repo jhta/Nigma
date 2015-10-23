@@ -92,7 +92,7 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       if(action.variables != null) {
         var code =  action.variables.text.split("\n").filter(variable => variable != '')
         _setVariables(code);
-        _validationOutput = _validateCode(code);
+        _validateCode(code);
       }
       VariableStore.emitChange();
       break;
