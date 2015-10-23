@@ -195,7 +195,7 @@ const CKEditor = {
   closeTeXDialog(cb) {
     if(window.DialogTEXOpen) {
       setTimeout(() => {
-        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_75");
+        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_80");
         window.TeXCloseButton.addEventListener("click", () => {
           cb();
         });
