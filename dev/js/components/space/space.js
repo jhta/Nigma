@@ -168,7 +168,6 @@ const Space = React.createClass({
     const historyString = this.state.historyString;
     history.push(this.state.root);
     historyString.push(folder.name);
-    debugger
     this.setState({
       root: folder,
       rootId: folder._id,
