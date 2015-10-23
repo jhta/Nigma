@@ -14,8 +14,9 @@ const FileSideBar = React.createClass({
   let route = ''; 
    if (nextProps.historyString.length > 0) {
       route = '/' + nextProps.historyString.reduce((prev, next) => `${prev}/${next}`);
+    } else {
+      route = '/';
     }
-    route = '/';
     if (route !== this.state.currentRoute) {
       this.setState({
         currentRoute: route,
