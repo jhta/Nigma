@@ -210,8 +210,7 @@ AnswerContainer.Answer = React.createClass({
     const target = evt.target;
     const path = target.getAttribute('data-path');
     const type = target.getAttribute('data-type');
-    console.log(target.value);
-    var value = this._convertToNativeType(target.value);
+    var value = this._convertToNativeType(target.value, type);
     this.props.handleChange(path, value);
   },
 

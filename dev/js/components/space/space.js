@@ -85,23 +85,22 @@ const Space = React.createClass({
   },
 
   setQuestion(question) {
+    if(question["data"] == null) {
+          question["data"] = {
+            formulation: "",
+            variables: null,
+            answer: null,
+            metadata: {title: question.name, author: "Jonathan"}
+          }
+      } else {
+        question.data = JSON.parse(question.data);
+      }
     SpaceActions.setActualQuestion(question);
     setTimeout(() => {
       console.log(question);
       this.setState({
         currentQuestion: question,
       });
-      if(question["data"] == null) {
-          question["data"] = {
-            formulation: "",
-            variables: null,
-            answer: null,
-            metadata: null
-          }
-      } else {
-        question.data = JSON.parse(question.data);
-      }
-      console.log("Setting  question => ",question);
       FormulationActions.addFormulation(question.data.formulation);
       VariableActions.loadVariables(question.data.variables);
       AnswerActions.setAnswer(question.data.answer);
@@ -208,7 +207,7 @@ const Space = React.createClass({
 
   renderContent() {
     if (Object.keys(this.state.currentQuestion) <= 0) {
-      return (<div className="Space"><h1>No se a seleccionado la pregunta</h1></div>);
+      return (<div className="Space"><h1>No se ha seleccionado la pregunta</h1></div>);
     }
     const styleTab = {
       background: '#009688',

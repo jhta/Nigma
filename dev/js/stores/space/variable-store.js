@@ -15,7 +15,6 @@ function _addVariable (variableCode) {
 }
 
 function _setVariables (code) {
-  console.log("Setting code => ", code);
   if(code.length != 0)
     _textVariables = code.join("\n") + "\n";
 }
