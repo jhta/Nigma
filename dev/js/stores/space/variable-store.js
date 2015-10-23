@@ -15,6 +15,7 @@ function _addVariable (variableCode) {
 }
 
 function _setVariables (code) {
+  console.log("Setting code => ", code);
   if(code.length != 0)
     _textVariables = code.join("\n") + "\n";
 }
@@ -88,9 +89,11 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       break;
 
     case VariableConstants.LOAD_VARIABLES:
-      var code =  action.variables.text.split("\n").filter(variable => variable != '')
-      _setVariables(code);
-      _validationOutput = _validateCode(code);
+      if(action.variables != null) {
+        var code =  action.variables.text.split("\n").filter(variable => variable != '')
+        _setVariables(code);
+        _validationOutput = _validateCode(code);
+      }
       VariableStore.emitChange();
       break;
     default:
