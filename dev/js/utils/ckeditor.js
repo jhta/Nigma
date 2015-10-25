@@ -165,10 +165,14 @@ const CKEditor = {
 
       // Depending on the wysiwygare plugin availability initialize classic or inline editor.
       if ( wysiwygareaAvailable ) {
-        CKEDITOR.replace( 'editor' );
+        CKEDITOR.replace( 'editor', {
+        extraPlugins: 'mathjax'
+      });
       } else {
         editorElement.setAttribute( 'contenteditable', 'true' );
-        CKEDITOR.inline( 'editor' );
+        CKEDITOR.inline( 'editor', {
+        extraPlugins: 'mathjax'
+      });
 
         // TODO we can consider displaying some info box that
         // without wysiwygarea the classic editor may not work.

@@ -68,7 +68,8 @@ const Formulation = React.createClass({
   },
 
   createMarkup() {
-    return {__html: this.state.html};
+    const html = (this.state.html)? this.state.html : '<p>lalalllaala</p>';
+    return {__html: html};
   },
 
   render() {
@@ -76,7 +77,9 @@ const Formulation = React.createClass({
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">
           <div id="editor">
-            <div dangerouslySetInnerHTML={this.createMarkup()} />
+            <p>
+              <div dangerouslySetInnerHTML={this.createMarkup()} />
+            </p>
           </div>
         </div>
       </div>
