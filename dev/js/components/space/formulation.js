@@ -64,11 +64,13 @@ const Formulation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    setTimeout(Ckeditor.setValue(this.state.html),2000);
+    if (this.state.html) {
+      setTimeout(Ckeditor.setValue(this.state.html),2000);
+    }
   },
 
   createMarkup() {
-    const html = (this.state.html)? this.state.html : '<p>lalalllaala</p>';
+    const html = (this.state.html)? this.state.html : '';
     return {__html: html};
   },
 

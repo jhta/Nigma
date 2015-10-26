@@ -165,14 +165,10 @@ const CKEditor = {
 
       // Depending on the wysiwygare plugin availability initialize classic or inline editor.
       if ( wysiwygareaAvailable ) {
-        CKEDITOR.replace( 'editor', {
-        extraPlugins: 'mathjax'
-      });
+        CKEDITOR.replace( 'editor' );
       } else {
         editorElement.setAttribute( 'contenteditable', 'true' );
-        CKEDITOR.inline( 'editor', {
-        extraPlugins: 'mathjax'
-      });
+        CKEDITOR.inline( 'editor' );
 
         // TODO we can consider displaying some info box that
         // without wysiwygarea the classic editor may not work.
@@ -185,12 +181,12 @@ const CKEditor = {
   openTeXDialog(openCb, closeCb) {
     let that = this;
     setTimeout(() => {
-      window.TeXButton = document.getElementsByClassName("cke_button__mathjax");
-      window.TeXButton = window.TeXButton[0];
+      window.TeXButton = document.getElementsByClassName("cke_button__mathjax");      
+      window.TeXButton = window.TeXButton[0];      
       window.TeXButton.addEventListener("click", () => {
       window.DialogTEXOpen = true;
       openCb();
-      that.closeTeXDialog(closeCb);
+      that.closeTeXDialog(closeCb);      
       });
       //captureText();
     }, 1000)
@@ -199,15 +195,15 @@ const CKEditor = {
   closeTeXDialog(cb) {
     if(window.DialogTEXOpen) {
       setTimeout(() => {
-        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_80");
+        window.TeXCloseButton = document.getElementById("cke_dialog_close_button_75");        
         window.TeXCloseButton.addEventListener("click", () => {
           cb();
         });
-        window.TeXOkButton = document.getElementsByClassName("cke_dialog_ui_hbox_first");
+        window.TeXOkButton = document.getElementsByClassName("cke_dialog_ui_hbox_first");        
         window.TeXOkButton[0].addEventListener("click", () => {
           cb();
         });
-        window.TeXCancelButton = document.getElementsByClassName("cke_dialog_ui_hbox_last");
+        window.TeXCancelButton = document.getElementsByClassName("cke_dialog_ui_hbox_last");        
         window.TeXCancelButton[0].addEventListener("click", () => {
           cb();
         });
@@ -217,8 +213,8 @@ const CKEditor = {
 
   addTeX(TeX) {
       setTimeout(() => {
-      window.TeXNode = document.getElementById("cke_85_textarea");
-      if(window.TeXNode) {
+      window.TeXNode = document.getElementById("cke_80_textarea");
+      if(window.TeXNode) {        
         let lastVal = window.TeXNode.value;
         window.TeXNode.value = lastVal + TeX;
         window.TeXNode.focus();
@@ -228,7 +224,7 @@ const CKEditor = {
 
   changeTeX(cb) {
     setTimeout(() => {
-      window.TeXNode = document.getElementById("cke_85_textarea");
+      window.TeXNode = document.getElementById("cke_80_textarea");
       console.log(TeXNode);
       cb();
       //var lastVal = $("#cke_80_textarea").val();
@@ -239,12 +235,14 @@ const CKEditor = {
   },
 
 
-  getValue() {
+
+  getValue() {    
     return(CKEDITOR.instances.editor.getData());
     //return (window.TeX)? window.TeX:"";
   },
+
   setValue(text) {
-    if(CKEDITOR.instances.editor != null)
+    if(CKEDITOR.instances.editor)
       CKEDITOR.instances.editor.setData(text)
   }
 }
