@@ -209,7 +209,7 @@ const Space = React.createClass({
     if (Object.keys(this.state.currentQuestion) <= 0) {
       return (
         <div className="Space">
-          <h1>No se ha seleccionado la pregunta</h1>
+          <h1> </h1>
         </div>
         );
     }

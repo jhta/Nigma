@@ -236,14 +236,17 @@ const CKEditor = {
 
 
 
-  getValue() {    
-    return(CKEDITOR.instances.editor.getData());
+  getValue() {
+    if (CKEDITOR.instances.editor)
+      return(CKEDITOR.instances.editor.getData());
     //return (window.TeX)? window.TeX:"";
   },
 
   setValue(text) {
+    if (CKEDITOR.instances) {
     if(CKEDITOR.instances.editor)
       CKEDITOR.instances.editor.setData(text)
+    }
   }
 }
 

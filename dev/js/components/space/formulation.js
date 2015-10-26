@@ -1,5 +1,4 @@
 const React = require("react");
-//Utils
 const ContentEditable       = require("../utils/content-editable");
 const MaterializeComponents = require("../utils/material-components");
 const {Button} = MaterializeComponents;
@@ -78,10 +77,8 @@ const Formulation = React.createClass({
     return (
       <div className="Formulation u-tab-content">
         <div className="row Formulation-CKEditor">
-          <div id="editor">
-            <p>
+          <div id="editor" >
               <div dangerouslySetInnerHTML={this.createMarkup()} />
-            </p>
           </div>
         </div>
       </div>
