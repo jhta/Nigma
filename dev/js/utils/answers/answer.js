@@ -118,6 +118,7 @@ class Answer {
     answer.showLabel = jsonAnswer.showLabel;
     answer.precision = jsonAnswer.precision;
     answer._id = jsonAnswer._id;
+    answer.code = jsonAnswer.code;
     answer.commonErrors = jsonAnswer.commonErrors.map(commonErrorJson => CommonError.createFromResponse(commonErrorJson));
     return answer;
   }
