@@ -7,15 +7,21 @@ const FileSideBar = React.createClass({
       currentRoute: this.generateCurrentRoute(),
       items: this.props.items,
       activeItemIndex: null,
+      newQuestion: false,
     }
+  },
+  getDefaultProps() {
+    return {
+      questions: []
+    };
   },
 
   componentWillReceiveProps(nextProps) {
-  let route = ''; 
-   if (nextProps.historyString.length > 0) {
-      route = '/' + nextProps.historyString.reduce((prev, next) => `${prev}/${next}`);
+    let route = ''; 
+    if (nextProps.historyString.length > 0) {
+        route = '/' + nextProps.historyString.reduce((prev, next) => `${prev}/${next}`);
     } else {
-      route = '/';
+        route = '/';
     }
     if (route !== this.state.currentRoute) {
       this.setState({
@@ -36,6 +42,11 @@ const FileSideBar = React.createClass({
     this.setState({
       activeItemIndex: index,
     });
+  },
+
+  setNewQuestion() {
+    debugger
+    this.setState({newQuestion: true});
   },
 
   changeRoute(route, father) {
@@ -98,7 +109,13 @@ const FileSideBar = React.createClass({
   },
   renderForm() {
     if (!this.props.sharedMode) {
-      return (<FileSideBar.Form rootId={this.props.rootId} root={this.props.root}/>);
+      return (
+        <FileSideBar.Form 
+        rootId={this.props.rootId}
+        root={this.props.root}
+        setNewQuestion={this.setNewQuestion}
+        onSetQuestion={this.props.onSetQuestion}
+      />);
     }
     return false;
   },
@@ -156,6 +173,7 @@ FileSideBar.Form = React.createClass({
   createItem() {
     let nameInput = React.findDOMNode(this.refs.folderName);
     MenuActions.createQuestion(nameInput.value, this.props.rootId, this.props.root);
+    this.props.onSetQuestion({name: nameInput.value});
     nameInput.value = '';
   },
 
@@ -239,6 +257,7 @@ FileSideBar.Question = React.createClass({
       showInput: false,
     };
   },
+
   deleteQuestion(e) {
     e.stopPropagation();
     MenuActions.deleteQuestion(this.props.questionIndex, this.props.question);
