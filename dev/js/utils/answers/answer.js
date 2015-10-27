@@ -114,6 +114,7 @@ class Answer {
   static createFromResponse(jsonAnswer) {
     var answer = new Answer();
     answer.names = jsonAnswer.names;
+    answer.code = jsonAnswer.code;
     answer.correctValues = jsonAnswer.correctValues;
     answer.showLabel = jsonAnswer.showLabel;
     answer.precision = jsonAnswer.precision;
