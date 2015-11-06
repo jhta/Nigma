@@ -17,6 +17,8 @@ const FormulationActions = require('../../actions/space/formulation-actions');
 const AnswerActions = require('../../actions/space/answer-actions');
 const MenuActions = require("../../actions/menu-actions");
 const MenuStore = require("../../stores/menu-store");
+const Variables  = require("./variables");
+const Expresions = require("./expresions");
 
 /*Stores*/
 window.VariableStore = require('../../stores/space/variable-store');
@@ -207,50 +209,47 @@ const Space = React.createClass({
   },
 
   renderContent() {
-    if (Object.keys(this.state.currentQuestion) <= 0) {
-      return (
-        <div className="Space">
-          <h1> </h1>
-        </div>
-        );
-    }
-    const styleTab = {
-      background: '#009688',
-      opacity: '1'
-    };
-
-
+    console.log("Lolll");
     return (
       <div>
         <h1 style={{margin: '5px 0 0 20px', fontSize: '30px', lineHeight: '30px'}}>{this.state.currentQuestion.name}</h1>
         <div className="Space">
-          <div className="Space-inner">
-            <div className="Space-content z-depth-1 ">
-              <Tabs>
-                <Tab label="Formulacion" style={styleTab}>
-                  <Formulation
-                    expresions={this.state.expresions}
-                    showExpresions={this.showExpresions}
-                    closeExpresions={this.closeExpresions}
-                    changeDialogTex={this.changeDialogTex}
-                    dialogTeX={this.state.dialogTeX}
-                  />
-                </Tab>
-                <Tab label="Respuestas" style={styleTab}>
-                  <Answers />
-                </Tab>
-                <Tab label="Metadatos" style={styleTab}>
-                  <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
-                </Tab>
-              </Tabs>
-            </div>
-          </div>
-          <RightPanel
-            expresions={this.state.expresions}
-            changeDialogTex={this.changeDialogTex}
-            dialogTeX={this.state.dialogTeX}
-          />
-
+          <ul ref="collapse" className="collapsible" data-collapsible="expandable">
+            <li>
+              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-body">
+                <Formulation
+                  expresions={this.state.expresions}
+                  showExpresions={this.showExpresions}
+                  closeExpresions={this.closeExpresions}
+                  changeDialogTex={this.changeDialogTex}
+                  dialogTeX={this.state.dialogTeX}
+                />
+              </div>
+            </li>
+             <li>
+              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-body">
+                <Answers />
+              </div>
+            </li>
+            <li>
+              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-body">
+                <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
+              </div>
+            </li>
+            <li>
+              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-body">
+               <Variables />
+               <Expresions
+                  expresions={this.state.expresions}
+                  changeDialogTex={this.changeDialogTex}
+                  dialogTeX={this.state.dialogTeX} />
+              </div>
+            </li>
+          </ul>
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
           <button className="btn waves-effect waves-light export-btn" onClick={this._exportQuestion}>Exportar a Scorm</button>
@@ -286,12 +285,8 @@ const Space = React.createClass({
   componentWillUnmount() {
     AnswerStore.removeChangeListener();
   },
-  componentDidUpdate(prevProps, prevState) {
-    if(this.state.previewOutput != null) {
-      console.log(this.state.previewOutput);
-      console.log(this.refs);
-      this.refs.modal.openModal();
-    }
+  componentDidMount() {
+    $(this.refs.collapse).collapsible();
   },
 });
 
