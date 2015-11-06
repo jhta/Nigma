@@ -97,6 +97,7 @@ const Space = React.createClass({
       }
     SpaceActions.setActualQuestion(question);
     setTimeout(() => {
+      console.log("Esta es la pregunta");
       console.log(question);
       this.setState({
         currentQuestion: question,
