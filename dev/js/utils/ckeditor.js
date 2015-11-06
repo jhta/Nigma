@@ -52,7 +52,7 @@ function initFormData(){
 function init(){
     var question = SpaceStore.getActualQuestion()._id;
     xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://104.131.58.229:4000/api/questions/'+question+'/scorms/uploadfiles', true);
+    xhr.open('POST', 'http://localhost:4000/api/questions/'+question+'/scorms/uploadfiles', true);
     xhr.setRequestHeader("Authorization", "Bearer " + Auth.getToken());
     xhr.responseType = "json";
 
