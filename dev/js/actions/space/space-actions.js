@@ -11,11 +11,13 @@ var SpaceActions = {
     SpaceApi.preview({
       question: JSON.stringify(data),
       questionid: questionid
-    }, (err, data) => {
-
-      if(data.ok){
-        window.open(data.url);
-      } else {
+    }, (err, res) => {
+      if (res) {
+        if(res.ok) {
+          window.open(res.url);
+        } else {
+          console.error("There was an error trying to preview question ");
+        }
         console.error("There was an error trying to preview question ");
       }
     });
