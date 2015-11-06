@@ -56,7 +56,12 @@ const Space = React.createClass({
   componentDidMount() {
     MenuActions.listFolders();
     MenuStore.addChangeListener(this._handleChange);
-    $(this.refs.collapse).collapsible();
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.refs.collapse != null){
+      $(this.refs.collapse.getDOMNode()).collapsible();
+    }
   },
 
   componentWillUnmount() {
@@ -122,7 +127,6 @@ const Space = React.createClass({
     let rootFolder;
     if (!this.state.sharedMode) {
       rootFolder = MenuStore.getRootSharedFolders();
-      console.log("nanananana");
     } else {
       rootFolder = MenuStore.getRootFolder();
     }
@@ -209,16 +213,16 @@ const Space = React.createClass({
   },
 
   renderContent() {
-    if(this.currentQuestion == null) {
+    if (Object.keys(this.state.currentQuestion) <= 0) {
       return null;
     }
     return (
-      <div>
+      <div className="Space">
         <h1 style={{margin: '5px 0 0 20px', fontSize: '30px', lineHeight: '30px'}}>{this.state.currentQuestion.name}</h1>
-        <div className="Space">
+        <div >
           <ul ref="collapse" className="collapsible" data-collapsible="expandable">
             <li>
-              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-header"><i className="material-icons">mode_edit</i>Formulación</div>
               <div className="collapsible-body">
                 <Formulation
                   expresions={this.state.expresions}
@@ -230,19 +234,19 @@ const Space = React.createClass({
               </div>
             </li>
              <li>
-              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-header"><i className="material-icons">question_answer</i>Respuestas</div>
               <div className="collapsible-body">
                 <Answers />
               </div>
             </li>
             <li>
-              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-header"><i className="material-icons">speaker_notes</i>Metadatos</div>
               <div className="collapsible-body">
                 <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
               </div>
             </li>
             <li>
-              <div className="collapsible-header"><i className="material-icons">filter_drama</i>First</div>
+              <div className="collapsible-header"><i className="material-icons">functions</i>Variables</div>
               <div className="collapsible-body">
                <Variables />
                <Expresions
@@ -263,7 +267,7 @@ const Space = React.createClass({
   render() {
 
     return (
-      <div className="Wrapper ">
+      <div className="Wrapper">
         <FileSideBar
           folders={this.state.folders}
           questions={this.state.questions}

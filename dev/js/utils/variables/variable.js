@@ -14,7 +14,6 @@ class Variable {
   }
 
   static replaceVariables(codeText) {
-    console.log("replacing " + codeText);
     if(typeof codeText  === "undefined")
       return "";
     codeText = codeText || "";
