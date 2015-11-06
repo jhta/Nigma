@@ -7,7 +7,6 @@ const Modal = require('../util/modal');
 const Formulation = require("./formulation");
 const Answers     = require("./answers");
 const Metadata    = require("./metadata");
-const RightPanel  = require("./right-panel");
 const FileSideBar = require("./file-sidebar");
 const Ckeditor = require('../../utils/ckeditor');
 
@@ -16,7 +15,6 @@ const VariableActions = require('../../actions/space/variable-actions');
 const FormulationActions = require('../../actions/space/formulation-actions');
 const AnswerActions = require('../../actions/space/answer-actions');
 const MenuActions = require("../../actions/menu-actions");
-const MenuStore = require("../../stores/menu-store");
 const Variables  = require("./variables");
 const Expresions = require("./expresions");
 
@@ -25,6 +23,7 @@ window.VariableStore = require('../../stores/space/variable-store');
 window.MetadataStore = require('../../stores/space/metadata-store');
 window.AnswerStore = require('../../stores/space/answer-store');
 window.SpaceStore = require('../../stores/space/space-store');
+window.MenuStore = require("../../stores/menu-store");
 
 const Answer = require('../../utils/answers/answer');
 
@@ -57,6 +56,7 @@ const Space = React.createClass({
   componentDidMount() {
     MenuActions.listFolders();
     MenuStore.addChangeListener(this._handleChange);
+    $(this.refs.collapse).collapsible();
   },
 
   componentWillUnmount() {
@@ -209,7 +209,9 @@ const Space = React.createClass({
   },
 
   renderContent() {
-    console.log("Lolll");
+    if(this.currentQuestion == null) {
+      return null;
+    }
     return (
       <div>
         <h1 style={{margin: '5px 0 0 20px', fontSize: '30px', lineHeight: '30px'}}>{this.state.currentQuestion.name}</h1>
@@ -284,10 +286,7 @@ const Space = React.createClass({
   },
   componentWillUnmount() {
     AnswerStore.removeChangeListener();
-  },
-  componentDidMount() {
-    $(this.refs.collapse).collapsible();
-  },
+  }
 });
 
 module.exports = Space;
