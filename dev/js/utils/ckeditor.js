@@ -22,9 +22,12 @@ CKEDITOR.on('dialogDefinition', function(ev) {
     dialogDefinition.onLoad = function() {
     
       var dialog = CKEDITOR.dialog.getCurrent();
-
+      var htmlPreview = dialog.getContentElement('info', 'htmlPreview');
       urlfield = dialog.getContentElement('info', 'txtUrl');
+    // dialog.addFocusable({ id : 'BotonUpload', type : 'button', label : 'Upload file' });
+    //dialog.definition.addContents({ id : 'BotonUpload', type : 'button', label : 'Upload file' });
      
+
 
      init();
 
