@@ -222,6 +222,16 @@ const Space = React.createClass({
         <div >
           <ul ref="collapse" className="collapsible" data-collapsible="expandable">
             <li>
+              <div className="collapsible-header"><i className="material-icons">functions</i>Variables</div>
+              <div className="collapsible-body">
+               <Variables />
+               <Expresions
+                  expresions={this.state.expresions}
+                  changeDialogTex={this.changeDialogTex}
+                  dialogTeX={this.state.dialogTeX} />
+              </div>
+            </li>
+            <li>
               <div className="collapsible-header"><i className="material-icons">mode_edit</i>Formulación</div>
               <div className="collapsible-body">
                 <Formulation
@@ -245,16 +255,7 @@ const Space = React.createClass({
                 <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
               </div>
             </li>
-            <li>
-              <div className="collapsible-header"><i className="material-icons">functions</i>Variables</div>
-              <div className="collapsible-body">
-               <Variables />
-               <Expresions
-                  expresions={this.state.expresions}
-                  changeDialogTex={this.changeDialogTex}
-                  dialogTeX={this.state.dialogTeX} />
-              </div>
-            </li>
+            
           </ul>
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>

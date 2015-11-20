@@ -1,6 +1,5 @@
 
 function captureText() {
-	console.log("lalalalal");
 	var TeXNode = document.getElementById("cke_80_textarea");
 	console.log(TeXNode);
 }
