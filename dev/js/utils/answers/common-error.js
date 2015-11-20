@@ -1,4 +1,3 @@
-const ExpressionEvaluator = require('../variables/expression-evaluator');
 class CommonError {
   constructor() {
     this.values = {};

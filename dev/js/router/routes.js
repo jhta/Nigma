@@ -4,7 +4,6 @@ const { Route, Link, DefaultRoute, NotFoundRoute } = Router;
 
 const Nigma = require('../components/app');
 const SignIn = require('../components/login/complete');
-const FolderContainer = require('../components/menu/folder-container');
 const Space = require('../components/space/space.js');
 
 const Routes = (

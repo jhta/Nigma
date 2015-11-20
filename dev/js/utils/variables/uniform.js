@@ -1,5 +1,4 @@
 const Variable = require('./variable');
-const ExpressionEvaluator = require('./expression-evaluator');
 
 class Uniform extends Variable {
 
