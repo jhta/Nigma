@@ -3,7 +3,6 @@ const CHANGE_EVENT = 'VariableStoreChange';
 var Dispatcher = require('../../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var Parser = require('../../utils/parser');
 
 
 var _textVariables = "";
@@ -19,34 +18,6 @@ function _setVariables (code) {
     _textVariables = code.join("\n") + "\n";
 }
 
-function _validateCode (code) {
-  var outputCompilation = Parser.compile(code);
-  if (outputCompilation.errors.length == 0) {
-    var outputExecution = Parser.executeCode(outputCompilation.variables);
-    if (outputExecution.errors.length == 0) {
-      _variableObjects = outputCompilation.variables;
-      return {
-        error: false,
-        messages: ["Variable validadas correctamente"],
-        result: outputExecution.result
-      }
-    } else {
-      _variableObjects = []
-      return {
-        error: true,
-        messages: outputExecution.errors,
-        result: null
-      }
-    }
-  } else {
-    _variableObjects = []
-    return {
-      error: true,
-      messages: outputCompilation.errors,
-      result: null
-    }
-  }
-}
 
 
 var VariableStore = assign({}, EventEmitter.prototype, {
@@ -82,17 +53,30 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       break;
 
     case VariableConstants.VALIDATE_CODE:
-      _setVariables(action.code);
-      _validationOutput = _validateCode(action.code);
+      var code =  action.code.split("\n").filter(variable => variable != '')
+      _setVariables(code);
+      var output = action.output;
+      if(output.ok) {
+        _validationOutput = {
+          error: false,
+          messages: ["Variable validadas correctamente"],
+          result: output.values
+        };
+        _variableObjects = output.variables;
+      } else {
+        _validationOutput = {
+          error: true,
+          messages: output.errors,
+          result: output.values
+        };
+        _variableObjects = output.variables;
+      }
       VariableStore.emitChange();
       break;
 
     case VariableConstants.LOAD_VARIABLES:
-      if(action.variables != null) {
-        var code =  action.variables.text.split("\n").filter(variable => variable != '')
-        _setVariables(code);
-        _validateCode(code);
-      }
+      var code =  action.variables.text.split("\n").filter(variable => variable != '')
+      _setVariables(code);
       VariableStore.emitChange();
       break;
     default:

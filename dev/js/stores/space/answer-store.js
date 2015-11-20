@@ -4,7 +4,6 @@ const Answer = require('../../utils/answers/answer');
 var Dispatcher = require('../../dispatchers/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var Parser = require('../../utils/parser');
 
 
 var _answer = null;
@@ -20,12 +19,11 @@ function _addAnswer(answerName) {
   _answer.names.push(answerName)
 }
 
-function _validateAnswers(answer, variables) {
-  _loadAnswer(answer);
+function _validateAnswers(output) {
+  _loadAnswer(output.answer);
   _validationOutput = {error: false, messages: []};
-  var validation = _answer.isValid(variables);
-  _validationOutput.error = _validationOutput.error || validation.error;
-  _validationOutput.messages = _validationOutput.messages.concat(validation.messages)
+  _validationOutput.error = _validationOutput.error || !output.ok;
+  _validationOutput.messages =output.errors
 
   if (!_validationOutput.error){
     _validationOutput.messages = ["Respustas validadas correctamente"];
@@ -69,7 +67,7 @@ AnswerStore.dispatchToken = Dispatcher.register(function(action) {
       AnswerStore.emitChange();
       break;
     case AnswerConstants.VALIDATE_ANSWERS:
-      _validateAnswers(action.answers, action.variables)
+      _validateAnswers(action.output)
       AnswerStore.emitChange();
       break;
     case AnswerConstants.ADD_NEW_ANSWER:
