@@ -14,7 +14,7 @@ const Routes = (
     	<Route name="space-question" path=":questionId" handler={Space} />
     </Route>
     <Route name="folders" path="folders" handler={FolderContainer} />
-    <DefaultRoute 	handler={FolderContainer}/>
+    <DefaultRoute 	handler={Space}/>
   </Route>
 )
 
