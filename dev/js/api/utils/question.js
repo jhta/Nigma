@@ -25,6 +25,16 @@ const QuestionAPI = {
     delete: {
       route: "/questions/:questionId",
       method: API._REQUEST_METHOD.delete,
+    },
+
+    validateVariables: {
+      route: "/questions/:questionId/variables/validate",
+      method: API._REQUEST_METHOD.post
+    },
+
+    validateAnswers: {
+      route: "/questions/:questionId/answers/validate",
+      method: API._REQUEST_METHOD.post
     }
   },
   createQuestion(data, cb){
@@ -81,6 +91,26 @@ const QuestionAPI = {
         cb(true, null);
       } else {
         cb(!res.body.ok, res.body.question)
+      }
+    });
+  }, 
+  validateVariables(data, cb){
+    const route = this._routes.validateVariables;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if(err){
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body);
+      }
+    });
+  },
+  validateAnswers(data, cb){
+    const route = this._routes.validateAnswers;
+    API.callAjaxRequest(route, data, (err, res) => {
+      if(err){
+        cb(true, null);
+      } else {
+        cb(!res.body.ok, res.body);
       }
     });
   }

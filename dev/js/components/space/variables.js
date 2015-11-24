@@ -33,7 +33,7 @@ const Variables = React.createClass({
       <div className="z-depth-1">
         <div className="Variables">
           <Variables.Header />
-          <Variables.Content />
+          <Variables.Content currentQuestion={this.props.currentQuestion} getQuestionData={this.props.getQuestionData}/>
         </div>
     </div>
     );
@@ -86,10 +86,9 @@ Variables.Content = React.createClass({
       validating: true,
       validationOutput: null
     });
-
-    setTimeout( () => {
-      VariableActions.validateCode(this.state.text);
-    }, 500);
+    var questionId = this.props.currentQuestion._id;
+    var data =   this.props.getQuestionData();
+    VariableActions.validateCode(this.state.text, questionId, data);
   },
 
   _addVariable(varType) {

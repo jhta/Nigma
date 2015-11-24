@@ -1,5 +1,5 @@
 const VariableConstants = require('../../constants/space/variable-constants');
-const VariableAPI = require('../../api/utils/variable');
+const QuestionAPI = require('../../api/utils/question');
 var Dispatcher = require('../../dispatchers/dispatcher');
 
 var VariableActions = {
@@ -11,13 +11,17 @@ var VariableActions = {
       code: code
     });
   },
-  validateCode(code) {
+  validateCode(code, questionId, questionData) {
     var data = {
       variables: {
         text: code
+      },
+      questionId: questionId,
+      question: {
+        data: JSON.stringify(questionData)
       }
     };
-    VariableAPI.validate(data, (err, res) => {
+    QuestionAPI.validateVariables(data, (err, res) => {
       if(err && res == null) {
         console.log("Validación de variables: Un error inesperado ha ocurrido");
       } else {

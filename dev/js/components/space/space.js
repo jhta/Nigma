@@ -141,31 +141,12 @@ const Space = React.createClass({
   },
 
   _previewQuestion() {
-    let questionFormulation = Ckeditor.getValue();
-    FormulationActions.addFormulation(questionFormulation);
-    if(AnswerStore.getAnswer() != null)
-      AnswerStore.getAnswer().isValid(VariableStore.getVariables());
-    var data = {
-      variables: VariableStore.getVariables(),
-      answer: AnswerStore.getAnswer(),
-      formulation: questionFormulation,
-      metadata: MetadataStore.getMetadata()
-    };
-
+    var data = this._getQuestionData();
     SpaceActions.previewQuestion(this.state.currentQuestion._id, data);
   },
 
   _exportQuestion(){
-    let questionFormulation = Ckeditor.getValue();
-    FormulationActions.addFormulation(questionFormulation);
-
-    var data = {
-      variables: VariableStore.getVariables(),
-      answer: AnswerStore.getAnswer(),
-      formulation: questionFormulation,
-      metadata: MetadataStore.getMetadata()
-    };
-
+    var data = this._getQuestionData();
     SpaceActions.updateQuestionAndExport(this.state.currentQuestion._id, data);
   },
 
@@ -200,16 +181,20 @@ const Space = React.createClass({
     }
   },
   _saveQuestion() {
+    var data = this._getQuestionData();
+    SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
+  },
+
+  _getQuestionData() {
     let questionFormulation = Ckeditor.getValue();
-    FormulationActions.addFormulation(questionFormulation);
+    //FormulationActions.addFormulation(questionFormulation);
     var data = {
       variables: VariableStore.getVariables(),
       answer: AnswerStore.getAnswer(),
       formulation: questionFormulation,
       metadata: MetadataStore.getMetadata()
     };
-
-    SpaceActions.updateQuestionData(data, this.state.currentQuestion._id)
+    return data;
   },
 
   renderContent() {
@@ -224,11 +209,15 @@ const Space = React.createClass({
             <li>
               <div className="collapsible-header"><i className="material-icons">functions</i>Variables</div>
               <div className="collapsible-body">
-               <Variables />
+               <Variables 
+                 currentQuestion={this.state.currentQuestion} 
+                 getQuestionData={this._getQuestionData}/>
                <Expresions
                   expresions={this.state.expresions}
                   changeDialogTex={this.changeDialogTex}
-                  dialogTeX={this.state.dialogTeX} />
+                  dialogTeX={this.state.dialogTeX}
+                  currentQuestion={this.state.currentQuestion} 
+                  getQuestionData={this._getQuestionData} />
               </div>
             </li>
             <li>
@@ -240,19 +229,27 @@ const Space = React.createClass({
                   closeExpresions={this.closeExpresions}
                   changeDialogTex={this.changeDialogTex}
                   dialogTeX={this.state.dialogTeX}
+                  currentQuestion={this.state.currentQuestion} 
+                  getQuestionData={this._getQuestionData}
                 />
               </div>
             </li>
              <li>
               <div className="collapsible-header"><i className="material-icons">question_answer</i>Respuestas</div>
               <div className="collapsible-body">
-                <Answers />
+                <Answers 
+                  currentQuestion={this.state.currentQuestion} 
+                  getQuestionData={this._getQuestionData} />
               </div>
             </li>
             <li>
               <div className="collapsible-header"><i className="material-icons">speaker_notes</i>Metadatos</div>
               <div className="collapsible-body">
-                <Metadata metadata={this.state.currentQuestion.data.metadata} currentQuestion={this.state.currentQuestion}/>
+                <Metadata 
+                  metadata={this.state.currentQuestion.data.metadata}
+                  currentQuestion={this.state.currentQuestion} 
+                  getQuestionData={this._getQuestionData}
+                />
               </div>
             </li>
             

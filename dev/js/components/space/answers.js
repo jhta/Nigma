@@ -39,7 +39,9 @@ var AnswerContainer = React.createClass({
     this.setState({
       validating: true
     });
-    setTimeout(() => AnswerActions.validateAnswers(this.state.answer, VariableStore.getVariables().text), 1000);
+    var questionId = this.props.currentQuestion._id;
+    var data =   this.props.getQuestionData();
+    AnswerActions.validateAnswers(this.state.answer, VariableStore.getVariables().text, questionId, data);
   },
 
   componentWillMount() {

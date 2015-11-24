@@ -1,5 +1,5 @@
 const AnswerConstants = require('../../constants/space/answer-constants');
-const AnswerAPI = require('../../api/utils/answer');
+const QuestionAPI = require('../../api/utils/question');
 var Dispatcher = require('../../dispatchers/dispatcher');
 
 var AnswerActions = {
@@ -10,15 +10,20 @@ var AnswerActions = {
     });
   },
 
-  validateAnswers(answer, variablesText) {
+  validateAnswers(answer, variablesText, questionId, questionData) {
 
     var data = {
       answer: answer,
       variables: {
         text: variablesText
+      },
+      questionId: questionId,
+      question: {
+        data: JSON.stringify(questionData)
       }
+      
     }
-    AnswerAPI.validate(data, (err, res) => {
+    QuestionAPI.validateAnswers(data, (err, res) => {
       if(err && res == null) {
         console.log("Validación de variables: Un error inesperado ha ocurrido");
       } else {
