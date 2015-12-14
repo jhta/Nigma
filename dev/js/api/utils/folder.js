@@ -28,6 +28,7 @@ const FolderAPI = {
       if(err){
         cb(true, null);
       } else {
+      	console.log(res.body);
         cb(!res.body.ok, res.body);
       }
     });

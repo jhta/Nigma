@@ -61,8 +61,8 @@ var MenuActions = {
           shareFolder: res.root_shared_folders,
         });
       } else {
-        
-        alert("whatda fuc?");
+
+        console.log("Error, con la conexión al server");
       }
     });
   },
