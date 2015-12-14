@@ -93,22 +93,8 @@ const Space = React.createClass({
 
   setQuestion(question) {
   	console.log("Setting Question", question);
-  	var defaultData = {
-  		formulation: "",
-  		variables: {text: "", variables: []},
-  		answer: new Answer(),
-  		metadata: {title: question.name, author: ""}
-  	};
-  	var keys = ["formulation", "variables", "answer", "metadata"];
-  	for(var i = 0;i < keys.length; i++) {
-  		var key = keys[i];
-  		var data = defaultData[key];
-  		if(question[key] == null)
-  			question[key] = data;
-  		else if(key != "variables")
-  			question[key] = JSON.parse(question[key]);
-  	}
     SpaceActions.setActualQuestion(question);
+    console.log("Operations", question);
     setTimeout(() => {
       this.setState({
         currentQuestion: question,
@@ -195,7 +181,7 @@ const Space = React.createClass({
     //FormulationActions.addFormulation(questionFormulation);
     var data = {
       variables: VariableStore.getVariables().text,
-      answer: JSON.stringify(AnswerStore.getAnswer()),
+      answer: AnswerStore.getAnswer(),
       formulation: questionFormulation,
       metadata: MetadataStore.getMetadata()
     };

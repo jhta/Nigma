@@ -41,6 +41,12 @@ var VariableActions = {
       type: VariableConstants.LOAD_VARIABLES,
       variables: variables
     });
+  },
+  autoSave(variables) {
+  	Dispatcher.dispatch({
+      type: VariableConstants.AUTO_SAVE_VARIABLES,
+      variables: variables
+    });
   }
 }
 

@@ -79,6 +79,10 @@ VariableStore.dispatchToken = Dispatcher.register(function(action) {
       _setVariables(code);
       VariableStore.emitChange();
       break;
+    case VariableConstants.AUTO_SAVE_VARIABLES:
+      var code =  action.variables.split("\n").filter(variable => variable != '')
+      _setVariables(code);
+      break;
     default:
   }
 });

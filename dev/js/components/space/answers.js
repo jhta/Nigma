@@ -40,8 +40,7 @@ var AnswerContainer = React.createClass({
       validating: true
     });
     var questionId = this.props.currentQuestion._id;
-    var data =   this.props.getQuestionData();
-    AnswerActions.validateAnswers(this.state.answer, VariableStore.getVariables().text, questionId, data);
+    AnswerActions.validateAnswers(this.state.answer, VariableStore.getVariables().text, questionId);
   },
 
   componentWillMount() {

@@ -87,8 +87,7 @@ Variables.Content = React.createClass({
       validationOutput: null
     });
     var questionId = this.props.currentQuestion._id;
-    var data =   this.props.getQuestionData();
-    VariableActions.validateCode(this.state.text, questionId, data);
+    VariableActions.validateCode(this.state.text, questionId);
   },
 
   _addVariable(varType) {
@@ -115,6 +114,13 @@ Variables.Content = React.createClass({
   componentWillUnmount() {
     VariableStore.removeChangeListener()
   },
+  componentDidUpdate(prevProps, prevState) {
+  	setTimeout(() => {
+  		var currentCode = this.refs.codeArea.getDOMNode().value;
+  		VariableActions.autoSave(currentCode);
+  	}, 500);
+
+  }
 
 });
 
