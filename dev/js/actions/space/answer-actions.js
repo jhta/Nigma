@@ -4,28 +4,27 @@ var Dispatcher = require('../../dispatchers/dispatcher');
 
 var AnswerActions = {
   listAnswers(questionId) {
-    //Pedido al API
     Dispatcher.dispatch({
       type: AnswerConstants.LIST_ANSWERS,
     });
   },
 
-  validateAnswers(answer, variablesText, questionId, questionData) {
+  validateAnswers(answer, variablesText, questionId) {
 
     var data = {
       answer: answer,
       variables: {
         text: variablesText
       },
-      questionId: questionId,
-      question: {
-        data: JSON.stringify(questionData)
-      }
-      
+      questionId: questionId
     }
     QuestionAPI.validateAnswers(data, (err, res) => {
       if(err && res == null) {
         console.log("Validación de variables: Un error inesperado ha ocurrido");
+        Dispatcher.dispatch({
+          type: AnswerConstants.VALIDATE_ANSWERS,
+          output: {answer: answer, ok: false, errors: ["Un error inesperado ha ocurrido"]}
+        });
       } else {
         Dispatcher.dispatch({
           type: AnswerConstants.VALIDATE_ANSWERS,
@@ -34,7 +33,7 @@ var AnswerActions = {
       }
     });
 
-    
+
   },
 
   addNewAnswer() {

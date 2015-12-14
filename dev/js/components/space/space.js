@@ -92,25 +92,30 @@ const Space = React.createClass({
   },
 
   setQuestion(question) {
-    if(question["data"] == null) {
-          question["data"] = {
-            formulation: "",
-            variables: null,
-            answer: null,
-            metadata: {title: question.name, author: "Jonathan"}
-          }
-      } else {
-        question.data = JSON.parse(question.data);
-      }
+  	console.log("Setting Question", question);
+  	var defaultData = {
+  		formulation: "",
+  		variables: {text: "", variables: []},
+  		answer: new Answer(),
+  		metadata: {title: question.name, author: ""}
+  	};
+  	var keys = ["formulation", "variables", "answer", "metadata"];
+  	for(var i = 0;i < keys.length; i++) {
+  		var key = keys[i];
+  		var data = defaultData[key];
+  		if(question[key] == null)
+  			question[key] = data;
+  		else if(key != "variables")
+  			question[key] = JSON.parse(question[key]);
+  	}
     SpaceActions.setActualQuestion(question);
     setTimeout(() => {
-      console.log(question);
       this.setState({
         currentQuestion: question,
       });
-      FormulationActions.addFormulation(question.data.formulation);
-      VariableActions.loadVariables(question.data.variables);
-      AnswerActions.setAnswer(question.data.answer);
+      FormulationActions.addFormulation(question.formulation);
+      VariableActions.loadVariables(question.variables);
+      AnswerActions.setAnswer(question.answer);
     }, 400);
 
   },
@@ -189,8 +194,8 @@ const Space = React.createClass({
     let questionFormulation = Ckeditor.getValue();
     //FormulationActions.addFormulation(questionFormulation);
     var data = {
-      variables: VariableStore.getVariables(),
-      answer: AnswerStore.getAnswer(),
+      variables: VariableStore.getVariables().text,
+      answer: JSON.stringify(AnswerStore.getAnswer()),
       formulation: questionFormulation,
       metadata: MetadataStore.getMetadata()
     };
@@ -209,14 +214,14 @@ const Space = React.createClass({
             <li>
               <div className="collapsible-header"><i className="material-icons">functions</i>Variables</div>
               <div className="collapsible-body">
-               <Variables 
-                 currentQuestion={this.state.currentQuestion} 
+               <Variables
+                 currentQuestion={this.state.currentQuestion}
                  getQuestionData={this._getQuestionData}/>
                <Expresions
                   expresions={this.state.expresions}
                   changeDialogTex={this.changeDialogTex}
                   dialogTeX={this.state.dialogTeX}
-                  currentQuestion={this.state.currentQuestion} 
+                  currentQuestion={this.state.currentQuestion}
                   getQuestionData={this._getQuestionData} />
               </div>
             </li>
@@ -229,7 +234,7 @@ const Space = React.createClass({
                   closeExpresions={this.closeExpresions}
                   changeDialogTex={this.changeDialogTex}
                   dialogTeX={this.state.dialogTeX}
-                  currentQuestion={this.state.currentQuestion} 
+                  currentQuestion={this.state.currentQuestion}
                   getQuestionData={this._getQuestionData}
                 />
               </div>
@@ -237,22 +242,22 @@ const Space = React.createClass({
              <li>
               <div className="collapsible-header"><i className="material-icons">question_answer</i>Respuestas</div>
               <div className="collapsible-body">
-                <Answers 
-                  currentQuestion={this.state.currentQuestion} 
+                <Answers
+                  currentQuestion={this.state.currentQuestion}
                   getQuestionData={this._getQuestionData} />
               </div>
             </li>
             <li>
               <div className="collapsible-header"><i className="material-icons">speaker_notes</i>Metadatos</div>
               <div className="collapsible-body">
-                <Metadata 
-                  metadata={this.state.currentQuestion.data.metadata}
-                  currentQuestion={this.state.currentQuestion} 
+                <Metadata
+                  metadata={this.state.currentQuestion.metadata}
+                  currentQuestion={this.state.currentQuestion}
                   getQuestionData={this._getQuestionData}
                 />
               </div>
             </li>
-            
+
           </ul>
           <button className="btn waves-effect waves-light send-btn" onClick={this._previewQuestion}>Previsualizar</button>
           <button className="btn waves-effect waves-light save-btn" onClick={this._saveQuestion}>Guardar</button>
