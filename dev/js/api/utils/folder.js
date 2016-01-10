@@ -24,14 +24,7 @@ const FolderAPI = {
   },
   listFolders(data, cb){
     const route = this._routes.list;
-    API.callAjaxRequest(route, data, (err, res) => {
-      if(err){
-        cb(true, null);
-      } else {
-      	console.log(res.body);
-        cb(!res.body.ok, res.body);
-      }
-    });
+    return API.callAjaxRequest(route, data);
   },
   createFolder(data, cb){
     const route = this._routes.create;

@@ -7,17 +7,18 @@ const LoginActions = {
 
   loginComplete( data ) {
     Auth.loginComplete(data.token);
-
-    UserApi.getData((err, user)=>{
-      if(!err){
-
-        Auth.saveUserData(user);
-        Dispatcher.dispatch({
-          type: UserActionConstants.LOGIN_COMPLETE,
-          user: user
-        })
-      }
-    });
+    UserApi.getData()
+    	.then(function(res) {
+    		var user = res.user;
+    		Auth.saveUserData(user);
+    		Dispatcher.dispatch({
+    		  type: UserActionConstants.LOGIN_COMPLETE,
+    		  user: user
+    		});
+    	})
+    	.catch(function(error) {
+    		console.error(error)
+    	})
   },
 
   setUserStore (){
