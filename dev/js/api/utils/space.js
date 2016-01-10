@@ -2,7 +2,7 @@ const API = require('../API');
 const SpaceApi = {
   _routes: {
     preview: {
-      route: "/questions/:questionid/scorms",
+      route: "/questions/:questionid/scorms/preview",
       method: API._REQUEST_METHOD.put
     }
   },

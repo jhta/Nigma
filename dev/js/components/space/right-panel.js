@@ -12,8 +12,7 @@ const RightPanel = React.createClass({
   render() {
     return (
       <div className="Space-right">
-        <Variables />
-        <Expresions {...this.props} />
+
       </div>
     )
   }

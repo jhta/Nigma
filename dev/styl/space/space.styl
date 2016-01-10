@@ -1,43 +1,46 @@
-$margin = 1.5em;
+$margin = 1.5em
 
 .Wrapper
-  display: flex;
-  height: 100%;
-  width: 100%;
-  position: relative;
-
-.Space
-  margin: $margin;
-  width: 100%;
-  display: flex;
+  display flex
+  height 100%
+  width 100%
   position relative
-  .send-btn
-    position fixed
-    bottom 20px
-    right 20px
 
-  .save-btn
-    position fixed
-    bottom 20px
-    right 190px
+  .Space
+    margin-left 10%
+    margin-right 10%
+    width 80%
+    display block
+    position relative
+    .collapsible
+      width 100%
+    .send-btn
+      position fixed
+      bottom 20px
+      right 20px
 
-  .export-btn
-    position fixed
-    bottom 20px
-    right 320px
+    .save-btn
+      position fixed
+      bottom 20px
+      right 190px
 
-  &-inner
-    margin-right:1em;
-    width: 65%;
+    .export-btn
+      position fixed
+      bottom 20px
+      right 320px
 
-  &-content
-    padding: 0 !important;
-    background: white;
-    padding-right: $margin / 2;
+    &-inner
+      margin-right1em
+      width 65%
 
-  &-right
-    padding: 0 !important;
-    width: 35%;
+    &-content
+      padding 0 !important
+      background white
+      padding-right $margin / 2
+
+    &-right
+      padding 0 !important
+      width 35%
 
 @import "formulation"
 @import "variables"

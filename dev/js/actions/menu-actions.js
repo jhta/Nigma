@@ -53,18 +53,17 @@ var MenuActions = {
   },
 
   listFolders() {
-    FolderAPI.listFolders({}, (err, res) => {
-      if(!err) {
-        Dispatcher.dispatch({
-          type: MenuActionConstants.LIST_FOLDERS,
-          rootFolder: res.root_folder,
-          shareFolder: res.root_shared_folders,
-        });
-      } else {
-        
-        alert("whatda fuc?");
-      }
-    });
+    FolderAPI.listFolders({})
+    	.then(function(res) {
+    		Dispatcher.dispatch({
+    		  type: MenuActionConstants.LIST_FOLDERS,
+    		  rootFolder: res.root_folder,
+    		  shareFolder: res.root_shared_folders,
+    		});
+    	})
+    	.catch(function(error) {
+    		console.error(error)
+    	})
   },
   deleteFolder(folderIndex, folder) {
     FolderAPI.deleteFolder({folderid: folder._id}, (err, res) => {
@@ -77,26 +76,6 @@ var MenuActions = {
       }
     });
   },
-  updateFolder(folderIndex, folder, folderName){
-    folderName = "LALAL ESTO ESTA QUEMADO EN ACTIONS"
-    var data = {
-      folderid: folder._id,
-      folder: {
-        name: folderName
-      }
-    }
-    FolderAPI.updateFolder(data, (err, res) => {
-      if(!err){
-        Dispatcher.dispatch({
-          type: MenuActionConstants.EDIT_FOLDER,
-          folderIndex: folderIndex,
-          folder: folder,
-          folderName: folderName
-        });
-      }
-    });
-  },
-
   shareQuestion(questionIndex, question, email) {
     const data =  {
       user: {

@@ -33,7 +33,7 @@ const Variables = React.createClass({
       <div className="z-depth-1">
         <div className="Variables">
           <Variables.Header />
-          <Variables.Content />
+          <Variables.Content currentQuestion={this.props.currentQuestion} getQuestionData={this.props.getQuestionData}/>
         </div>
     </div>
     );
@@ -86,10 +86,8 @@ Variables.Content = React.createClass({
       validating: true,
       validationOutput: null
     });
-
-    setTimeout( () => {
-      VariableActions.validateCode(this.state.text);
-    }, 500);
+    var questionId = this.props.currentQuestion._id;
+    VariableActions.validateCode(this.state.text, questionId);
   },
 
   _addVariable(varType) {
@@ -116,6 +114,13 @@ Variables.Content = React.createClass({
   componentWillUnmount() {
     VariableStore.removeChangeListener()
   },
+  componentDidUpdate(prevProps, prevState) {
+  	setTimeout(() => {
+  		var currentCode = this.refs.codeArea.getDOMNode().value;
+  		VariableActions.autoSave(currentCode);
+  	}, 500);
+
+  }
 
 });
 

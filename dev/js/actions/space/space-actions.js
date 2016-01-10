@@ -9,7 +9,7 @@ var SpaceActions = {
 
   previewQuestion(questionid, data) {
     SpaceApi.preview({
-      question: JSON.stringify(data),
+      question: data,
       questionid: questionid
     }, (err, res) => {
       if (res) {
@@ -25,9 +25,7 @@ var SpaceActions = {
 
   updateQuestionData(data, questionId) {
     var payload = {
-      question: {
-        data: JSON.stringify(data)
-      },
+      question: data,
       questionid: questionId
     };
 

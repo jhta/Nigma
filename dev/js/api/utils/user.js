@@ -4,22 +4,15 @@ const UserApi = {
 
   _routes: {
 
-    get: {
+    getData: {
       route: "/users/data",
       method: API._REQUEST_METHOD.get
     }
   },
 
-  getData(cb){
-    const route = this._routes.get;
-
-    API.callAjaxRequest(route, null, function(err, res) {
-      if(err){
-        return cb(true);
-      }
-
-      cb(!res.body.ok, res.body.user);
-    });
+  getData() {
+    const route = this._routes.getData;
+    return API.callAjaxRequest(route, null);
   }
 
 };
